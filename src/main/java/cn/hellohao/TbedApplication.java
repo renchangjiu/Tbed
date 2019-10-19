@@ -16,6 +16,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.net.InetAddress;
 import java.util.Scanner;
 
+/**
+ * @author su
+ * @date 2019/10/19 12:11
+ */
 @SpringBootApplication
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -27,7 +31,6 @@ public static void main(String[] args) {
     /**
      * 文件上传配置
      *
-     * @return
      */
     @Bean
     public MultipartConfigElement multipartConfigElement() {

@@ -1,11 +1,10 @@
 package cn.hellohao.quartz;
 
 import cn.hellohao.pojo.Keys;
-import cn.hellohao.service.impl.ImgServiceImpl;
+import cn.hellohao.service.impl.ImageServiceImpl;
 import cn.hellohao.service.impl.KeysServiceImpl;
 import cn.hellohao.utils.DeleImg;
 import cn.hellohao.utils.LocUpdateImg;
-import cn.hellohao.utils.Print;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +25,7 @@ import java.util.List;
 public class TempImgTask  {
 
     @Autowired
-    private ImgServiceImpl imgService;
+    private ImageServiceImpl imgService;
     @Autowired
     private KeysServiceImpl keysService;
 

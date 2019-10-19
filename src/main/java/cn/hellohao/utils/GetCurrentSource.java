@@ -34,18 +34,18 @@ public class GetCurrentSource {
 
     @PostConstruct
     public void init() {
-        groupService =groupServiceImpl;
+        groupService = groupServiceImpl;
         userGroupService = userGroupServiceImpl;
         userService = userServiceImpl;
     }
 
 
-    public static Integer GetSource(Integer userid){
+    public static Integer GetSource(Integer userid) {
         Integer ret = 0;
-        if(userid==null){
+        if (userid == null) {
             Group group = groupService.idgrouplist(1);
             ret = group.getKeyid();
-        }else{
+        } else {
             //UserGroup userGroup = userGroupService.useridgetusergroup(userid);
             User user = userService.getUsersid(userid);
             Group group = groupService.idgrouplist(user.getGroupid());

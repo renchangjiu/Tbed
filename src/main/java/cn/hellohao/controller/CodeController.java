@@ -1,14 +1,9 @@
 package cn.hellohao.controller;
 
 import cn.hellohao.pojo.Code;
-import cn.hellohao.pojo.Config;
 import cn.hellohao.pojo.User;
 import cn.hellohao.service.CodeService;
-import cn.hellohao.service.KeysService;
-import cn.hellohao.service.UserService;
-import cn.hellohao.service.impl.ImgServiceImpl;
 import cn.hutool.crypto.SecureUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

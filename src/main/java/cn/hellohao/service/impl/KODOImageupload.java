@@ -26,6 +26,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 七牛存储
+ *
+ * @author su
+ * @date 2019/10/19 13:26
+ */
 @Service
 public class KODOImageupload {
     static String upToken;
@@ -33,30 +39,31 @@ public class KODOImageupload {
     static Keys key;
 
     public Map<ReturnImage, Integer> ImageuploadKODO(Map<String, MultipartFile> fileMap, String username,
-                                                     Map<String, String> fileMap2,Integer setday) throws Exception {
+                                                     Map<String, String> fileMap2, Integer setday) throws Exception {
         // 要上传文件的路径
-        if(fileMap2==null){
+        if (fileMap2 == null) {
             File file = null;
             Map<ReturnImage, Integer> ImgUrl = new HashMap<>();
 
             for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
-                String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0,5);//生成一个没有-的uuid，然后取前5位
+                //生成一个没有-的uuid，然后取前5位
+                String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0, 5);
                 java.text.DateFormat format1 = new java.text.SimpleDateFormat("MMddhhmmss");
                 String times = format1.format(new Date());
                 file = changeFile(entry.getValue());
                 // 上传文件流。
-                System.out.println("待上传的图片："+username + "/" + uuid+times + "." + entry.getKey());
+                System.out.println("待上传的图片：" + username + "/" + uuid + times + "." + entry.getKey());
                 //ossClient.putObject(key.getBucketname(), username + "/" + uuid+times + "." + entry.getKey(),file,meta);
                 try {
-                    Response response = uploadManager.put(file,username + "/" + uuid+times + "." + entry.getKey(),upToken);
+                    Response response = uploadManager.put(file, username + "/" + uuid + times + "." + entry.getKey(), upToken);
                     System.out.println(response);
                     //解析上传成功的结果
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgname(entry.getValue().getOriginalFilename());
-                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey());
+                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid + times + "." + entry.getKey());
                     ImgUrl.put(returnImage, (int) (entry.getValue().getSize()));
-                    if(setday>0) {
+                    if (setday > 0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "4");
                     }
@@ -71,23 +78,23 @@ public class KODOImageupload {
                 }
             }
             return ImgUrl;
-        }else{
+        } else {
             Map<ReturnImage, Integer> ImgUrl = new HashMap<>();
             for (Map.Entry<String, String> entry : fileMap2.entrySet()) {
-                String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0,5);//生成一个没有-的uuid，然后取前5位
+                String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0, 5);//生成一个没有-的uuid，然后取前5位
                 java.text.DateFormat format1 = new java.text.SimpleDateFormat("MMddhhmmss");
                 String times = format1.format(new Date());
                 String imgurl = entry.getValue();
                 // 上传文件流。
-                System.out.println("待上传的图片："+username + "/" + uuid+times + "." + entry.getKey());
+                System.out.println("待上传的图片：" + username + "/" + uuid + times + "." + entry.getKey());
                 try {
-                    Response response = uploadManager.put(new File(imgurl),username + "/" + uuid+times + "." + entry.getKey(),upToken);
+                    Response response = uploadManager.put(new File(imgurl), username + "/" + uuid + times + "." + entry.getKey(), upToken);
                     //解析上传成功的结果
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     ReturnImage returnImage = new ReturnImage();
-                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey());
+                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid + times + "." + entry.getKey());
                     ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
-                    if(setday>0) {
+                    if (setday > 0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "4");
                     }
@@ -125,8 +132,8 @@ public class KODOImageupload {
         int ret = -1;
         if (k.getEndpoint() != null && k.getAccessSecret() != null && k.getEndpoint() != null
                 && k.getBucketname() != null && k.getRequestAddress() != null) {
-            if (!k.getEndpoint().equals("") && !k.getAccessSecret() .equals("") && !k.getEndpoint() .equals("")
-                    && !k.getBucketname().equals("") && !k.getRequestAddress() .equals("")) {
+            if (!k.getEndpoint().equals("") && !k.getAccessSecret().equals("") && !k.getEndpoint().equals("")
+                    && !k.getBucketname().equals("") && !k.getRequestAddress().equals("")) {
                 // 初始化
                 // 创建KODOClient实例。
                 Configuration cfg;
@@ -154,29 +161,29 @@ public class KODOImageupload {
 
     /**
      * 客户端接口
-     * */
+     */
     public Map<ReturnImage, Integer> clientuploadKODO(Map<String, MultipartFile> fileMap, String username, UploadConfig uploadConfig) throws Exception {
         File file = null;
         Map<ReturnImage, Integer> ImgUrl = new HashMap<>();
 
         for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
-            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0,5);//生成一个没有-的uuid，然后取前5位
+            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0, 5);//生成一个没有-的uuid，然后取前5位
             java.text.DateFormat format1 = new java.text.SimpleDateFormat("MMddhhmmss");
             String times = format1.format(new Date());
             file = changeFile(entry.getValue());
-            System.out.println("待上传的图片："+username + "/" + uuid+times + "." + entry.getKey());
+            System.out.println("待上传的图片：" + username + "/" + uuid + times + "." + entry.getKey());
             try {
                 ReturnImage returnImage = new ReturnImage();
-                if(entry.getValue().getSize()/1024<=uploadConfig.getFilesizeuser()*1024){
-                    Response response = uploadManager.put(file,username + "/" + uuid+times + "." + entry.getKey(),upToken);
+                if (entry.getValue().getSize() / 1024 <= uploadConfig.getFilesizeuser() * 1024) {
+                    Response response = uploadManager.put(file, username + "/" + uuid + times + "." + entry.getKey(), upToken);
                     //解析上传成功的结果
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
 
                     returnImage.setImgname(entry.getValue().getOriginalFilename());
-                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey());
+                    returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid + times + "." + entry.getKey());
                     ImgUrl.put(returnImage, (int) (entry.getValue().getSize()));
                     //ImgUrl.put(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey(), (int) (entry.getValue().getSize()));
-                }else{
+                } else {
                     returnImage.setImgname(entry.getValue().getOriginalFilename());
                     returnImage.setImgurl("文件超出系统设定大小，不得超过");
                     ImgUrl.put(returnImage, -1);

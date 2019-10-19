@@ -2,8 +2,7 @@ package cn.hellohao.utils;
 
 import cn.hellohao.pojo.Imgreview;
 import cn.hellohao.pojo.Keys;
-import cn.hellohao.service.ImgreviewService;
-import cn.hellohao.service.impl.ImgServiceImpl;
+import cn.hellohao.service.impl.ImageServiceImpl;
 import cn.hellohao.service.impl.ImgreviewServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.baidu.aip.contentcensor.AipContentCensor;
@@ -31,7 +30,7 @@ public class ImageReview {
     }
     //开始调用鉴黄。
     public static void imgJB(Map<String, Integer> imgmap, String requestAddress, Keys key, Imgreview imgreview) {
-        ImgServiceImpl imgService = SpringContextHolder.getBean(ImgServiceImpl.class);
+        ImageServiceImpl imgService = SpringContextHolder.getBean(ImageServiceImpl.class);
         ImgreviewServiceImpl imgreviewService = SpringContextHolder.getBean(ImgreviewServiceImpl.class);
         ImageReview.Initializes(imgreview);
         //遍历map,获取里边的key（图片地址）

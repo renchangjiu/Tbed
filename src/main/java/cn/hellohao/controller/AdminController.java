@@ -3,7 +3,7 @@ package cn.hellohao.controller;
 import cn.hellohao.pojo.*;
 import cn.hellohao.pojo.vo.PageResultBean;
 import cn.hellohao.service.*;
-import cn.hellohao.service.impl.ImgServiceImpl;
+import cn.hellohao.service.impl.ImageServiceImpl;
 import cn.hellohao.service.impl.UserServiceImpl;
 import cn.hellohao.utils.*;
 import com.alibaba.fastjson.JSONArray;
@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import java.util.Map;
 public class AdminController {
 
     @Autowired
-    private ImgService imgService;
+    private ImageService imageService;
     @Autowired
     private KeysService keysService;
     @Autowired
@@ -51,7 +50,7 @@ public class AdminController {
     public String goadmin1(HttpSession session, Model model, HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        Integer usermemory = imgService.getusermemory(user.getId());
+        Integer usermemory = imageService.getusermemory(user.getId());
         if(usermemory==null){usermemory=0;}
         User u = userService.getUsers(user.getEmail());
         if(user!=null){
@@ -106,7 +105,7 @@ public class AdminController {
 
         //空间大小
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        Integer usermemory = imgService.getusermemory(u.getId());
+        Integer usermemory = imageService.getusermemory(u.getId());
         if(usermemory==null){usermemory=0;}
         User user = userService.getUsers(u.getEmail());
         if(u!=null){
@@ -141,8 +140,8 @@ public class AdminController {
         User u = (User) session.getAttribute("user");
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         Imgreview imgreview = imgreviewService.selectByPrimaryKey(1);
-        jsonObject.put("usercount", imgService.countimg(u.getId()));
-        jsonObject.put("counts", imgService.counts(null) );
+        jsonObject.put("usercount", imageService.countimg(u.getId()));
+        jsonObject.put("counts", imageService.counts(null) );
         jsonObject.put("getusertotal", userService.getUserTotal() );
         jsonObject.put("imgreviewcount", imgreview.getCount());
         Keys key= keysService.selectKeys(Sourcekey);
@@ -184,14 +183,14 @@ public class AdminController {
         List<Images> images = null;
         if (u.getLevel() > 1) { //根据用户等级查询管理员查询所有的信息
             if (selecttype == 1) {
-                images = imgService.selectimg(img);// 这是我们的sql
+                images = imageService.selectimg(img);// 这是我们的sql
             } else {
                 img.setUserid(u.getId());
-                images = imgService.selectimg(img);// 这是我们的sql
+                images = imageService.selectimg(img);// 这是我们的sql
             }
         } else {
             img.setUserid(u.getId());
-            images = imgService.selectimg(img);// 这是我们的sql
+            images = imageService.selectimg(img);// 这是我们的sql
         }
         // 使用pageInfo包装查询
         PageInfo<Images> rolePageInfo = new PageInfo<>(images);//
@@ -229,7 +228,7 @@ public class AdminController {
     public String deleimg(HttpSession session, Integer id, Integer sourcekey) {
         JSONObject jsonObject = new JSONObject();
         User u = (User) session.getAttribute("user");
-        Images images = imgService.selectByPrimaryKey(id);
+        Images images = imageService.selectByPrimaryKey(id);
         Keys key = keysService.selectKeys(sourcekey);
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         Boolean b =false;
@@ -239,7 +238,7 @@ public class AdminController {
             b = StringUtils.doNull(Sourcekey,key);//判断对象是否有空值
         }
         if(b){
-            ImgServiceImpl de = new ImgServiceImpl();
+            ImageServiceImpl de = new ImageServiceImpl();
             if (key.getStorageType() == 1) {
                 de.delect(key, images.getImgname());
             } else if (key.getStorageType() == 2) {
@@ -257,11 +256,11 @@ public class AdminController {
             }else {
                 System.err.println("未获取到对象存储参数，删除失败。");
             }
-            Integer ret = imgService.deleimg(id);
+            Integer ret = imageService.deleimg(id);
             Integer count = 0;
             if (ret > 0) {
-                jsonObject.put("usercount", imgService.countimg(u.getId()));
-                jsonObject.put("count", imgService.counts(null));
+                jsonObject.put("usercount", imageService.countimg(u.getId()));
+                jsonObject.put("count", imageService.counts(null));
                 count = 1;
             } else {
                 count = 0;
@@ -280,11 +279,11 @@ public class AdminController {
         JSONObject jsonObject = new JSONObject();
 
         Integer v = 0;
-        ImgServiceImpl de = new ImgServiceImpl();
+        ImageServiceImpl de = new ImageServiceImpl();
         User u = (User) session.getAttribute("user");
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         for (int i = 0; i < ids.length; i++) {
-            Images images = imgService.selectByPrimaryKey(ids[i]);
+            Images images = imageService.selectByPrimaryKey(ids[i]);
             Keys key = keysService.selectKeys(images.getSource());
             Boolean b =false;
             if(Sourcekey==5){
@@ -310,7 +309,7 @@ public class AdminController {
                 }else {
                     System.err.println("未获取到对象存储参数，删除失败。");
                 }
-                Integer ret = imgService.deleimg(ids[i]);
+                Integer ret = imageService.deleimg(ids[i]);
                 if (ret < 1) {
                     v = 0;
                 } else {
@@ -321,8 +320,8 @@ public class AdminController {
             }
         }
         jsonObject.put("val", v);
-        jsonObject.put("usercount", imgService.countimg(u.getId()));
-        jsonObject.put("count", imgService.counts(null));
+        jsonObject.put("usercount", imageService.countimg(u.getId()));
+        jsonObject.put("count", imageService.counts(null));
         return jsonObject.toString();
     }
 
@@ -414,7 +413,7 @@ public class AdminController {
     @GetMapping(value = "/images/{id}")
     @ResponseBody
     public Images selectByFy(@PathVariable("id") Integer id) {
-        return imgService.selectByPrimaryKey(id);
+        return imageService.selectByPrimaryKey(id);
     }
 
 

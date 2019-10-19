@@ -22,6 +22,7 @@ import com.qiniu.util.Auth;
 import com.upyun.UpException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.netease.cloud.auth.BasicCredentials;
@@ -34,15 +35,22 @@ import com.netease.cloud.services.nos.transfer.TransferManager;
 import cn.hellohao.dao.ImgMapper;
 import cn.hellohao.pojo.Images;
 import cn.hellohao.pojo.Keys;
-import cn.hellohao.service.ImgService;
+import cn.hellohao.service.ImageService;
 
-import javax.annotation.Resource;
-
+/**
+ * @author su
+ * @date 2019/10/19 13:26
+ */
 @Service
-public class ImgServiceImpl implements ImgService {
+public class ImageServiceImpl implements ImageService {
     @Autowired
-    //@Resource
     private ImgMapper imgMapper;
+
+    @Value("${system.image.save.path.windows}")
+    private String imageSavePath4windows;
+
+    @Value("${system.image.save.path.linux}")
+    private String imageSavePath4linux;
 
     @Override
     public List<Images> selectimg(Images images) {
@@ -106,6 +114,7 @@ public class ImgServiceImpl implements ImgService {
 // 关闭OSSClient。
         ossClient.shutdown();
     }
+
     //删除USS对象存储的图片文件
     public void delectUSS(Keys key, String fileName) {
         UpYun upyun = new UpYun(key.getBucketname(), key.getAccessKey(), key.getAccessSecret());
@@ -117,15 +126,22 @@ public class ImgServiceImpl implements ImgService {
             e.printStackTrace();
         }
     }
+
     //删除KODO对象存储的图片文件
     public void delectKODO(Keys key, String fileName) {
         Configuration cfg;
         //构造一个带指定Zone对象的配置类
-        if(key.getEndpoint().equals("1")){cfg = new Configuration(Zone.zone0());}
-        else if(key.getEndpoint().equals("2")){cfg = new Configuration(Zone.zone1());}
-        else if(key.getEndpoint().equals("3")){cfg = new Configuration(Zone.zone2());}
-        else if(key.getEndpoint().equals("4")){cfg = new Configuration(Zone.zoneNa0());}
-        else{cfg = new Configuration(Zone.zoneAs0());}
+        if (key.getEndpoint().equals("1")) {
+            cfg = new Configuration(Zone.zone0());
+        } else if (key.getEndpoint().equals("2")) {
+            cfg = new Configuration(Zone.zone1());
+        } else if (key.getEndpoint().equals("3")) {
+            cfg = new Configuration(Zone.zone2());
+        } else if (key.getEndpoint().equals("4")) {
+            cfg = new Configuration(Zone.zoneNa0());
+        } else {
+            cfg = new Configuration(Zone.zoneAs0());
+        }
         Auth auth = Auth.create(key.getAccessKey(), key.getAccessSecret());
         BucketManager bucketManager = new BucketManager(auth, cfg);
         try {
@@ -136,24 +152,26 @@ public class ImgServiceImpl implements ImgService {
             System.err.println(ex.response.toString());
         }
     }
+
     //删除COS对象存储的图片文件
     public void delectCOS(Keys key, String fileName) {
         COSCredentials cred = new BasicCOSCredentials(key.getAccessKey(), key.getAccessSecret());
         Region region = new Region(key.getEndpoint());
         ClientConfig clientConfig = new ClientConfig(region);
-        COSClient cosClient= new COSClient(cred, clientConfig);
+        COSClient cosClient = new COSClient(cred, clientConfig);
         try {
             // 指定对象所在的存储桶
             String bucketName = key.getBucketname();
             // 指定对象在 COS 上的对象键
             String userkey = fileName;
-             cosClient.deleteObject(key.getBucketname(), userkey);
+            cosClient.deleteObject(key.getBucketname(), userkey);
         } catch (CosServiceException serverException) {
             serverException.printStackTrace();
         } catch (CosClientException clientException) {
             clientException.printStackTrace();
         }
     }
+
     //删除FTP存储的图片文件
     public void delectFTP(Keys key, String fileName) {
         FTPClient ftp = new FTPClient();
@@ -161,8 +179,8 @@ public class ImgServiceImpl implements ImgService {
         String h = host[0];
         Integer p = Integer.parseInt(host[1]);
         try {
-            if(!ftp.isConnected()){
-                ftp.connect(h,p);
+            if (!ftp.isConnected()) {
+                ftp.connect(h, p);
             }
             //如果是需要认证的服务器，就需要账号和密码来登录
             ftp.login(key.getAccessKey(), key.getAccessSecret());
@@ -172,6 +190,7 @@ public class ImgServiceImpl implements ImgService {
             Print.warning("删除FTP存储的图片失败");
         }
     }
+
     @Override
     public Integer counts(Integer userid) {
         // TODO Auto-generated method stub
@@ -208,5 +227,16 @@ public class ImgServiceImpl implements ImgService {
     @Override
     public Integer getusermemory(Integer userid) {
         return imgMapper.getusermemory(userid);
+    }
+
+    @Override
+    public String getImagePath(long imageId) {
+        return this.getSavePath() + imageId;
+    }
+
+    @Override
+    public String getSavePath() {
+        String osType = System.getProperty("os.name");
+        return osType.toLowerCase().contains("window") ? this.imageSavePath4windows : this.imageSavePath4linux;
     }
 }

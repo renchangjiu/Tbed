@@ -1,5 +1,20 @@
 package cn.hellohao.pojo;
 
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
+/**
+ * @author su
+ * @date 2019/10/19 12:25
+ */
+
+@Getter
+@Setter
+@ToString
+@Accessors(chain = true)
 public class Keys {
     private Integer id;
     private String AccessKey;
@@ -24,62 +39,5 @@ public class Keys {
         RequestAddress = requestAddress;
         this.storageType = storageType;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAccessKey() {
-        return AccessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        AccessKey = accessKey;
-    }
-
-    public String getAccessSecret() {
-        return AccessSecret;
-    }
-
-    public void setAccessSecret(String accessSecret) {
-        AccessSecret = accessSecret;
-    }
-
-    public String getEndpoint() {
-        return Endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        Endpoint = endpoint;
-    }
-
-    public String getBucketname() {
-        return Bucketname;
-    }
-
-    public void setBucketname(String bucketname) {
-        Bucketname = bucketname;
-    }
-
-    public String getRequestAddress() {
-        return RequestAddress;
-    }
-
-    public void setRequestAddress(String requestAddress) {
-        RequestAddress = requestAddress;
-    }
-
-    public Integer getStorageType() {
-        return storageType;
-    }
-
-    public void setStorageType(Integer storageType) {
-        this.storageType = storageType;
-    }
-
 
 }
