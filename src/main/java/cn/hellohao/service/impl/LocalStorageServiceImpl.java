@@ -1,5 +1,6 @@
 package cn.hellohao.service.impl;
 
+import cn.hellohao.pojo.Image;
 import cn.hellohao.pojo.Result;
 import cn.hellohao.pojo.ReturnImage;
 import cn.hellohao.service.ImageService;
@@ -9,12 +10,15 @@ import cn.hellohao.utils.DeleImg;
 import cn.hellohao.utils.IdWorker;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,12 +36,14 @@ public class LocalStorageServiceImpl implements StorageService {
     @Autowired
     private ImageService imageService;
 
+    @Value("${system.enable-https}")
+    private String enableHttps;
 
     @Override
-    public Result<ReturnImage> save(String imageName, MultipartFile multipartFile, String username, Integer expireDay) {
+    public Result<Image> save(MultipartFile multipartFile, String userPath, Integer expireDay, HttpServletRequest request) {
         long id = IdWorker.singleNextId();
-        String imageExt = FilenameUtils.getExtension(imageName);
-        String destPath = this.imageService.getSavePath() + username + File.separator + id + "." + imageExt;
+        String imageExt = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String destPath = this.imageService.getSavePath() + userPath + File.separator + id + "." + imageExt;
         File dest = new File(destPath);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
@@ -47,15 +53,16 @@ public class LocalStorageServiceImpl implements StorageService {
             IOUtils.copy(multipartFile.getInputStream(), out);
             out.close();
 
-            ReturnImage returnImage = new ReturnImage();
-            returnImage.setName(multipartFile.getOriginalFilename());
-            returnImage.setUrl(username + "/" + id + "." + imageExt);
-            returnImage.setSize(multipartFile.getSize());
+            Image image = new Image();
+            image.setName(multipartFile.getOriginalFilename());
+            String url = getDomain(enableHttps, request) + "links/" + userPath + "/" + id + "." + imageExt;
+            image.setUrl(url);
+            image.setSize(multipartFile.getSize());
             if (expireDay > 0) {
                 String delImg = DateUtils.plusDay(expireDay);
-                DeleImg.charu(username + "/" + id + "." + imageExt + "|" + delImg + "|" + "5");
+                DeleImg.charu("/links/" + userPath + "/" + id + "." + imageExt + "|" + delImg + "|" + "5");
             }
-            return Result.success(returnImage);
+            return Result.success(image);
         } catch (IOException e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e);
@@ -65,7 +72,26 @@ public class LocalStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Result<ReturnImage> save(String imageName, String imageUrl, String username, Integer expireDay) {
+    public Result<Image> save(String imageUrl, String userPath, Integer expireDay, HttpServletRequest request) {
+        //     long id = IdWorker.singleNextId();
+        //     String oldfilePath = entry.getValue();
+        //     String newfilePath = File.separator + "HellohaoData" + File.separator + username + File.separator + uuid + times + "." + entry.getKey();//
+        //     File file = new File(oldfilePath);
+        //     File targetFile = new File(newfilePath);
+        //     if (!targetFile.getParentFile().exists()) {
+        //         targetFile.mkdirs();
+        //     }
+        //
+        //     file.renameTo(new File(newfilePath));//只移动，源目录不存在文件
+        //     // 例2：采用数据流模式上传文件（节省内存）,自动创建父级目录
+        //     ReturnImage returnImage = new ReturnImage();
+        //     returnImage.setImgurl(username + "/" + uuid + times + "." + entry.getKey());
+        //     ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(newfilePath)));
+        //     if (setday > 0) {
+        //         String deleimg = DateUtils.plusDay(setday);
+        //         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "5");
+        //     }
+        // }
         return null;
     }
 

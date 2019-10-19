@@ -2,6 +2,7 @@ package cn.hellohao.service.impl;
 
 import cn.hellohao.dao.CodeMapper;
 import cn.hellohao.exception.CodeException;
+import cn.hellohao.pojo.Image;
 import cn.hellohao.utils.Print;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,11 +41,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.getUsers(email);
     }
 
-    @Override
-    public Integer insertimg(Images img) {
-        // TODO Auto-generated method stub
-        return userMapper.insertimg(img);
-    }
 
     @Override
     public Integer change(User user) {

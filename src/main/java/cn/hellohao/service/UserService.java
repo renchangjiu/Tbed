@@ -1,5 +1,6 @@
 package cn.hellohao.service;
 
+import cn.hellohao.pojo.Image;
 import cn.hellohao.pojo.Images;
 import cn.hellohao.pojo.User;
 import org.apache.ibatis.annotations.Param;
@@ -15,9 +16,6 @@ public interface UserService {
 
     //获取用户信息
     User getUsers(String email);
-
-    //插入图片
-    Integer insertimg(Images img);
 
     //修改资料
     Integer change(User user);
@@ -39,8 +37,12 @@ public interface UserService {
     Integer uiduser(String uid);
 
     User getUsersMail(String uid);
-    Integer setisok (User user);
+
+    Integer setisok(User user);
+
     Integer setmemory(User user);
+
     User getUsersid(Integer id);
+
     List<User> getuserlistforgroupid(Integer groupid);
 }

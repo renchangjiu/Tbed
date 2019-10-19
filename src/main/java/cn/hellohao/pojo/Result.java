@@ -1,4 +1,6 @@
-package cn.hellohao.pojo;;
+package cn.hellohao.pojo;
+
+;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,6 +77,10 @@ public class Result<T> {
         this.code = 1;
         this.message = "";
         this.data = data;
+    }
+
+    public boolean isNotSuccess() {
+        return !this.success;
     }
 
 }

@@ -167,7 +167,8 @@ public class ClientController {
                                     img.setAbnormal(0);
                                     //-1证明超出大小，
                                     if (entry.getValue() != -1) {
-                                        userService.insertimg(img);
+                                        // todo
+                                        // userService.insertimg(img);
                                     }
                                     long etime = System.currentTimeMillis();
                                     System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");
@@ -201,7 +202,8 @@ public class ClientController {
                                     img.setAbnormal(0);
                                     //-1证明超出大小，
                                     if (entry.getValue() != -1) {
-                                        userService.insertimg(img);
+                                        // todo
+                                        // userService.insertimg(img);
                                     }
                                     long etime = System.currentTimeMillis();
                                     System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");

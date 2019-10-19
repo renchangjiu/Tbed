@@ -79,12 +79,6 @@
         WHERE uid = #{uid}
     </select>
 
-    <!-- 插入图片信息 -->
-    <insert id="insertimg" parameterType="cn.hellohao.pojo.Images">
-        INSERT INTO imgdata (id, imgname, imgurl, userid, updatetime,sizes,abnormal,source)
-        VALUES (NULL, #{imgname}, #{imgurl}, #{userid}, #{updatetime},#{sizes},null,#{source})
-    </insert>
-
     <!-- 修改资料 -->
     <update id="change" parameterType="cn.hellohao.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->

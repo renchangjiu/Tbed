@@ -3,6 +3,7 @@ package cn.hellohao.service;
 
 import java.util.List;
 
+import cn.hellohao.pojo.Image;
 import org.apache.ibatis.annotations.Param;
 
 import cn.hellohao.pojo.Images;
@@ -14,7 +15,9 @@ import cn.hellohao.pojo.Images;
 public interface ImageService {
     List<Images> selectimg(Images images);
 
-    Integer deleimg(Integer id);
+    Integer delete(Long id);
+
+    Integer insert(Image image);
 
     Integer countimg(Integer userid);
 

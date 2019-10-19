@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hellohao.dao.ImgMapper">
 
+    <!-- 插入图片信息 -->
+    <insert id="insert" parameterType="cn.hellohao.pojo.Image">
+        INSERT INTO imgdata (id, imgname, imgurl, userid, updatetime, sizes, abnormal, source)
+        VALUES (NULL, #{name}, #{url}, #{userid}, #{updatetime}, #{size}, null, #{source})
+    </insert>
+
     <!-- 查询-->
     <select id="selectimg" parameterType="cn.hellohao.pojo.Images" resultType="cn.hellohao.pojo.Images">
         SELECT
@@ -38,16 +44,22 @@
     </select>
     <!-- 此用户下总数 -->
     <select id="countimg" parameterType="integer" resultType="integer">
-        select count(*) from imgdata where userid = #{userid}
+        select count(*)
+        from imgdata
+        where userid = #{userid}
     </select>
 
-    <delete id="deleimg" parameterType="integer">
-        DELETE FROM imgdata WHERE id=#{id}
+    <delete id="delete" parameterType="integer">
+        DELETE
+        FROM imgdata
+        WHERE id = #{id}
     </delete>
 
 
     <select id="selectByPrimaryKey" parameterType="integer" resultType="cn.hellohao.pojo.Images">
-        select * from imgdata where id = #{id}
+        select *
+        from imgdata
+        where id = #{id}
     </select>
 
     <select id="counts" resultType="integer">
@@ -60,24 +72,34 @@
 
     <!-- 根据图片名字标记非法提示 -->
     <update id="setabnormal" parameterType="string">
-         UPDATE imgdata set abnormal=1 where imgname=#{imgname}
+        UPDATE imgdata
+        set abnormal=1
+        where imgname = #{imgname}
     </update>
     <!-- 非法图片删除他  根据名称-->
     <delete id="deleimgname" parameterType="string">
-        DELETE FROM imgdata WHERE imgname=#{imgname}
+        DELETE
+        FROM imgdata
+        WHERE imgname = #{imgname}
     </delete>
 
-<!--    批量删除-->
+    <!--    批量删除-->
     <delete id="deleall" parameterType="integer">
-        DELETE FROM imgdata WHERE id = #{id}
+        DELETE
+        FROM imgdata
+        WHERE id = #{id}
     </delete>
 
     <select id="gettimeimg" parameterType="string" resultType="cn.hellohao.pojo.Images">
-        SELECT * from  imgdata WHERE  updatetime>=#{time}
+        SELECT *
+        from imgdata
+        WHERE updatetime >= #{time}
     </select>
-<!--查询指定用户总内存-->
+    <!--查询指定用户总内存-->
     <select id="getusermemory" parameterType="integer" resultType="integer">
-        SELECT sum(sizes) FROM `imgdata` where userid = #{userid}
+        SELECT sum(sizes)
+        FROM `imgdata`
+        where userid = #{userid}
     </select>
 
 </mapper>

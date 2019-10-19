@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.hellohao.pojo.Image;
 import cn.hellohao.utils.Print;
 import com.UpYun;
 import com.aliyun.oss.OSSClient;
@@ -44,7 +45,8 @@ import cn.hellohao.service.ImageService;
 @Service
 public class ImageServiceImpl implements ImageService {
     @Autowired
-    private ImgMapper imgMapper;
+    private ImgMapper imageMapper;
+
 
     @Value("${system.image.save.path.windows}")
     private String imageSavePath4windows;
@@ -53,20 +55,24 @@ public class ImageServiceImpl implements ImageService {
     private String imageSavePath4linux;
 
     @Override
-    public List<Images> selectimg(Images images) {
-        // TODO Auto-generated method stub
-        return imgMapper.selectimg(images);
+    public Integer insert(Image image) {
+        return this.imageMapper.insert(image);
     }
 
     @Override
-    public Integer deleimg(Integer id) {
+    public List<Images> selectimg(Images images) {
         // TODO Auto-generated method stub
-        return imgMapper.deleimg(id);
+        return imageMapper.selectimg(images);
+    }
+
+    @Override
+    public Integer delete(Long id) {
+        return imageMapper.delete(id);
     }
 
 
     public Images selectByPrimaryKey(Integer id) {
-        return imgMapper.selectByPrimaryKey(id);
+        return imageMapper.selectByPrimaryKey(id);
     }
 
     //删除对象存储的图片文件
@@ -194,39 +200,39 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Integer counts(Integer userid) {
         // TODO Auto-generated method stub
-        return imgMapper.counts(userid);
+        return imageMapper.counts(userid);
     }
 
 
     @Override
     public Integer countimg(Integer userid) {
         // TODO Auto-generated method stub
-        return imgMapper.countimg(userid);
+        return imageMapper.countimg(userid);
     }
 
     @Override
     public Integer setabnormal(String imgname) {
-        return imgMapper.setabnormal(imgname);
+        return imageMapper.setabnormal(imgname);
     }
 
     @Override
     public Integer deleimgname(String imgname) {
-        return imgMapper.deleimgname(imgname);
+        return imageMapper.deleimgname(imgname);
     }
 
     @Override
     public Integer deleall(Integer id) {
-        return imgMapper.deleall(id);
+        return imageMapper.deleall(id);
     }
 
     @Override
     public List<Images> gettimeimg(String time) {
-        return imgMapper.gettimeimg(time);
+        return imageMapper.gettimeimg(time);
     }
 
     @Override
     public Integer getusermemory(Integer userid) {
-        return imgMapper.getusermemory(userid);
+        return imageMapper.getusermemory(userid);
     }
 
     @Override

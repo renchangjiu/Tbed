@@ -30,7 +30,7 @@ import com.alibaba.fastjson.JSONArray;
  * @date 2019/10/19 12:07
  */
 @Controller
-public class UpdateImgController {
+public class ImageController {
 
     @Autowired
     private HttpServletRequest request;
@@ -58,15 +58,16 @@ public class UpdateImgController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private StorageHandler storageHandler;
+
     @Value("${system.enable-https}")
     private String enableHttps;
 
     @RequestMapping({"/", "/index"})
     public String indexImg(Model model, HttpSession httpSession) {
-        //boolean b = VerificationDomain.verification();
-        Print.Normal("欢迎使用Hellohao图床源码。者也许是最好用的java图床项目。");
-        Print.Normal("当前项目路径：" + System.getProperty("user.dir"));
-        Config config = configService.getSourceype();//查询当前系统使用的存储源类型。
+        //查询当前系统使用的存储源类型。
+        Config config = configService.getSourceype();
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
         User u = (User) httpSession.getAttribute("user");
         String email = (String) httpSession.getAttribute("email");
@@ -86,8 +87,6 @@ public class UpdateImgController {
         if (uploadConfig.getImgcountuser() != null) {
             imgcountuser = uploadConfig.getImgcountuser();
         }
-        //Boolean b =false;
-        //Integer Sourcekey = GetCurrentSource.GetSource(u==null?null:u.getId());//查询当当前用户或者游客使用的数据源
         if (email != null) {
             //登陆成功
             Integer ret = userService.login(u.getEmail(), u.getPassword());
@@ -111,28 +110,25 @@ public class UpdateImgController {
         model.addAttribute("suffix", uploadConfig.getSuffix());
         model.addAttribute("config", config);
         model.addAttribute("uploadConfig", uploadConfig);
-        Integer isupdate = 1;
+        int isupdate = 1;
         if (uploadConfig.getIsupdate() != 1) {
-            isupdate = (u == null) ? 0 : 1;//如果u等于null那么isupdate就等于0，否则等于1
+            isupdate = (u == null) ? 0 : 1;
         }
         model.addAttribute("ykxz", isupdate);
         return "index";
 
     }
 
-    @RequestMapping("/upimg")
+    @RequestMapping("/up")
     @ResponseBody
-    public String upimg(@RequestParam(value = "file", required = false) MultipartFile[] file, Integer setday,
-                        HttpSession session) throws Exception {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        Config config = configService.getSourceype();
+    public Result<?> upload(@RequestParam(value = "file", required = false) MultipartFile file, Integer setday,
+                            HttpSession session) {
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        User u = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
         Integer usermemory = 0;
         Integer memory = 0;
         Integer Sourcekey = 0;
-        if (u == null) {
+        if (user == null) {
             Sourcekey = GetCurrentSource.GetSource(null);
             memory = uploadConfig.getVisitormemory();
             usermemory = imageService.getusermemory(0);
@@ -140,15 +136,15 @@ public class UpdateImgController {
                 usermemory = 0;
             }
         } else {
-            Sourcekey = GetCurrentSource.GetSource(u.getId());
-            memory = userService.getUsers(u.getEmail()).getMemory();
-            usermemory = imageService.getusermemory(u.getId());
+            Sourcekey = GetCurrentSource.GetSource(user.getId());
+            memory = userService.getUsers(user.getEmail()).getMemory();
+            usermemory = imageService.getusermemory(user.getId());
             if (usermemory == null) {
                 usermemory = 0;
             }
         }
         Keys key = keysService.selectKeys(Sourcekey);
-        Boolean b = false;
+        boolean b = false;
         if (Sourcekey == 5) {
             b = true;
         } else {
@@ -156,8 +152,7 @@ public class UpdateImgController {
         }
 
         if (!b) {
-            jsonObject.put("imgurls", -1);
-            return jsonObject.toString();
+            return Result.success("-1");
         }
 
         int tmp = usermemory / 1024;
@@ -167,91 +162,58 @@ public class UpdateImgController {
         }
         // 可用空间不足
         if (tmp >= memory) {
-            jsonObject.put("imgurls", -5);
-            return jsonObject.toString();
+            return Result.success("-5");
         }
-        long stime = System.currentTimeMillis();
         String userpath = "tourist";
         if (uploadConfig.getUrltype() == 2) {
             java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy/MM/dd");
             userpath = dateFormat.format(new Date());
         } else {
-            if (u != null) {
-                userpath = u.getUsername();
+            if (user != null) {
+                userpath = user.getUsername();
             }
         }
-        Map<String, MultipartFile> map = new HashMap<>();
-        for (MultipartFile multipartFile : file) {
-            // 获取ImageReader对象的迭代器
-            String ext = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-            if (!multipartFile.isEmpty()) {
-                map.put(ext, multipartFile);
-                System.out.println("===name===" + multipartFile.getOriginalFilename());  //文件名
-            }
+        // if (key.getStorageType() == 1) {
+        //     m = nOSImageupload.Imageupload(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 2) {
+        //     m = ossImageupload.ImageuploadOSS(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 3) {
+        //     m = ussImageupload.ImageuploadUSS(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 4) {
+        //     m = kodoImageupload.ImageuploadKODO(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 5) {
+        //     m = LocUpdateImg.ImageuploadLOC(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 6) {
+        //     m = cosImageupload.ImageuploadCOS(map, userpath, null, setday);
+        // } else if (key.getStorageType() == 7) {
+        //     m = ftpImageupload.ImageuploadFTP(map, userpath, null, setday);
+        // } else {
+        //     System.err.println("未获取到对象存储参数，上传失败。");
+        // }
+        Result<Image> result = this.storageHandler.saveHand(file, userpath, setday, key.getStorageType(), this.request);
+        if (result.isNotSuccess()) {
+            return Result.error(result.getMessage());
         }
-        Map<ReturnImage, Integer> m = null;
-        if (key.getStorageType() == 1) {
-            m = nOSImageupload.Imageupload(map, userpath, null, setday);
-        } else if (key.getStorageType() == 2) {
-            m = ossImageupload.ImageuploadOSS(map, userpath, null, setday);
-        } else if (key.getStorageType() == 3) {
-            m = ussImageupload.ImageuploadUSS(map, userpath, null, setday);
-        } else if (key.getStorageType() == 4) {
-            m = kodoImageupload.ImageuploadKODO(map, userpath, null, setday);
-        } else if (key.getStorageType() == 5) {
-            m = LocUpdateImg.ImageuploadLOC(map, userpath, null, setday);
-        } else if (key.getStorageType() == 6) {
-            m = cosImageupload.ImageuploadCOS(map, userpath, null, setday);
-        } else if (key.getStorageType() == 7) {
-            m = ftpImageupload.ImageuploadFTP(map, userpath, null, setday);
+        Image image = result.getData();
+        image.setUpdatetime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        image.setSource(key.getStorageType());
+        if (user == null) {
+            image.setUserid(0);
         } else {
-            System.err.println("未获取到对象存储参数，上传失败。");
+            image.setUserid(user.getId());
         }
-        Images img = new Images();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        // 上传图片的时间
-        String times = df.format(new Date());
-
-        for (Map.Entry<ReturnImage, Integer> entry : m.entrySet()) {
-            if (key.getStorageType() == 5) {
-                jsonObject.put("imgurls", this.getDomain() + "/links/" + entry.getKey().getImgurl());
-                jsonObject.put("imgnames", entry.getKey().getImgname());
-                if (config.getDomain() != null) {
-                    img.setImgurl(config.getDomain() + "/links/" + entry.getKey().getImgurl());//图片链接
-                } else {
-                    img.setImgurl("http://" + IPPortUtil.getLocalIP() + ":" + IPPortUtil.getLocalPort() + "/links/" + entry.getKey().getImgurl());//图片链接
-                }
-            } else {
-                jsonObject.put("imgurls", entry.getKey().getImgurl());
-                jsonObject.put("imgnames", entry.getKey().getImgname());
-                img.setImgurl(entry.getKey().getImgurl());//图片链接
-            }
-            jsonArray.add(jsonObject);
-            img.setUpdatetime(times);
-            img.setSource(key.getStorageType());
-            if (u == null) {
-                img.setUserid(0);
-            } else {
-                img.setUserid(u.getId());//用户id
-            }
-            img.setSizes((entry.getValue()) / 1024);
-            img.setImgname(SetText.getSubString(entry.getKey().getImgurl(), key.getRequestAddress() + "/", ""));
-            img.setAbnormal(0);
-            userService.insertimg(img);
-            long etime = System.currentTimeMillis();
-
-            System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");
-        }
-        return jsonObject.toString();
+        image.setAbnormal(0);
+        this.imageService.insert(image);
+        return Result.success(image);
     }
 
 
     /**
      * 根据网络图片url上传
      */
-    @PostMapping("/upurlimg")
+    @PostMapping("/up-url")
     @ResponseBody
-    public String upurlimg(HttpSession session, String imgurl, HttpServletRequest request, Integer setday) throws Exception {
+    public String uploadByUrl(HttpSession session, String imgurl, HttpServletRequest request, Integer setday) throws Exception {
         Config config = configService.getSourceype();//查询当前系统使用的存储源类型。
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
         User u = (User) session.getAttribute("user");
@@ -386,7 +348,8 @@ public class UpdateImgController {
                                         img.setSizes((entry.getValue()));
                                         img.setImgname(SetText.getSubString(entry.getKey().getImgurl(), key.getRequestAddress() + "/", ""));
                                         img.setAbnormal(0);
-                                        userService.insertimg(img);
+                                        // todo
+                                        // userService.insertimg(img);
                                         long etime = System.currentTimeMillis();
                                         System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");
                                     }
@@ -468,7 +431,8 @@ public class UpdateImgController {
                                         img.setSizes((entry.getValue()));
                                         img.setImgname(SetText.getSubString(entry.getKey().getImgurl(), key.getRequestAddress() + "/", ""));
                                         img.setAbnormal(0);
-                                        userService.insertimg(img);
+                                        // todo
+                                        // userService.insertimg(img);
                                         long etime = System.currentTimeMillis();
                                         System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");
                                     }
@@ -499,6 +463,56 @@ public class UpdateImgController {
  * -2 目标图片太大或者不存在
  * -3 文件类型不符合要求
  * */
+    }
+
+
+    @PostMapping("/admin/deleimg")
+    @ResponseBody
+    public String delete(long id, Integer sourcekey, HttpSession session) {
+        JSONObject jsonObject = new JSONObject();
+        User u = (User) session.getAttribute("user");
+        Images images = imageService.selectByPrimaryKey((int) id);
+        Keys key = keysService.selectKeys(sourcekey);
+        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        boolean b = false;
+        if (Sourcekey == 5) {
+            b = true;
+        } else {
+            b = StringUtils.doNull(Sourcekey, key);
+        }
+        if (b) {
+            ImageServiceImpl de = new ImageServiceImpl();
+            if (key.getStorageType() == 1) {
+                de.delect(key, images.getImgname());
+            } else if (key.getStorageType() == 2) {
+                de.delectOSS(key, images.getImgname());
+            } else if (key.getStorageType() == 3) {
+                de.delectUSS(key, images.getImgname());
+            } else if (key.getStorageType() == 4) {
+                de.delectKODO(key, images.getImgname());
+            } else if (key.getStorageType() == 5) {
+                LocUpdateImg.deleteLOCImg(images.getImgname());
+            } else if (key.getStorageType() == 6) {
+                de.delectCOS(key, images.getImgname());
+            } else if (key.getStorageType() == 7) {
+                de.delectFTP(key, images.getImgname());
+            } else {
+                System.err.println("未获取到对象存储参数，删除失败。");
+            }
+            Integer ret = imageService.delete(id);
+            Integer count = 0;
+            if (ret > 0) {
+                jsonObject.put("usercount", imageService.countimg(u.getId()));
+                jsonObject.put("count", imageService.counts(null));
+                count = 1;
+            } else {
+                count = 0;
+            }
+            jsonObject.put("val", count);
+        } else {
+            jsonObject.put("val", 0);
+        }
+        return jsonObject.toString();
     }
 
     //刪除用戶
@@ -534,11 +548,4 @@ public class UpdateImgController {
         return "err";
     }
 
-
-    private String getDomain() {
-        String protocol = "1".equals(this.enableHttps) ? "https" : "http";
-        String localAddr = this.request.getLocalAddr();
-        localAddr = "0:0:0:0:0:0:0:1".equals(localAddr) ? "localhost" : localAddr;
-        return protocol + "://" + localAddr + ":" + this.request.getLocalPort();
-    }
 }

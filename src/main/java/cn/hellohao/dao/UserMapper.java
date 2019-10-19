@@ -1,5 +1,6 @@
 package cn.hellohao.dao;
 
+import cn.hellohao.pojo.Image;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,9 +19,6 @@ public interface UserMapper {
 
     //获取用户信息
     User getUsers(@Param("email") String email);
-
-    //插入图片
-    Integer insertimg(Images img);
 
     //修改资料
     Integer change(User user);
@@ -43,9 +41,11 @@ public interface UserMapper {
     Integer uiduser(@Param("uid") String uid);
 
     User getUsersMail(@Param("uid") String uid);
-    Integer setisok (User user);
+
+    Integer setisok(User user);
 
     Integer setmemory(User user);
+
     User getUsersid(@Param("id") Integer id);
 
     List<User> getuserlistforgroupid(@Param("groupid") Integer groupid);

@@ -156,7 +156,7 @@
                 swf: '/webuploade/Uploader.sw',
                 chunked: false,//分片上传
                 chunkSize: 512 * 1024,
-                server: '/upimg',
+                server: '/up',
                 method:'POST',
                 // runtimeOrder: 'flash',
                 compress: false,//不启用压缩
@@ -198,10 +198,8 @@
         // 文件上传成功
 
         uploader.on( 'uploadSuccess', function(file,response) {
-            //alert(response.length);
-            //console.log(response.imgurls)
             $("#address").css('display', 'block');
-            if(response.imgurls==-100){
+            if(response.data.url==-100){
                 layui.use('layer', function () {
                     layer = layui.layer;
                     layer.msg("本站已禁用游客上传,请登录本站。", {icon: 2});
@@ -209,20 +207,20 @@
                 // arr_url += '未配置存储源，请先后台配置存储源\r\n';
                 // arr_markdown += '未配置存储源，请先后台配置存储源\r\n';
                 // arr_html += '未配置存储源，请先后台配置存储源\r\n';
-            }else if(response.imgurls==-1){
+            }else if(response.data.url==-1){
                 layui.use('layer', function () {
                     layer = layui.layer;
                     layer.msg("未配置存储源，或存储源配置不正确。", {icon: 2});
                 });
-            }else if(response.imgurls==-5){
+            }else if(response.data.url==-5){
                 layui.use('layer', function () {
                     layer = layui.layer;
                     layer.msg("上传失败，可用空间不足", {icon: 2});
                 });
             } else{
-                arr_url += response.imgurls + '\r\n';
-                arr_markdown += '!['+response.imgnames+'](' + response.imgurls + ')\r\n';
-                arr_html += '<img src="' + response.imgurls + '" alt="'+response.imgnames+'" title="'+response.imgnames+'" /> \r\n';
+                arr_url += response.data.url + '\r\n';
+                arr_markdown += '!['+response.data.name+'](' + response.data.url + ')\r\n';
+                arr_html += '<img src="' + response.data.url + '" alt="'+response.data.name+'" title="'+response.data.name+'" /> \r\n';
             }
             if(urltypes==1){
                 $("#urls").text(arr_url);

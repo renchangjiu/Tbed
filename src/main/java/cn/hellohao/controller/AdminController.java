@@ -223,55 +223,6 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/deleimg")
-    @ResponseBody
-    public String deleimg(HttpSession session, Integer id, Integer sourcekey) {
-        JSONObject jsonObject = new JSONObject();
-        User u = (User) session.getAttribute("user");
-        Images images = imageService.selectByPrimaryKey(id);
-        Keys key = keysService.selectKeys(sourcekey);
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
-        Boolean b =false;
-        if(Sourcekey==5){
-            b =true;
-        }else{
-            b = StringUtils.doNull(Sourcekey,key);//判断对象是否有空值
-        }
-        if(b){
-            ImageServiceImpl de = new ImageServiceImpl();
-            if (key.getStorageType() == 1) {
-                de.delect(key, images.getImgname());
-            } else if (key.getStorageType() == 2) {
-                de.delectOSS(key, images.getImgname());
-            } else if (key.getStorageType() == 3) {
-                de.delectUSS(key, images.getImgname());
-            } else if (key.getStorageType() == 4) {
-                de.delectKODO(key, images.getImgname());
-            } else if (key.getStorageType() == 5) {
-                LocUpdateImg.deleteLOCImg(images.getImgname());
-            }else if (key.getStorageType() == 6) {
-                de.delectCOS(key, images.getImgname());
-            }else if (key.getStorageType() == 7) {
-                de.delectFTP(key, images.getImgname());
-            }else {
-                System.err.println("未获取到对象存储参数，删除失败。");
-            }
-            Integer ret = imageService.deleimg(id);
-            Integer count = 0;
-            if (ret > 0) {
-                jsonObject.put("usercount", imageService.countimg(u.getId()));
-                jsonObject.put("count", imageService.counts(null));
-                count = 1;
-            } else {
-                count = 0;
-            }
-            jsonObject.put("val", count);
-        }else{
-            jsonObject.put("val", 0);
-        }
-        return jsonObject.toString();
-    }
-
     //批量删除图片
     @PostMapping("/deleallimg")
     @ResponseBody

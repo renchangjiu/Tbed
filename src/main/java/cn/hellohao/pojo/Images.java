@@ -135,11 +135,6 @@ public class Images {
     public void setStoptime(String stoptime) {
         this.stoptime = stoptime;
     }
-//    @Mapper
-//    public static interface ConfigMapper {
-//        Config getSourceype();
-//        Integer setSourceype(@Param("sourcekey") Integer sourcekey);
-//    }
 }
 	
 		

@@ -24,9 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/19 16:35
+ * @author su
+ * @date 2019/10/19 19:23
  */
 @Controller
 @RequestMapping("/admin/root")
@@ -43,15 +42,17 @@ public class GroupController {
     public String togroup() {
         return "admin/group";
     }
+
     @RequestMapping(value = "/addgroup")
     public String addgroup() {
         return "admin/addgroup";
     }
+
     //获取code列表
     @RequestMapping(value = "/getgrouplist")
     @ResponseBody
     public Map<String, Object> getgrouplist(HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
-                                           @RequestParam(required = false) int limit) {
+                                            @RequestParam(required = false) int limit) {
         User u = (User) session.getAttribute("user");
         // 使用Pagehelper传入当前页数和页面显示条数会自动为我们的select语句加上limit查询
         // 从他的下一条sql开始分页
@@ -75,26 +76,27 @@ public class GroupController {
     @RequestMapping(value = "/addisgroup")
     @ResponseBody
     public Integer addisgroup(Group group) {
-        boolean b =false;
-        if(group.getKeyid()==5){
-            b =true;
-        }else{
+        boolean b = false;
+        if (group.getKeyid() == 5) {
+            b = true;
+        } else {
             Keys key = keysService.selectKeys(group.getKeyid());
-            b = StringUtils.doNull(group.getKeyid(),key);
+            b = StringUtils.doNull(group.getKeyid(), key);
         }
         Integer ret = 0;
-        if(b){
+        if (b) {
             ret = groupService.addgroup(group);
-        }else{
+        } else {
             ret = -1;//该存储源key配置不完整
         }
         return ret;
     }
+
     @RequestMapping(value = "/delegroup")
     @ResponseBody
     public Integer delegroup(Integer id) {
         Integer ret = -1;
-        if(id!=1){
+        if (id != 1) {
             ret = groupService.delegroup(id);
         }
         return ret;
@@ -135,10 +137,9 @@ public class GroupController {
     @RequestMapping("/modifygroup")
     public String modifygroup(Model model, Integer id) {
         Group group = groupService.idgrouplist(id);
-        model.addAttribute("group",group);
+        model.addAttribute("group", group);
         return "admin/setgroup";
     }
-
 
 
 }

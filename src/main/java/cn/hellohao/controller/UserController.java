@@ -29,6 +29,10 @@ import com.alibaba.fastjson.JSONObject;
 
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @author su
+ * @date 2019/10/19 19:23
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -47,9 +51,9 @@ public class UserController {
 
     @RequestMapping("/register")
     @ResponseBody
-    public String Register(@Valid User u,Integer zctmp) {
+    public String Register(@Valid User u, Integer zctmp) {
         JSONObject jsonObject = new JSONObject();
-        if((zctmp-number2)==(istmp2-number2)){
+        if ((zctmp - number2) == (istmp2 - number2)) {
             //取当前时间
             User user = new User();
             UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
@@ -57,7 +61,7 @@ public class UserController {
             Integer countusername = userService.countusername(u.getUsername());
             Integer countmail = userService.countmail(u.getEmail());
             SysConfig sysConfig = sysConfigService.getstate();
-            if(sysConfig.getRegister()==1){
+            if (sysConfig.getRegister() == 1) {
                 if (countusername == 0 && countmail == 0) {
                     String uid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -72,43 +76,43 @@ public class UserController {
                     user.setPassword(Base64Encryption.encryptBASE64(u.getPassword().getBytes()));
                     //查询是否启用了邮箱验证。
                     Config config = configService.getSourceype();
-                    System.err.println("是否启用了邮箱激活："+emailConfig.getUsing());
+                    System.err.println("是否启用了邮箱激活：" + emailConfig.getUsing());
                     Integer type = 0;
-                    if(emailConfig.getUsing()==1){
+                    if (emailConfig.getUsing() == 1) {
                         user.setIsok(0);
                         //初始化邮箱
                         MimeMessage message = SendEmail.Emails(emailConfig);
                         //注册完发激活链接
                         Thread thread = new Thread() {
                             public void run() {
-                                Integer a = SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(),emailConfig,config);
+                                Integer a = SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
                             }
                         };
                         thread.start();
                         type = 1;
-                    }else{
+                    } else {
                         //直接注册
                         user.setIsok(1);
                         type = 2;
                     }
                     Integer ret = userService.register(user);
-                    if(ret>0){
+                    if (ret > 0) {
 //                    UserGroup userGroup = new UserGroup();
 //                    User user1 = userService.getUsersMail(uid);
 //                    userGroup.setUserid(user1.getId());
 //                    userGroup.setGroupid(1);
 //                    userGroupService.addusergroup(userGroup);
                     }
-                    jsonObject.put("ret",ret);
-                    jsonObject.put("zctype",type);
+                    jsonObject.put("ret", ret);
+                    jsonObject.put("zctype", type);
                 } else {
-                    jsonObject.put("ret",-2);
+                    jsonObject.put("ret", -2);
                 }
-            }else{
-                jsonObject.put("ret",-3); //管理员关闭的注册
+            } else {
+                jsonObject.put("ret", -3); //管理员关闭的注册
             }
-        }else{
-            jsonObject.put("ret",-4);//非法注册
+        } else {
+            jsonObject.put("ret", -4);//非法注册
         }
         return jsonObject.toString();
     }
@@ -116,9 +120,9 @@ public class UserController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public String login( HttpSession httpSession, String email, String password,Integer logotmp) {
+    public String login(HttpSession httpSession, String email, String password, Integer logotmp) {
         JSONArray jsonArray = new JSONArray();
-        if((logotmp-number1)==(istmp1-number1)){
+        if ((logotmp - number1) == (istmp1 - number1)) {
             String basepass = Base64Encryption.encryptBASE64(password.getBytes());
             Integer ret = userService.login(email, basepass);
             if (ret > 0) {
@@ -127,15 +131,16 @@ public class UserController {
                     httpSession.setAttribute("user", user);
                     httpSession.setAttribute("email", user.getEmail());
                     jsonArray.add(1);
-                } else if(ret==-1){
+                } else if (ret == -1) {
                     jsonArray.add(-1);
-                }else {
+                } else {
                     jsonArray.add(-2);
                 }
             } else {
                 jsonArray.add(0);
             }
-        }else{jsonArray.add(-3);//非法登录
+        } else {
+            jsonArray.add(-3);//非法登录
         }
 
         return jsonArray.toString();
@@ -180,19 +185,20 @@ public class UserController {
         }
 
     }
+
     @PostMapping(value = "/verification")
     @ResponseBody
-    public Integer verification(HttpSession session,Integer tmp,Integer type) {
+    public Integer verification(HttpSession session, Integer tmp, Integer type) {
         Random random = new Random();
-        if(type==1){
+        if (type == 1) {
             number1 = random.nextInt(100);
             istmp1 = tmp;
-            Print.Normal(tmp-number1);
+            Print.Normal(tmp - number1);
         }
-        if(type==2){
+        if (type == 2) {
             number2 = random.nextInt(100);
             istmp2 = tmp;
-            Print.Normal(tmp-number2);
+            Print.Normal(tmp - number2);
         }
 
         return 1;

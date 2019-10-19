@@ -8,6 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * @author su
+ * @date 2019/10/19 19:23
+ */
 @Controller
 @RequestMapping("/admin")
 public class ImageReviewController {

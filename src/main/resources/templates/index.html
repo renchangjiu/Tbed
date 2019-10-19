@@ -38,7 +38,9 @@
 	<!--	<script th:src="@{/static/js/popover.min.js}"></script>-->
 	<script th:src="@{/layui/layui/layui.js}"></script>
 	<style type="text/css">
-		a{transition: all 0.6s;}
+		a {
+			transition: all 0.6s;
+		}
 		a:hover{
 			text-decoration: none;
 			transform: scale(1.4);}
@@ -712,7 +714,7 @@
 				$('#loadingModal').modal({backdrop: 'static', keyboard: false});
 				$.ajax({
 					type: "POST",
-					url: "/upurlimg",
+					url: "/up-url",
 					dataType: "json",
 					data: {imgurl: result,setday:isday},
 					success: function (data) {
