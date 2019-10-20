@@ -113,7 +113,7 @@ VALUES (1, '默认群组', 5);
 DROP TABLE IF EXISTS `imgdata`;
 CREATE TABLE `imgdata`
 (
-    `id`         int(255)                                                NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `id`         bigint(255)                                             NOT NULL AUTO_INCREMENT COMMENT '主键',
     `imgname`    varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片名',
     `imgurl`     varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片链接',
     `userid`     int(10)                                                 NULL DEFAULT NULL COMMENT '用户名',
