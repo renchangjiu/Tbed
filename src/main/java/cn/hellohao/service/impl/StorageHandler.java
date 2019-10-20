@@ -2,9 +2,6 @@ package cn.hellohao.service.impl;
 
 import cn.hellohao.pojo.Image;
 import cn.hellohao.pojo.Result;
-import cn.hellohao.pojo.ReturnImage;
-import cn.hellohao.utils.LocUpdateImg;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

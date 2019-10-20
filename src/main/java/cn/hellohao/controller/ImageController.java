@@ -162,30 +162,13 @@ public class ImageController {
         }
         String userpath = "tourist";
         if (uploadConfig.getUrltype() == 2) {
-            java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy/MM/dd");
             userpath = dateFormat.format(new Date());
         } else {
             if (user != null) {
                 userpath = user.getUsername();
             }
         }
-        // if (key.getStorageType() == 1) {
-        //     m = nOSImageupload.Imageupload(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 2) {
-        //     m = ossImageupload.ImageuploadOSS(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 3) {
-        //     m = ussImageupload.ImageuploadUSS(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 4) {
-        //     m = kodoImageupload.ImageuploadKODO(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 5) {
-        //     m = LocUpdateImg.ImageuploadLOC(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 6) {
-        //     m = cosImageupload.ImageuploadCOS(map, userpath, null, setday);
-        // } else if (key.getStorageType() == 7) {
-        //     m = ftpImageupload.ImageuploadFTP(map, userpath, null, setday);
-        // } else {
-        //     System.err.println("未获取到对象存储参数，上传失败。");
-        // }
         Result<Image> result = this.storageHandler.saveHand(file, userpath, setday, key.getStorageType(), this.request);
         if (result.isNotSuccess()) {
             return Result.error(result.getMessage());

@@ -201,19 +201,6 @@
                         layer = layui.layer;
                         layer.msg(response.message, {icon: 2});
                     });
-                }
-                if (response.data.url == -100) {
-
-                } else if (response.data.url == -1) {
-                    layui.use('layer', function () {
-                        layer = layui.layer;
-                        layer.msg("未配置存储源，或存储源配置不正确。", {icon: 2});
-                    });
-                } else if (response.data.url == -5) {
-                    layui.use('layer', function () {
-                        layer = layui.layer;
-                        layer.msg("上传失败，可用空间不足", {icon: 2});
-                    });
                 } else {
                     arr_url += response.data.url + '\r\n';
                     arr_markdown += '![' + response.data.name + '](' + response.data.url + ')\r\n';
