@@ -109,7 +109,7 @@ Expression=0 30 04 * * ?
 #下边的配置项不需要修改。
 mybatis.configuration.map-underscore-to-camel-case=true
 mybatis.mapper-locations=classpath:mapper/*.xml
-logging.level.cn.hellohao.dao=debug
+logging.level.cn.su.dao=debug
 spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
 spring.jackson.time-zone=GMT+8
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver

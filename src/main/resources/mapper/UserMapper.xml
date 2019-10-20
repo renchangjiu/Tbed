@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.hellohao.dao.UserMapper">
+<mapper namespace="com.su.dao.UserMapper">
 
     <!-- 用户注册 -->
-    <insert id="register" parameterType="cn.hellohao.pojo.User">
+    <insert id="register" parameterType="com.su.pojo.User">
         INSERT INTO user (id, username, PASSWORD, email, birthder, LEVEL,uid,isok,memory,groupid)
         VALUES (NULL, #{username}, #{password}, #{email}, #{birthder}, #{level},#{uid},#{isok},#{memory},#{groupid}   )
     </insert>
@@ -20,7 +20,7 @@
         where email = #{email}
     </select>
     <!--  uid查询用户并修改  -->
-    <update id="uiduser" parameterType="cn.hellohao.pojo.User">
+    <update id="uiduser" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
         UPDATE `user` set `isok`=1 where uid=#{uid}
     </update>
@@ -34,7 +34,7 @@
     </select>
 
     <!-- 查询当前用户:根据邮箱 -->
-    <select id="getUsers" parameterType="string" resultType="cn.hellohao.pojo.User">
+    <select id="getUsers" parameterType="string" resultType="com.su.pojo.User">
         SELECT id,
         username,
         email,
@@ -49,7 +49,7 @@
         WHERE email = #{email}
     </select>
     <!-- 查询当前用户:根据id -->
-    <select id="getUsersid" parameterType="integer" resultType="cn.hellohao.pojo.User">
+    <select id="getUsersid" parameterType="integer" resultType="com.su.pojo.User">
         SELECT id,
                username,
                email,
@@ -64,7 +64,7 @@
         WHERE id = #{id}
     </select>
     <!-- 查询当前用户:根据uid -->
-    <select id="getUsersMail" parameterType="string" resultType="cn.hellohao.pojo.User">
+    <select id="getUsersMail" parameterType="string" resultType="com.su.pojo.User">
         SELECT id,
         username,
         email,
@@ -80,7 +80,7 @@
     </select>
 
     <!-- 修改资料 -->
-    <update id="change" parameterType="cn.hellohao.pojo.User">
+    <update id="change" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
         UPDATE `user`
         <set>
@@ -112,7 +112,7 @@
         SELECT count(*) FROM `user`
     </select>
     <!-- 获取用户的详细信息 -->
-    <select id="getuserlist" resultType="cn.hellohao.pojo.User">
+    <select id="getuserlist" resultType="com.su.pojo.User">
         SELECT
         *
         FROM
@@ -132,16 +132,16 @@
         DELETE FROM user WHERE id=#{id}
     </delete>
 
-    <update id="setisok" parameterType="cn.hellohao.pojo.User">
+    <update id="setisok" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
         UPDATE `user` set `isok`=#{isok} where id=#{id}
     </update>
-    <update id="setmemory" parameterType="cn.hellohao.pojo.User">
+    <update id="setmemory" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
         UPDATE `user` set `memory`=#{memory} where id=#{id}
     </update>
 
-    <select id="getuserlistforgroupid" parameterType="integer" resultType="cn.hellohao.pojo.User">
+    <select id="getuserlistforgroupid" parameterType="integer" resultType="com.su.pojo.User">
         select * from user where groupid=#{groupid}
     </select>
 

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.hellohao.dao.KeysMapper">
+<mapper namespace="com.su.dao.KeysMapper">
 
 
     <!-- 查询对象存储key-->
-    <select id="selectKeys" parameterType="integer" resultType="cn.hellohao.pojo.Keys">
+    <select id="selectByStorageType" parameterType="integer" resultType="com.su.pojo.Keys">
         SELECT *
         FROM `keys`
         WHERE storageType = #{storageType}
     </select>
 
     <!-- 查询对象存储key-->
-    <select id="getKeys" parameterType="integer" resultType="cn.hellohao.pojo.Keys">
+    <select id="getKeys" parameterType="integer" resultType="com.su.pojo.Keys">
         SELECT *
         FROM `keys`
     </select>
 
-    <update id="updateKey" parameterType="cn.hellohao.pojo.Keys">
+    <update id="updateKey" parameterType="com.su.pojo.Keys">
         UPDATE `keys`
         SET AccessKey      = #{AccessKey},
             AccessSecret   = #{AccessSecret},
