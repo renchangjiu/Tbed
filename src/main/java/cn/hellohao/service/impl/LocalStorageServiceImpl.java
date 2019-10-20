@@ -1,5 +1,6 @@
 package cn.hellohao.service.impl;
 
+import cn.hellohao.config.SystemConfig;
 import cn.hellohao.pojo.Image;
 import cn.hellohao.pojo.Result;
 import cn.hellohao.pojo.ReturnImage;
@@ -36,8 +37,8 @@ public class LocalStorageServiceImpl implements StorageService {
     @Autowired
     private ImageService imageService;
 
-    @Value("${system.enable-https}")
-    private String enableHttps;
+    @Autowired
+    private SystemConfig systemConfig;
 
     @Override
     public Result<Image> save(MultipartFile multipartFile, String userPath, Integer expireDay, HttpServletRequest request) {
@@ -55,7 +56,7 @@ public class LocalStorageServiceImpl implements StorageService {
 
             Image image = new Image();
             image.setName(multipartFile.getOriginalFilename());
-            String url = getDomain(enableHttps, request) + "links/" + userPath + "/" + id + "." + imageExt;
+            String url = getDomain(systemConfig, request) + "links/" + userPath + "/" + id + "." + imageExt;
             image.setUrl(url);
             image.setSize(multipartFile.getSize());
             if (expireDay > 0) {

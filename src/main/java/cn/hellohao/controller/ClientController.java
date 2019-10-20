@@ -50,6 +50,9 @@ public class ClientController {
     @Autowired
     private DomainService domainService;
 
+    @Autowired
+    private ImageService imageService;
+
     @Value("${systemupdate}")
     private String systemupdate;
 
@@ -204,6 +207,7 @@ public class ClientController {
                                     if (entry.getValue() != -1) {
                                         // todo
                                         // userService.insertimg(img);
+                                        // this.imageService.insert(image);
                                     }
                                     long etime = System.currentTimeMillis();
                                     System.out.println("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");

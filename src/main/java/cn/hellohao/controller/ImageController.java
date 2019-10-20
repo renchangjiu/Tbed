@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,11 +62,8 @@ public class ImageController {
     @Autowired
     private StorageHandler storageHandler;
 
-    @Value("${system.enable-https}")
-    private String enableHttps;
-
     @RequestMapping({"/", "/index"})
-    public String indexImg(Model model, HttpSession httpSession) {
+    public String indexImg(ModelMap map, HttpSession httpSession) {
         //查询当前系统使用的存储源类型。
         Config config = configService.getSourceype();
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
@@ -92,29 +90,26 @@ public class ImageController {
             Integer ret = userService.login(u.getEmail(), u.getPassword());
             if (ret > 0) {
                 User user = userService.getUsers(u.getEmail());
-                model.addAttribute("username", user.getUsername());
-                model.addAttribute("level", user.getLevel());
-                model.addAttribute("loginid", 100);
-                model.addAttribute("imgcount", imgcountuser);
-                model.addAttribute("filesize", filesizeuser * 1024 * 1024);
+                map.addAttribute("username", user.getUsername());
+                map.addAttribute("level", user.getLevel());
+                map.addAttribute("loginid", 100);
+                map.addAttribute("imgcount", imgcountuser);
+                map.addAttribute("filesize", filesizeuser * 1024 * 1024);
 
             } else {
-                model.addAttribute("loginid", -1);
-                model.addAttribute("imgcount", imgcounttourists);
+                map.addAttribute("loginid", -1);
+                map.addAttribute("imgcount", imgcounttourists);
             }
         } else {
-            model.addAttribute("loginid", -2);
-            model.addAttribute("imgcount", imgcounttourists);
-            model.addAttribute("filesize", filesizetourists * 1024 * 1024);
+            map.addAttribute("loginid", -2);
+            map.addAttribute("imgcount", imgcounttourists);
+            map.addAttribute("filesize", filesizetourists * 1024 * 1024);
         }
-        model.addAttribute("suffix", uploadConfig.getSuffix());
-        model.addAttribute("config", config);
-        model.addAttribute("uploadConfig", uploadConfig);
-        int isupdate = 1;
-        if (uploadConfig.getIsupdate() != 1) {
-            isupdate = (u == null) ? 0 : 1;
-        }
-        model.addAttribute("ykxz", isupdate);
+        map.addAttribute("suffix", uploadConfig.getSuffix());
+        map.addAttribute("config", config);
+        map.addAttribute("uploadConfig", uploadConfig);
+        int uploadable = (uploadConfig.getIsupdate() != 1 || u != null) ? 1 : 0;
+        map.put("uploadable", uploadable);
         return "index";
 
     }
@@ -125,6 +120,9 @@ public class ImageController {
                             HttpSession session) {
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
         User user = (User) session.getAttribute("user");
+        if (uploadConfig.getIsupdate() == 1 && user == null) {
+            return Result.error("已禁止游客上传,请登陆后使用。");
+        }
         Integer usermemory = 0;
         Integer memory = 0;
         Integer Sourcekey = 0;
@@ -150,9 +148,8 @@ public class ImageController {
         } else {
             b = StringUtils.doNull(Sourcekey, key);
         }
-
         if (!b) {
-            return Result.success("-1");
+            return Result.error("未配置存储源，或存储源配置不正确。");
         }
 
         int tmp = usermemory / 1024;
@@ -160,9 +157,8 @@ public class ImageController {
         if (memory == -1) {
             tmp = -2;
         }
-        // 可用空间不足
         if (tmp >= memory) {
-            return Result.success("-5");
+            return Result.error("上传失败，可用空间不足。");
         }
         String userpath = "tourist";
         if (uploadConfig.getUrltype() == 2) {
@@ -253,7 +249,7 @@ public class ImageController {
         Integer youke = uploadConfig.getFilesizetourists();
         Integer yonghu = uploadConfig.getFilesizeuser();
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        Boolean bo = false;
+        boolean bo = false;
         if (Sourcekey == 5) {
             bo = true;
         } else {

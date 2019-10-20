@@ -8,8 +8,12 @@ import org.apache.ibatis.annotations.Param;
 
 import cn.hellohao.pojo.Images;
 
+/**
+ * @author su
+ * @date 2019/10/20 11:09
+ */
 @Mapper
-public interface ImgMapper {
+public interface ImageMapper {
 
     Integer insert(Image image);
 

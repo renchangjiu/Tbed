@@ -1,5 +1,10 @@
 package cn.hellohao.pojo;
 
+
+/**
+ * @author su
+ * @date 2019/10/20 11:24
+ */
 public class UploadConfig {
     private String suffix;
     private Integer filesizetourists;
@@ -7,6 +12,9 @@ public class UploadConfig {
     private Integer imgcounttourists;
     private Integer imgcountuser;
     private Integer urltype;
+    /**
+     * 是否禁止游客上传图片, 1是/0否
+     */
     private Integer isupdate;
     private Integer api;
     private Integer visitormemory;

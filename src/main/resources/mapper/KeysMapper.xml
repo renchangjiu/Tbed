@@ -5,30 +5,24 @@
 
     <!-- 查询对象存储key-->
     <select id="selectKeys" parameterType="integer" resultType="cn.hellohao.pojo.Keys">
-        SELECT
-            *
-        FROM
-            `keys`
-        WHERE
-            storageType = #{storageType}
+        SELECT *
+        FROM `keys`
+        WHERE storageType = #{storageType}
     </select>
 
     <!-- 查询对象存储key-->
     <select id="getKeys" parameterType="integer" resultType="cn.hellohao.pojo.Keys">
-        SELECT
-            *
-        FROM
-            `keys`
+        SELECT *
+        FROM `keys`
     </select>
 
     <update id="updateKey" parameterType="cn.hellohao.pojo.Keys">
         UPDATE `keys`
-        SET AccessKey = #{AccessKey},
-        AccessSecret = #{AccessSecret},
-        Endpoint = #{Endpoint},
-        Bucketname = #{Bucketname},
-        RequestAddress = #{RequestAddress}
-        WHERE
-            storageType = #{storageType}
+        SET AccessKey      = #{AccessKey},
+            AccessSecret   = #{AccessSecret},
+            Endpoint       = #{Endpoint},
+            Bucketname     = #{Bucketname},
+            RequestAddress = #{RequestAddress}
+        WHERE storageType = #{storageType}
     </update>
 </mapper>

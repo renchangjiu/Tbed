@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.hellohao.config.SystemConfig;
 import cn.hellohao.pojo.Image;
 import cn.hellohao.utils.Print;
 import com.UpYun;
@@ -33,7 +34,7 @@ import com.netease.cloud.services.nos.model.Bucket;
 import com.netease.cloud.services.nos.model.CannedAccessControlList;
 import com.netease.cloud.services.nos.transfer.TransferManager;
 
-import cn.hellohao.dao.ImgMapper;
+import cn.hellohao.dao.ImageMapper;
 import cn.hellohao.pojo.Images;
 import cn.hellohao.pojo.Keys;
 import cn.hellohao.service.ImageService;
@@ -45,14 +46,10 @@ import cn.hellohao.service.ImageService;
 @Service
 public class ImageServiceImpl implements ImageService {
     @Autowired
-    private ImgMapper imageMapper;
+    private ImageMapper imageMapper;
 
-
-    @Value("${system.image.save.path.windows}")
-    private String imageSavePath4windows;
-
-    @Value("${system.image.save.path.linux}")
-    private String imageSavePath4linux;
+    @Autowired
+    private SystemConfig systemConfig;
 
     @Override
     public Integer insert(Image image) {
@@ -243,6 +240,6 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String getSavePath() {
         String osType = System.getProperty("os.name");
-        return osType.toLowerCase().contains("window") ? this.imageSavePath4windows : this.imageSavePath4linux;
+        return osType.toLowerCase().contains("window") ? this.systemConfig.imageSavePath4windows : this.systemConfig.imageSavePath4linux;
     }
 }
