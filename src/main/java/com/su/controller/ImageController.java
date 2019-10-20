@@ -56,6 +56,9 @@ public class ImageController {
     private ImageService imageService;
 
     @Autowired
+    private GroupService groupService;
+
+    @Autowired
     private StorageHandler storageHandler;
     @Autowired
     private SystemConfig systemConfig;
@@ -65,8 +68,6 @@ public class ImageController {
         //查询当前系统使用的存储源类型。
         Config config = configService.getSourceype();
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        User u = (User) httpSession.getAttribute("user");
-        String email = (String) httpSession.getAttribute("email");
         Integer filesizetourists = 0;
         Integer filesizeuser = 0;
         Integer imgcounttourists = 0;
@@ -83,23 +84,13 @@ public class ImageController {
         if (uploadConfig.getImgcountuser() != null) {
             imgcountuser = uploadConfig.getImgcountuser();
         }
-        if (email != null) {
-            //登陆成功
-            Integer ret = userService.login(u.getEmail(), u.getPassword());
-            if (ret > 0) {
-                User user = userService.getUsers(u.getEmail());
-                map.addAttribute("username", user.getUsername());
-                map.addAttribute("level", user.getLevel());
-                map.addAttribute("loginid", 100);
-                map.addAttribute("imgcount", imgcountuser);
-                map.addAttribute("filesize", filesizeuser * 1024 * 1024);
-
-            } else {
-                map.addAttribute("loginid", -1);
-                map.addAttribute("imgcount", imgcounttourists);
-            }
+        User user = (User) httpSession.getAttribute("user");
+        if (user != null) {
+            map.addAttribute("username", user.getUsername());
+            map.addAttribute("level", user.getLevel());
+            map.addAttribute("imgcount", imgcountuser);
+            map.addAttribute("filesize", filesizeuser * 1024 * 1024);
         } else {
-            map.addAttribute("loginid", -2);
             map.addAttribute("imgcount", imgcounttourists);
             map.addAttribute("filesize", filesizetourists * 1024 * 1024);
         }
@@ -107,8 +98,7 @@ public class ImageController {
         map.addAttribute("config", config);
         map.addAttribute("uploadConfig", uploadConfig);
 
-        int uploadable = (this.systemConfig.touristUploadable || u != null) ? 1 : 0;
-
+        int uploadable = (this.systemConfig.touristUploadable || user != null) ? 1 : 0;
         map.put("uploadable", uploadable);
         return "index";
 
@@ -118,41 +108,22 @@ public class ImageController {
     @ResponseBody
     public Result<?> upload(@RequestParam(value = "file", required = false) MultipartFile file, Integer setday,
                             HttpSession session) {
-        UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
         User user = (User) session.getAttribute("user");
-
         Result<Boolean> booleanResult = this.storageHandler.canSave(user);
         if (booleanResult.isNotSuccess()) {
             return booleanResult;
         }
-        Integer storageType = 0;
-        if (user == null) {
-            storageType = GetCurrentSource.GetSource(null);
-        } else {
-            storageType = GetCurrentSource.GetSource(user.getId());
-        }
+        Result<Group> res = this.groupService.getByUserId(user != null ? user.getId() : null);
+        int storageType = res.getData().getKeyid();
         Keys key = keysService.selectByStorageType(storageType);
-        String userPath = "tourist";
-        if (uploadConfig.getUrltype() == 2) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            userPath = dateFormat.format(new Date());
-        } else {
-            if (user != null) {
-                userPath = user.getUsername();
-            }
-        }
-        Result<Image> result = this.storageHandler.saveHand(file, userPath, setday, key.getStorageType(), this.request);
+        Result<Image> result = this.storageHandler.saveHand(file, setday, key.getStorageType(), this.request);
         if (result.isNotSuccess()) {
             return Result.error(result.getMessage());
         }
         Image image = result.getData();
         image.setUpdatetime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         image.setSource(key.getStorageType());
-        if (user == null) {
-            image.setUserid(0);
-        } else {
-            image.setUserid(user.getId());
-        }
+        image.setUserId(user != null ? user.getId() : 0L);
         image.setAbnormal(0);
         this.imageService.insert(image);
         return Result.success(image);
@@ -175,7 +146,7 @@ public class ImageController {
         if (u == null) {
             Sourcekey = GetCurrentSource.GetSource(null);
             memory = uploadConfig.getVisitormemory();
-            usermemory = imageService.getUsedMemory(0);
+            usermemory = imageService.getUsedMemory(0L);
             if (usermemory == null) {
                 usermemory = 0;
             }
@@ -214,7 +185,7 @@ public class ImageController {
 //        Integer memory =0;
         if (u == null) {
             memory = uploadConfig.getVisitormemory();
-            usermemory = imageService.getUsedMemory(0);
+            usermemory = imageService.getUsedMemory(0L);
             if (usermemory == null) {
                 usermemory = 0;
             }
@@ -291,7 +262,7 @@ public class ImageController {
                                         img.setUpdatetime(times);
                                         img.setSource(key.getStorageType());
                                         if (u == null) {
-                                            img.setUserid(0);//用户id
+                                            img.setUserid(0L);//用户id
                                         } else {
                                             img.setUserid(u.getId());//用户id
                                         }
@@ -374,7 +345,7 @@ public class ImageController {
                                         img.setUpdatetime(times);
                                         img.setSource(key.getStorageType());
                                         if (u == null) {
-                                            img.setUserid(0);//用户id
+                                            img.setUserid(0L);//用户id
                                         } else {
                                             img.setUserid(u.getId());//用户id
                                         }
@@ -450,7 +421,7 @@ public class ImageController {
                 System.err.println("未获取到对象存储参数，删除失败。");
             }
             Integer ret = imageService.delete(id);
-            Integer count = 0;
+            int count = 0;
             if (ret > 0) {
                 jsonObject.put("usercount", imageService.countimg(u.getId()));
                 jsonObject.put("count", imageService.counts(null));

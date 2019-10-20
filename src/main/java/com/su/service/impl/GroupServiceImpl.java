@@ -4,8 +4,10 @@ import com.su.dao.GroupMapper;
 import com.su.dao.UserMapper;
 import com.su.exception.CodeException;
 import com.su.pojo.Group;
+import com.su.pojo.Result;
 import com.su.pojo.User;
 import com.su.service.GroupService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/19 16:30
+ * @author su
+ * @date 2019/10/20 17:19
  */
 @Service
 public class GroupServiceImpl implements GroupService {
+
     @Autowired
     private GroupMapper groupMapper;
     @Autowired
@@ -30,8 +32,21 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group idgrouplist(Integer id) {
-        return groupMapper.idgrouplist(id);
+    public Group getById(Long id) {
+        return this.groupMapper.selectByKey(id);
+    }
+
+    @Override
+    public Result<Group> getByUserId(Long userId) {
+        if (userId == null) {
+            // 1 即是默认群组
+            Group group = this.groupMapper.selectByKey(1L);
+            return Result.success(group);
+        } else {
+            User user = this.userMapper.getUsersid(userId);
+            Group group = this.getById(user.getGroupid());
+            return Result.success(group);
+        }
     }
 
     @Override
@@ -40,21 +55,19 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Transactional//默认遇到throw new RuntimeException(“…”);会回滚
-    public Integer delegroup(Integer id) {
+    @Transactional
+    public Integer delegroup(Long id) {
         Integer ret = 0;
         ret = groupMapper.delegroup(id);
-        if(ret>0){
-            //userGroupMapper.updateusergroupdefault(id);
+        if (ret > 0) {
             List<User> userList = userMapper.getuserlistforgroupid(id);
             for (User user : userList) {
                 User u = new User();
-                u.setGroupid(1);
+                u.setGroupid(1L);
                 u.setUid(user.getUid());
                 userMapper.change(u);
             }
-
-        }else{
+        } else {
             throw new CodeException("用户之没有设置成功。");
         }
         return ret;

@@ -42,13 +42,13 @@ public class Result<T> {
     }
 
 
-    public static <T> Result<T> success(int status, String message) {
-        return new Result<T>(true, status, message, null);
+    public static <T> Result<T> success(int code, String message) {
+        return new Result<T>(true, code, message, null);
     }
 
 
-    public static <T> Result<T> success(int status, String message, T data) {
-        return new Result<T>(true, status, message, data);
+    public static <T> Result<T> success(int code, String message, T data) {
+        return new Result<T>(true, code, message, data);
     }
 
 
@@ -60,7 +60,7 @@ public class Result<T> {
         return new Result<T>(false, -1, message, null);
     }
 
-    public static <T> Result<T> error(int status, String message) {
+    public static <T> Result<T> error(int code, String message) {
         return new Result<T>(false, -1, message, null);
     }
 

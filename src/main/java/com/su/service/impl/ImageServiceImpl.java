@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.su.config.SystemConfig;
 import com.su.pojo.Image;
+import com.su.pojo.Result;
+import com.su.utils.IdWorker;
 import com.su.utils.Print;
 import com.UpYun;
 import com.aliyun.oss.OSSClient;
@@ -50,8 +52,10 @@ public class ImageServiceImpl implements ImageService {
     private SystemConfig systemConfig;
 
     @Override
-    public Integer insert(Image image) {
-        return this.imageMapper.insert(image);
+    public Result<Image> insert(Image image) {
+        image.setId(IdWorker.singleNextId());
+        this.imageMapper.insert(image);
+        return Result.success(image);
     }
 
     @Override
@@ -200,8 +204,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public Integer countimg(Integer userid) {
-        // TODO Auto-generated method stub
+    public Integer countimg(Long userid) {
         return imageMapper.countimg(userid);
     }
 
@@ -226,8 +229,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Integer getUsedMemory(Integer userid) {
-        Integer usedMemory = imageMapper.getusermemory(userid);
+    public Integer getUsedMemory(Long userId) {
+        Integer usedMemory = imageMapper.getusermemory(userId);
         return usedMemory != null ? usedMemory : 0;
     }
 

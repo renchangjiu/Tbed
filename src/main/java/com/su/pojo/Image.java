@@ -14,15 +14,13 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 public class Image {
-    // 默认的时间字符串格式
-
     private Long id;
 
     private String name;
 
     private String url;
 
-    private Integer userid;
+    private Long userId;
 
     /**
      * 图片大小, 单位: KB
@@ -35,7 +33,7 @@ public class Image {
 
     private String updatetime;
 
-    private String username;
+    private String userName;
 
     private Integer storageType;
 

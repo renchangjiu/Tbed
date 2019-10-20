@@ -61,11 +61,11 @@ public class AdminRootController {
     public String tostorage(HttpSession session, Model model, HttpServletRequest request) {
         User u = (User) session.getAttribute("user");
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
-        Keys key= keysService.selectByStorageType(Sourcekey);//然后根据类型再查询key
-        Boolean b = StringUtils.doNull(Sourcekey,key);//判断对象是否有空值
+        Keys key = keysService.selectByStorageType(Sourcekey);//然后根据类型再查询key
+        Boolean b = StringUtils.doNull(Sourcekey, key);//判断对象是否有空值
         Integer StorageType = 0;
-        if(Sourcekey!=5){
-            if(b){
+        if (Sourcekey != 5) {
+            if (b) {
                 //key信息
                 model.addAttribute("AccessKey", key.getAccessKey());
                 model.addAttribute("AccessSecret", key.getAccessSecret());
@@ -75,12 +75,12 @@ public class AdminRootController {
                 model.addAttribute("StorageType", Sourcekey);
             }
             //如果是4就是七牛
-            if(Sourcekey==4){
+            if (Sourcekey == 4) {
                 model.addAttribute("Endpoint2", key.getEndpoint());
-            }else{
+            } else {
                 model.addAttribute("Endpoint2", 0);
             }
-        }else{
+        } else {
             model.addAttribute("StorageType", 5);//切换到本地
             model.addAttribute("Endpoint2", 0);
         }
@@ -105,7 +105,7 @@ public class AdminRootController {
         User u = (User) session.getAttribute("user");
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         Integer ret = 0;
-        if(Sourcekey!=null){
+        if (Sourcekey != null) {
             ret = Sourcekey;
         }
         return ret;
@@ -121,23 +121,22 @@ public class AdminRootController {
         //if (val > 0) {
         Integer ret = -2;
         //修改完初始化
-        if(key.getStorageType()==1){
-            ret =nOSImageupload.Initialize(key);//实例化网易
-        }else if (key.getStorageType()==2){
+        if (key.getStorageType() == 1) {
+            ret = nOSImageupload.Initialize(key);//实例化网易
+        } else if (key.getStorageType() == 2) {
             ret = OSSImageupload.Initialize(key);
-        }else if(key.getStorageType()==3){
+        } else if (key.getStorageType() == 3) {
             ret = USSImageupload.Initialize(key);
-        }else if(key.getStorageType()==4){
+        } else if (key.getStorageType() == 4) {
             ret = KODOImageupload.Initialize(key);
-        }else if(key.getStorageType()==6){
+        } else if (key.getStorageType() == 6) {
             ret = COSImageupload.Initialize(key);
-        }else if(key.getStorageType()==7){
+        } else if (key.getStorageType() == 7) {
             ret = FTPImageupload.Initialize(key);
-        }
-        else{
+        } else {
             Print.Normal("为获取到存储参数，或者使用存储源是本地的。");
         }
-        if(ret>0){
+        if (ret > 0) {
             ret = keysService.updateKey(key);
         }
 
@@ -146,20 +145,20 @@ public class AdminRootController {
         //1 正确
         jsonArray.add(ret);
         //} else {
-            //jsonArray.add(0);
-       // }
+        //jsonArray.add(0);
+        // }
         return jsonArray.toString();
     }
 
     //刪除用戶
     @PostMapping("/deleuser")
     @ResponseBody
-    public String deleuser(HttpSession session, Integer id) {
+    public String deleuser(HttpSession session, Long id) {
         JSONArray jsonArray = new JSONArray();
         User u = (User) session.getAttribute("user");
-        if(u.getId()==id){
+        if (u.getId().equals(id)) {
             jsonArray.add("-1");
-        }else{
+        } else {
             Integer ret = userService.deleuser(id);
             //userGroupService.deleusergroup(id);
             jsonArray.add(ret);
@@ -171,14 +170,14 @@ public class AdminRootController {
     @RequestMapping(value = "/emailconfig")
     public String emailconfig(Model model) {
         EmailConfig emailConfig = emailConfigService.getemail();
-        model.addAttribute("emailConfig",emailConfig);
+        model.addAttribute("emailConfig", emailConfig);
         return "admin/emailconfig";
     }
 
 
     @PostMapping("/updateemail")
     @ResponseBody
-    public Integer updateemail(HttpSession session,String emails, String emailkey, String emailurl, String port, String emailname, Integer using ) {
+    public Integer updateemail(HttpSession session, String emails, String emailkey, String emailurl, String port, String emailname, Integer using) {
         EmailConfig emailConfig = new EmailConfig();
         emailConfig.setEmailname(emailname);
         emailConfig.setEmails(emails);
@@ -191,29 +190,31 @@ public class AdminRootController {
     }
 
     @RequestMapping(value = "/towebconfig")
-    public String towebconfig(HttpSession session,Model model) {
+    public String towebconfig(HttpSession session, Model model) {
         Config config = configService.getSourceype();
         User u = (User) session.getAttribute("user");
         Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
         SysConfig sysConfig = sysConfigService.getstate();
-        model.addAttribute("config",config);
-        model.addAttribute("updateConfig",updateConfig);
-        model.addAttribute("sysconfig",sysConfig);
-        model.addAttribute("group",Sourcekey);
+        model.addAttribute("config", config);
+        model.addAttribute("updateConfig", updateConfig);
+        model.addAttribute("sysconfig", sysConfig);
+        model.addAttribute("group", Sourcekey);
         return "admin/webconfig";
     }
+
     //修改站点配置
     @PostMapping("/updateconfig")
     @ResponseBody
 //    public Integer updateconfig(String webname,String explain, String video,
 //                                Integer backtype, String links, String notice,String baidu,
 //                                String domain,String background1,String background2 ) {
-        public Integer updateconfig(Config config ) {
+    public Integer updateconfig(Config config) {
 
         Integer ret = configService.setSourceype(config);
         return ret;
     }
+
     //修改上传配置
     @PostMapping("/scconfig")
     @ResponseBody
@@ -231,6 +232,7 @@ public class AdminRootController {
         jsonArray.add(ret);
         return jsonArray.toString();
     }
+
     //修改资料
     @PostMapping("/setmemory")
     @ResponseBody
@@ -245,18 +247,18 @@ public class AdminRootController {
     @PostMapping("/setstate")
     @ResponseBody
     public Integer setstate(HttpSession session, SysConfig sysConfig) {
-        Integer ret =-1;
+        Integer ret = -1;
         ret = sysConfigService.setstate(sysConfig);
         return ret;
     }
 
     @RequestMapping(value = "/modifyuser")
-    public String modifyuser(Model model,String uid,Integer id) {
-    User user = userService.getUsersMail(uid);
-        model.addAttribute("memory",user.getMemory());
-        model.addAttribute("groupid",user.getGroupid());
-        model.addAttribute("uid",uid);
-        model.addAttribute("id",id);
+    public String modifyuser(Model model, String uid, Integer id) {
+        User user = userService.getUsersMail(uid);
+        model.addAttribute("memory", user.getMemory());
+        model.addAttribute("groupid", user.getGroupid());
+        model.addAttribute("uid", uid);
+        model.addAttribute("id", id);
         return "admin/modifyuser";
     }
 
@@ -272,23 +274,24 @@ public class AdminRootController {
 
     //关于系统
     @RequestMapping("/about")
-    public String about(HttpSession session,Model model ) {
+    public String about(HttpSession session, Model model) {
         //Integer ret = uploadConfigService.setUpdateConfig(updateConfig);
         User u = (User) session.getAttribute("user");
-        model.addAttribute("level",u.getLevel());
-        model.addAttribute("systemupdate",systemupdate);
+        model.addAttribute("level", u.getLevel());
+        model.addAttribute("systemupdate", systemupdate);
         return "admin/about";
     }
+
     //检查更新
     @PostMapping("/sysupdate")
     @ResponseBody
-    public Integer sysupdate(String  dates) {
+    public Integer sysupdate(String dates) {
         HashMap<String, Object> paramMap = new HashMap<>();
-        String urls ="http://tc.hellohao.cn/systemupdate";
-        paramMap.put("dates",dates);
-        String result= HttpUtil.post(urls, paramMap);
-        System.out.println(Integer.parseInt( result ));
-        return Integer.parseInt( result );
+        String urls = "http://tc.hellohao.cn/systemupdate";
+        paramMap.put("dates", dates);
+        String result = HttpUtil.post(urls, paramMap);
+        System.out.println(Integer.parseInt(result));
+        return Integer.parseInt(result);
     }
 
 }

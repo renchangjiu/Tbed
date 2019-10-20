@@ -36,7 +36,7 @@ public class StorageHandler {
         this.keysService = keysService;
     }
 
-    public Result<Image> saveHand(MultipartFile multipartFile, String username, Integer expireDay, Integer storageType, HttpServletRequest request) {
+    public Result<Image> saveHand(MultipartFile multipartFile, Integer expireDay, Integer storageType, HttpServletRequest request) {
         Result<Image> result = null;
         if (storageType == 1) {
             // m = nOSImageupload.Imageupload(map, userpath, null, setday);
@@ -47,7 +47,7 @@ public class StorageHandler {
         } else if (storageType == 4) {
             // m = kodoImageupload.ImageuploadKODO(map, userpath, null, setday);
         } else if (storageType == 5) {
-            result = this.localStorageService.save(multipartFile, username, expireDay, request);
+            result = this.localStorageService.save(multipartFile, expireDay, request);
         } else if (storageType == 6) {
             // m = cosImageupload.ImageuploadCOS(map, userpath, null, setday);
         } else if (storageType == 7) {
@@ -75,7 +75,7 @@ public class StorageHandler {
         if (user == null) {
             storageType = GetCurrentSource.GetSource(null);
             totalMemory = this.systemConfig.touristTotalMemory;
-            usedMemory = imageService.getUsedMemory(0);
+            usedMemory = imageService.getUsedMemory(0L);
         } else {
             storageType = GetCurrentSource.GetSource(user.getId());
             totalMemory = userService.getUsers(user.getEmail()).getMemory();

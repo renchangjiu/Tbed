@@ -6,6 +6,7 @@ import java.util.List;
 import com.su.pojo.Image;
 
 import com.su.pojo.Images;
+import com.su.pojo.Result;
 
 /**
  * @author su
@@ -16,9 +17,9 @@ public interface ImageService {
 
     Integer delete(Long id);
 
-    Integer insert(Image image);
+    Result<Image> insert(Image image);
 
-    Integer countimg(Integer userid);
+    Integer countimg(Long userid);
 
     Images selectByPrimaryKey(Integer id);
 
@@ -38,7 +39,7 @@ public interface ImageService {
      * @param userId user id
      * @return integer
      */
-    Integer getUsedMemory(Integer userId);
+    Integer getUsedMemory(Long userId);
 
     /**
      * 根据 imageId 返回其在本地存储中的文件路径

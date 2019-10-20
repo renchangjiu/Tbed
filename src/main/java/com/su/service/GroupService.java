@@ -1,6 +1,7 @@
 package com.su.service;
 
 import com.su.pojo.Group;
+import com.su.pojo.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,14 @@ import java.util.List;
 @Service
 public interface GroupService {
     List<Group> grouplist();
-    Group idgrouplist(Integer id);
+
+    Group getById(Long id);
+
+    Result<Group> getByUserId(Long userId);
+
     Integer addgroup(Group group);
-    Integer delegroup(Integer id);
+
+    Integer delegroup(Long id);
+
     Integer setgroup(Group group);
 }

@@ -2,10 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.su.dao.ImageMapper">
 
-    <!-- 插入图片信息 -->
     <insert id="insert" parameterType="com.su.pojo.Image">
         INSERT INTO imgdata (id, imgname, imgurl, userid, updatetime, sizes, abnormal, source)
-        VALUES (NULL, #{name}, #{url}, #{userid}, #{updatetime}, #{size}, null, #{source})
+        VALUES (#{id}, #{name}, #{url}, #{userId}, #{updatetime}, #{size}, null, #{source})
     </insert>
 
     <!-- 查询-->
@@ -43,7 +42,7 @@
         order by id desc
     </select>
     <!-- 此用户下总数 -->
-    <select id="countimg" parameterType="integer" resultType="integer">
+    <select id="countimg" parameterType="long" resultType="integer">
         select count(*)
         from imgdata
         where userid = #{userid}
@@ -96,7 +95,7 @@
         WHERE updatetime >= #{time}
     </select>
     <!--查询指定用户总内存-->
-    <select id="getusermemory" parameterType="integer" resultType="integer">
+    <select id="getusermemory" parameterType="long" resultType="integer">
         SELECT sum(sizes)
         FROM `imgdata`
         where userid = #{userid}

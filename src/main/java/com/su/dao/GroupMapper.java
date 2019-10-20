@@ -7,15 +7,18 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/19 16:11
+ * @author su
+ * @date 2019/10/20 20:04
  */
 @Mapper
 public interface GroupMapper {
     List<Group> grouplist();
-    Group idgrouplist(@Param("id") Integer id);
+
+    Group selectByKey(@Param("id") Long id);
+
     Integer addgroup(Group group);
-    Integer delegroup(@Param("id") Integer id);
+
+    Integer delegroup(@Param("id") Long id);
+
     Integer setgroup(Group group);
 }

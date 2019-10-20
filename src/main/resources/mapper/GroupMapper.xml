@@ -8,7 +8,7 @@
         FROM `group`
     </select>
 
-    <select id="idgrouplist" parameterType="integer" resultType="com.su.pojo.Group">
+    <select id="selectByKey" parameterType="long" resultType="com.su.pojo.Group">
         SELECT *
         FROM `group`
         where id = #{id}
@@ -19,7 +19,7 @@
         values (null, #{groupname}, #{keyid})
     </insert>
 
-    <delete id="delegroup" parameterType="integer">
+    <delete id="delegroup" parameterType="long">
         delete
         from `group`
         where id = #{id}

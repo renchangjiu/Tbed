@@ -19,7 +19,7 @@ public interface ImageMapper {
 
     List<Images> selectimg(Images images);
 
-    Integer countimg(@Param("userid") Integer userid);
+    Integer countimg(@Param("userid") Long userid);
 
     Integer delete(@Param("id") Long id);
 
@@ -35,5 +35,5 @@ public interface ImageMapper {
 
     List<Images> gettimeimg(@Param("time") String time);
 
-    Integer getusermemory(@Param("userid") Integer userid);
+    Integer getusermemory(@Param("userid") Long userid);
 }

@@ -29,7 +29,7 @@ public interface UserMapper {
     List<User> getuserlist(User user);
 
     //刪除用戶
-    Integer deleuser(@Param("id") Integer id);
+    Integer deleuser(@Param("id") Long id);
 
     //查询用户名或者邮箱是否存在
     Integer countusername(@Param("username") String username);
@@ -44,8 +44,8 @@ public interface UserMapper {
 
     Integer setmemory(User user);
 
-    User getUsersid(@Param("id") Integer id);
+    User getUsersid(@Param("id") Long id);
 
-    List<User> getuserlistforgroupid(@Param("groupid") Integer groupid);
+    List<User> getuserlistforgroupid(@Param("groupid") Long groupid);
 
 }

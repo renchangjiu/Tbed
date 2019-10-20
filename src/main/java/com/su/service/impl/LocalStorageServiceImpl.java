@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 本地存储
@@ -38,27 +40,31 @@ public class LocalStorageServiceImpl implements StorageService {
     private SystemConfig systemConfig;
 
     @Override
-    public Result<Image> save(MultipartFile multipartFile, String userPath, Integer expireDay, HttpServletRequest request) {
-        long id = IdWorker.singleNextId();
-        String imageExt = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        String destPath = this.systemConfig.getSavePath() + userPath + File.separator + id + "." + imageExt;
-        File dest = new File(destPath);
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
-        }
+    public Result<Image> save(MultipartFile multipartFile, Integer expireDay, HttpServletRequest request) {
         try {
+            long id = IdWorker.singleNextId();
+            String urlPart1 = "links/";
+            String urlPart2 = new SimpleDateFormat("yyyy/MM/dd/").format(new Date());
+            String imageExt = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+            String destPath = this.systemConfig.getSavePath() + urlPart2 + id + "." + imageExt;
+            String url = getDomain(systemConfig, request) + urlPart1 + urlPart2 + id + "." + imageExt;
+            File dest = new File(destPath);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+
             FileOutputStream out = new FileOutputStream(dest);
             IOUtils.copy(multipartFile.getInputStream(), out);
             out.close();
 
             Image image = new Image();
             image.setName(multipartFile.getOriginalFilename());
-            String url = getDomain(systemConfig, request) + "links/" + userPath + "/" + id + "." + imageExt;
+
             image.setUrl(url);
             image.setSize(multipartFile.getSize() / 1024);
             if (expireDay > 0) {
                 String delImg = DateUtils.plusDay(expireDay);
-                DeleImg.charu("/links/" + userPath + "/" + id + "." + imageExt + "|" + delImg + "|" + "5");
+                DeleImg.charu(urlPart1 + urlPart2 + id + "." + imageExt + "|" + delImg + "|" + "5");
             }
             return Result.success(image);
         } catch (IOException e) {
@@ -70,7 +76,7 @@ public class LocalStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Result<Image> save(String imageUrl, String userPath, Integer expireDay, HttpServletRequest request) {
+    public Result<Image> save(String imageUrl, Integer expireDay, HttpServletRequest request) {
         //     long id = IdWorker.singleNextId();
         //     String oldfilePath = entry.getValue();
         //     String newfilePath = File.separator + "HellohaoData" + File.separator + username + File.separator + uuid + times + "." + entry.getKey();//

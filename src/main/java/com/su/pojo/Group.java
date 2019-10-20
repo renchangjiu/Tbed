@@ -1,45 +1,25 @@
 package com.su.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 /**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/19 15:59
+ * @author su
+ * @date 2019/10/20 17:19
  */
+@Getter
+@Setter
+@ToString
+@Accessors(chain = true)
 public class Group {
-    private Integer id;
+    private Long id;
+    private String name;
+    // private Long keyId;
+
     private String groupname;
     private Integer keyid;
 
-    public Group() {
-    }
 
-    public Group(Integer id, String groupname, Integer keyid) {
-        this.id = id;
-        this.groupname = groupname;
-        this.keyid = keyid;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getGroupname() {
-        return groupname;
-    }
-
-    public void setGroupname(String groupname) {
-        this.groupname = groupname;
-    }
-
-    public Integer getKeyid() {
-        return keyid;
-    }
-
-    public void setKeyid(Integer keyid) {
-        this.keyid = keyid;
-    }
 }

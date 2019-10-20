@@ -94,7 +94,7 @@ public class GroupController {
 
     @RequestMapping(value = "/delegroup")
     @ResponseBody
-    public Integer delegroup(Integer id) {
+    public Integer delegroup(Long id) {
         Integer ret = -1;
         if (id != 1) {
             ret = groupService.delegroup(id);
@@ -135,8 +135,8 @@ public class GroupController {
     }
 
     @RequestMapping("/modifygroup")
-    public String modifygroup(Model model, Integer id) {
-        Group group = groupService.idgrouplist(id);
+    public String modifygroup(Model model, Long id) {
+        Group group = groupService.getById(id);
         model.addAttribute("group", group);
         return "admin/setgroup";
     }

@@ -24,7 +24,7 @@ public interface UserService {
 
     List<User> getuserlist(User user);
 
-    Integer deleuser(Integer id);
+    Integer deleuser(Long id);
 
     //查询用户名或者邮箱是否存在
     Integer countusername(String username);
@@ -39,7 +39,7 @@ public interface UserService {
 
     Integer setmemory(User user);
 
-    User getUsersid(Integer id);
+    User getUsersid(Long id);
 
-    List<User> getuserlistforgroupid(Integer groupid);
+    List<User> getuserlistforgroupid(Long groupid);
 }

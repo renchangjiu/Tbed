@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer deleuser(Integer id) {
+    public Integer deleuser(Long id) {
         return userMapper.deleuser(id);
     }
 
@@ -99,12 +99,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUsersid(Integer id) {
+    public User getUsersid(Long id) {
         return userMapper.getUsersid(id);
     }
 
     @Override
-    public List<User> getuserlistforgroupid(Integer groupid) {
+    public List<User> getuserlistforgroupid(Long groupid) {
         return userMapper.getuserlistforgroupid(groupid);
     }
 

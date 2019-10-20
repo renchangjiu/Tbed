@@ -49,7 +49,7 @@
         WHERE email = #{email}
     </select>
     <!-- 查询当前用户:根据id -->
-    <select id="getUsersid" parameterType="integer" resultType="com.su.pojo.User">
+    <select id="getUsersid" parameterType="long" resultType="com.su.pojo.User">
         SELECT id,
                username,
                email,
@@ -128,7 +128,7 @@
     </select>
 
     <!--刪除用戶-->
-    <delete id="deleuser" parameterType="integer">
+    <delete id="deleuser" parameterType="long">
         DELETE FROM user WHERE id=#{id}
     </delete>
 
@@ -141,7 +141,7 @@
         UPDATE `user` set `memory`=#{memory} where id=#{id}
     </update>
 
-    <select id="getuserlistforgroupid" parameterType="integer" resultType="com.su.pojo.User">
+    <select id="getuserlistforgroupid" parameterType="long" resultType="com.su.pojo.User">
         select * from user where groupid=#{groupid}
     </select>
 

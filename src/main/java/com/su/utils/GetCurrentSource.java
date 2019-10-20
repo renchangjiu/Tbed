@@ -11,41 +11,35 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 /**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/20 14:10
+ * @author su
+ * @date 2019/10/20 17:19
  */
 @Component
 public class GetCurrentSource {
     @Autowired
     private GroupServiceImpl groupServiceImpl;
     @Autowired
-    private UserGroupServiceImpl userGroupServiceImpl;
-    @Autowired
     private UserServiceImpl userServiceImpl;
 
     private static GroupServiceImpl groupService;
-    private static UserGroupServiceImpl userGroupService;
     private static UserServiceImpl userService;
 
     @PostConstruct
     public void init() {
         groupService = groupServiceImpl;
-        userGroupService = userGroupServiceImpl;
         userService = userServiceImpl;
     }
 
 
-    public static Integer GetSource(Integer userid) {
+    public static Integer GetSource(Long userId) {
         Integer ret = 0;
-        if (userid == null) {
+        if (userId == null) {
             // 1 即是默认群组
-            Group group = groupService.idgrouplist(1);
+            Group group = groupService.getById(1L);
             ret = group.getKeyid();
         } else {
-            //UserGroup userGroup = userGroupService.useridgetusergroup(userid);
-            User user = userService.getUsersid(userid);
-            Group group = groupService.idgrouplist(user.getGroupid());
+            User user = userService.getUsersid(userId);
+            Group group = groupService.getById(user.getGroupid());
             ret = group.getKeyid();
         }
         return ret;

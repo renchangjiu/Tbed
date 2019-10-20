@@ -160,7 +160,7 @@ public class ClientController {
                                     img.setUpdatetime(times);
                                     img.setSource(key.getStorageType());
                                     if (u == null) {
-                                        img.setUserid(0);//用户id
+                                        img.setUserid(0L);//用户id
                                     } else {
                                         img.setUserid(u.getId());//用户id
                                     }
@@ -195,7 +195,7 @@ public class ClientController {
                                     img.setUpdatetime(times);
                                     img.setSource(key.getStorageType());
                                     if (u == null) {
-                                        img.setUserid(0);//用户id
+                                        img.setUserid(0L);//用户id
                                     } else {
                                         img.setUserid(u.getId());//用户id
                                     }

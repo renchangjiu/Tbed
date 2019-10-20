@@ -21,7 +21,7 @@ public interface StorageService {
      * @param request       request
      * @return Result<ReturnImage>
      */
-    Result<Image> save(MultipartFile multipartFile, String userPath, Integer expireDay, HttpServletRequest request);
+    Result<Image> save(MultipartFile multipartFile, Integer expireDay, HttpServletRequest request);
 
     /**
      * 使用图片URL地址上传
@@ -31,7 +31,7 @@ public interface StorageService {
      * @param request   request
      * @return Result<ReturnImage>
      */
-    Result<Image> save(String imageUrl, String userPath, Integer expireDay, HttpServletRequest request);
+    Result<Image> save(String imageUrl, Integer expireDay, HttpServletRequest request);
 
     Result<Boolean> delete(Integer imageId);
 

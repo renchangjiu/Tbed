@@ -69,7 +69,7 @@ public class UserController {
                     user.setUid(uid);
                     user.setBirthder(birthder);
                     user.setMemory(updateConfig.getUsermemory());
-                    user.setGroupid(1);
+                    user.setGroupid(1L);
                     user.setEmail(u.getEmail());
                     user.setUsername(u.getUsername());
                     user.setPassword(Base64Encryption.encryptBASE64(u.getPassword().getBytes()));
