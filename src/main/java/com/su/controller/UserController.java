@@ -12,11 +12,9 @@ import javax.validation.Valid;
 
 import com.su.pojo.*;
 import com.su.service.*;
-import com.su.pojo.*;
-import com.su.service.*;
-import com.su.utils.Base64Encryption;
 import com.su.utils.Print;
 import com.su.utils.SendEmail;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,8 +43,6 @@ public class UserController {
     private UploadConfigService uploadConfigService;
     @Autowired
     private SysConfigService sysConfigService;
-    @Autowired
-    private UserGroupService userGroupService;
 
     @RequestMapping("/register")
     @ResponseBody
@@ -72,7 +68,7 @@ public class UserController {
                     user.setGroupid(1L);
                     user.setEmail(u.getEmail());
                     user.setUsername(u.getUsername());
-                    user.setPassword(Base64Encryption.encryptBASE64(u.getPassword().getBytes()));
+                    user.setPassword(new String(Base64.encodeBase64(user.getPassword().getBytes())));
                     //查询是否启用了邮箱验证。
                     Config config = configService.getSourceype();
                     System.err.println("是否启用了邮箱激活：" + emailConfig.getUsing());
@@ -82,11 +78,9 @@ public class UserController {
                         //初始化邮箱
                         MimeMessage message = SendEmail.Emails(emailConfig);
                         //注册完发激活链接
-                        Thread thread = new Thread() {
-                            public void run() {
-                                Integer a = SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
-                            }
-                        };
+                        Thread thread = new Thread(() -> {
+                            Integer a = SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
+                        });
                         thread.start();
                         type = 1;
                     } else {
@@ -122,7 +116,7 @@ public class UserController {
     public String login(HttpSession httpSession, String email, String password, Integer logotmp) {
         JSONArray jsonArray = new JSONArray();
         if ((logotmp - number1) == (istmp1 - number1)) {
-            String basepass = Base64Encryption.encryptBASE64(password.getBytes());
+            String basepass = new String(Base64.encodeBase64(password.getBytes()));
             Integer ret = userService.login(email, basepass);
             if (ret > 0) {
                 User user = userService.getUsers(email);

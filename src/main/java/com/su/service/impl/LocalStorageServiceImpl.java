@@ -77,25 +77,6 @@ public class LocalStorageServiceImpl implements StorageService {
 
     @Override
     public Result<Image> save(String imageUrl, Integer expireDay, HttpServletRequest request) {
-        //     long id = IdWorker.singleNextId();
-        //     String oldfilePath = entry.getValue();
-        //     String newfilePath = File.separator + "HellohaoData" + File.separator + username + File.separator + uuid + times + "." + entry.getKey();//
-        //     File file = new File(oldfilePath);
-        //     File targetFile = new File(newfilePath);
-        //     if (!targetFile.getParentFile().exists()) {
-        //         targetFile.mkdirs();
-        //     }
-        //
-        //     file.renameTo(new File(newfilePath));//只移动，源目录不存在文件
-        //     // 例2：采用数据流模式上传文件（节省内存）,自动创建父级目录
-        //     ReturnImage returnImage = new ReturnImage();
-        //     returnImage.setImgurl(username + "/" + uuid + times + "." + entry.getKey());
-        //     ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(newfilePath)));
-        //     if (setday > 0) {
-        //         String deleimg = DateUtils.plusDay(setday);
-        //         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "5");
-        //     }
-        // }
         return null;
     }
 

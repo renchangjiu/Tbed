@@ -10,11 +10,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -297,10 +299,9 @@ public class AdminController {
     public String change(HttpSession session, User user) {
         User u = (User) session.getAttribute("user");
         User us = new User();
-        //user.setEmail(u.getEmail());
         us.setEmail(user.getEmail());
         us.setUsername(user.getUsername());
-        us.setPassword(Base64Encryption.encryptBASE64(user.getPassword().getBytes()));
+        us.setPassword(new String(Base64.encodeBase64(user.getPassword().getBytes())));
         us.setUid(u.getUid());
         //user.setUid(u.getUid());
         JSONArray jsonArray = new JSONArray();

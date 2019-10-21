@@ -89,6 +89,10 @@ public class StorageHandler {
         if (totalMemory != -1 && usedMemory >= totalMemory) {
             return Result.error("上传失败，可用空间不足。");
         }
+        Integer uploadMaxSize = user != null ? this.systemConfig.userUploadMaxSize : this.systemConfig.touristUploadMaxSize;
+        // if (imageSize / 1024 > uploadMaxSize) {
+        //     return Result.error("超出用户单次上传的限制大小。");
+        // }
         return Result.success();
     }
 }

@@ -27,6 +27,12 @@ public class SystemConfig {
     private String q;
     public boolean touristUploadable = StringUtils.isEmpty(this.q) || "1".equals(this.q);
 
+    @Value("${system.image.tourist-upload-max-size}")
+    public Integer touristUploadMaxSize;
+
+    @Value("${system.image.user-upload-max-size}")
+    public Integer userUploadMaxSize;
+
     /**
      * 返回本地存储中的保存图片的路径
      *
