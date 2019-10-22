@@ -15,6 +15,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class User {
 
+    /**
+     * 游客id
+     */
+    public static final Long TOURIST_ID = 0L;
+
     private Long id;
     //@NotBlank(message = "用户名不能为空")
     // @Length(min = 6, max = 20, message = "用户名需要为 6 - 20 个字符")

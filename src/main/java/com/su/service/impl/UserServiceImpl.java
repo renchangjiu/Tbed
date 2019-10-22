@@ -2,16 +2,21 @@ package com.su.service.impl;
 
 import com.su.dao.CodeMapper;
 import com.su.exception.CodeException;
-import com.su.utils.Print;
 import com.su.dao.UserMapper;
+import com.su.pojo.Group;
 import com.su.pojo.User;
 import com.su.service.UserService;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * @author su
+ * @date 2019/10/22 14:04
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -22,39 +27,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer register(User user) {
-        // TODO Auto-generated method stub
-
         return userMapper.register(user);
     }
 
     @Override
-    public Integer login(String email, String password) {
-        // TODO Auto-generated method stub
-        return userMapper.login(email, password);
+    public User login(String email, String password) {
+        return userMapper.login(email, new String(Base64.encodeBase64(password.getBytes())));
     }
 
     @Override
     public User getUsers(String email) {
-        // TODO Auto-generated method stub
         return userMapper.getUsers(email);
     }
 
 
     @Override
     public Integer change(User user) {
-        // TODO Auto-generated method stub
         return userMapper.change(user);
     }
 
     @Override
     public Integer checkUsername(String username) {
-        // TODO Auto-generated method stub
         return userMapper.checkUsername(username);
     }
 
     @Override
     public Integer getUserTotal() {
-        // TODO Auto-generated method stub
         return userMapper.getUserTotal();
     }
 
@@ -108,15 +106,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.getuserlistforgroupid(groupid);
     }
 
-    @Transactional//默认遇到throw new RuntimeException(“…”);会回滚
+    @Transactional
     public Integer usersetmemory(User user, String codestring) {
         Integer ret = userMapper.setmemory(user);
         if (ret <= 0) {
-            Print.warning("用户空间没有设置成功。回滚");
             throw new CodeException("用户之没有设置成功。");
         } else {
             ret = codeMapper.deleteCode(codestring);
         }
         return ret;
     }
+
+
 }

@@ -80,7 +80,7 @@ public class LocUpdateImg {
                 // 例2：采用数据流模式上传文件（节省内存）,自动创建父级目录
                 ReturnImage returnImage = new ReturnImage();
                 returnImage.setImgurl(username + "/" + uuid + times + "." + entry.getKey());
-                ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(newfilePath)));
+                ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(newfilePath)));
                 if (setday > 0) {
                     String deleimg = DateUtils.plusDay(setday);
                     DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "5");

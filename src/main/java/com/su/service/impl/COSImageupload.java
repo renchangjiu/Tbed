@@ -1,12 +1,11 @@
 package com.su.service.impl;
 
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.ReturnImage;
 import com.su.pojo.UploadConfig;
 import com.su.utils.DateUtils;
 import com.su.utils.DeleImg;
-import com.su.utils.ImgUrlUtil;
-import com.su.utils.Print;
+import com.su.utils.BinUtils;
 import com.netease.cloud.services.nos.model.ObjectMetadata;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -28,7 +27,7 @@ import java.util.*;
 public class COSImageupload {
     static String BarrelName;
     static COSClient cosClient;
-    static Keys key;
+    static Key key;
 
     public Map<ReturnImage, Integer> ImageuploadCOS(Map<String, MultipartFile> fileMap, String username,
                                                     Map<String, String> fileMap2, Integer setday) throws Exception {
@@ -83,19 +82,19 @@ public class COSImageupload {
                     PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgurl(key.getRequestAddress() + "/" + userkey);
-                    ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
+                    ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(imgurl)));
                     if(setday>0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "6");
                     }
                     boolean bb= new File(imgurl).getAbsoluteFile().delete();
-                    Print.Normal("删除情况"+bb);
+                    // Print.Normal("删除情况"+bb);
                 } catch (Exception e) {
                     System.out.println("上传报错:" + e.getMessage());
                 }
                 if(fileInputStream!=null){
                     fileInputStream.close();
-                    Print.Normal("流已经关闭");
+                    // Print.Normal("流已经关闭");
                 }
             }
             cosClient.shutdown();
@@ -118,7 +117,7 @@ public class COSImageupload {
     }
 
     //初始化网易NOS对象存储
-    public static Integer Initialize(Keys k) {
+    public static Integer Initialize(Key k) {
         int ret = -1;
         if(k.getEndpoint()!=null && k.getAccessSecret()!=null && k.getEndpoint()!=null
                 && k.getBucketname()!=null && k.getRequestAddress()!=null ) {

@@ -8,14 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.su.pojo.Key;
 import com.su.pojo.ReturnImage;
 import com.su.pojo.UploadConfig;
 import com.su.utils.DateUtils;
 import com.su.utils.DeleImg;
-import com.su.utils.ImgUrlUtil;
-import com.su.utils.Print;
+import com.su.utils.BinUtils;
 import com.netease.cloud.services.nos.model.ObjectMetadata;
-import com.su.pojo.Keys;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +37,7 @@ public class NOSImageupload {
 //	private String RequestAddress;
     static String BarrelName;
     static NosClient nosClient;
-    static Keys key;
+    static Key key;
 
     public Map<ReturnImage, Integer> Imageupload(Map<String, MultipartFile> fileMap, String username,
                                                  Map<String, String> fileMap2, Integer setday) throws Exception {
@@ -95,20 +94,18 @@ public class NOSImageupload {
 
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey());
-                    ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
+                    ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(imgurl)));
                     if(setday>0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "-" + deleimg + "-" + "1");
                     }
 
                     boolean bb= new File(imgurl).getAbsoluteFile().delete();
-                    Print.Normal("删除情况"+bb);
                 } catch (Exception e) {
                     System.out.println("上传报错:" + e.getMessage());
                 }
                 if(fileInputStream!=null){
                     fileInputStream.close();
-                    Print.Normal("流已经关闭");
                 }
             }
             return ImgUrl;
@@ -131,7 +128,7 @@ public class NOSImageupload {
 
 
     //初始化网易NOS对象存储
-    public static Integer Initialize(Keys k) {
+    public static Integer Initialize(Key k) {
         int ret = -1;
         if(k.getEndpoint()!=null && k.getAccessSecret()!=null && k.getEndpoint()!=null
                 && k.getBucketname()!=null && k.getRequestAddress()!=null ){
@@ -178,7 +175,6 @@ public class NOSImageupload {
             String times = format1.format(new Date());
             file = changeFile(entry.getValue());
             try {
-                 Print.warning(entry.getValue().getSize());
                 ReturnImage returnImage = new ReturnImage();
                 if(entry.getValue().getSize()/1024<=uploadConfig.getFilesizeuser()*1024){
                     nosClient.putObject(BarrelName, username + "/" + uuid+times + "." + entry.getKey(), file);

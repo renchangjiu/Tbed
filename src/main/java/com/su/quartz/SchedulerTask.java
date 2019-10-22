@@ -3,7 +3,7 @@ package com.su.quartz;
 import com.su.pojo.Imgreview;
 import com.su.service.impl.ImageServiceImpl;
 import com.su.service.impl.ImgreviewServiceImpl;
-import com.su.service.impl.KeysServiceImpl;
+import com.su.service.impl.KeyServiceImpl;
 import com.baidu.aip.contentcensor.AipContentCensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class SchedulerTask {
     @Autowired
     private ImgreviewServiceImpl imgreviewService;
     @Autowired
-    private KeysServiceImpl keysService;
+    private KeyServiceImpl keysService;
 
     private static AipContentCensor client;
 

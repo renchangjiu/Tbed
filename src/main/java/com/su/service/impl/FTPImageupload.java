@@ -1,9 +1,8 @@
 package com.su.service.impl;
 
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.ReturnImage;
 import com.su.pojo.UploadConfig;
-import com.su.utils.*;
 import com.su.utils.*;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -19,7 +18,7 @@ import java.util.*;
 @Service
 public class FTPImageupload {
     static FTPClient ftpClient1 ;
-    static Keys key;
+    static Key key;
 
     public Map<ReturnImage, Integer> ImageuploadFTP(Map<String, MultipartFile> fileMap, String username,
                                                     Map<String, String> fileMap2, Integer setday) throws Exception {
@@ -59,7 +58,7 @@ public class FTPImageupload {
                     ftps.close();
                 }
 
-                Print.Normal("要上传的文件路径："+File.separator+userkey);
+                // Print.Normal("要上传的文件路径："+File.separator+userkey);
             }
             return ImgUrl;
         }else{
@@ -77,8 +76,8 @@ public class FTPImageupload {
 
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgurl(key.getRequestAddress() + File.separator+ userkey);
-                    Print.Normal("Url上传成功返回地址");
-                    ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
+                    // Print.Normal("Url上传成功返回地址");
+                    ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(imgurl)));
                     if(setday>0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "7");
@@ -86,7 +85,7 @@ public class FTPImageupload {
                     ftps.close();
                 }
                 boolean bb= new File(imgurl).getAbsoluteFile().delete();
-                Print.Normal("删除情况"+bb);
+                // Print.Normal("删除情况"+bb);
 
             }
             return ImgUrl;
@@ -108,7 +107,7 @@ public class FTPImageupload {
     }
 
     //初始化FTP对象存储
-    public static Integer Initialize(Keys k) {
+    public static Integer Initialize(Key k) {
         int ret = -1;
         if(k.getEndpoint()!=null && k.getAccessSecret()!=null && k.getEndpoint()!=null && k.getRequestAddress()!=null ) {
             if(!k.getEndpoint().equals("") && !k.getAccessSecret().equals("") && !k.getEndpoint().equals("") && !k.getRequestAddress().equals("") ) {

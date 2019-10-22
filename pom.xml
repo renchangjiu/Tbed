@@ -83,7 +83,6 @@
 
 
         <!--hutool-->
-        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
@@ -91,7 +90,6 @@
         </dependency>
 
 
-        <!--        定时器依赖-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -147,7 +145,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.13</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+        </dependency>
         <dependency>
             <groupId>nekohtml</groupId>
             <artifactId>nekohtml</artifactId>

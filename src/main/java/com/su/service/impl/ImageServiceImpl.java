@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.su.config.SystemConfig;
 import com.su.pojo.Image;
+import com.su.pojo.Key;
 import com.su.pojo.Result;
 import com.su.utils.IdWorker;
-import com.su.utils.Print;
 import com.UpYun;
 import com.aliyun.oss.OSSClient;
 import com.qcloud.cos.COSClient;
@@ -25,7 +25,6 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.util.Auth;
 import com.su.dao.ImageMapper;
 import com.su.pojo.Images;
-import com.su.pojo.Keys;
 import com.su.service.ImageService;
 import com.upyun.UpException;
 import org.apache.commons.net.ftp.FTPClient;
@@ -70,12 +69,13 @@ public class ImageServiceImpl implements ImageService {
     }
 
 
+    @Override
     public Images selectByPrimaryKey(Integer id) {
         return imageMapper.selectByPrimaryKey(id);
     }
 
     //删除对象存储的图片文件
-    public void delect(Keys key, String fileName) {
+    public void delect(Key key, String fileName) {
         // 初始化
         Credentials credentials = new BasicCredentials(key.getAccessKey(), key.getAccessSecret());
         NosClient nosClient = new NosClient(credentials);
@@ -103,7 +103,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     //删除OSS对象存储的图片文件
-    public void delectOSS(Keys key, String fileName) {
+    public void delectOSS(Key key, String fileName) {
         // 初始化
 // Endpoint以杭州为例，其它Region请按实际情况填写。
         String endpoint = key.getEndpoint();
@@ -121,7 +121,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     //删除USS对象存储的图片文件
-    public void delectUSS(Keys key, String fileName) {
+    public void delectUSS(Key key, String fileName) {
         UpYun upyun = new UpYun(key.getBucketname(), key.getAccessKey(), key.getAccessSecret());
         try {
             boolean result = upyun.deleteFile(fileName, null);
@@ -133,7 +133,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     //删除KODO对象存储的图片文件
-    public void delectKODO(Keys key, String fileName) {
+    public void delectKODO(Key key, String fileName) {
         Configuration cfg;
         //构造一个带指定Zone对象的配置类
         if (key.getEndpoint().equals("1")) {
@@ -159,7 +159,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     //删除COS对象存储的图片文件
-    public void delectCOS(Keys key, String fileName) {
+    public void delectCOS(Key key, String fileName) {
         COSCredentials cred = new BasicCOSCredentials(key.getAccessKey(), key.getAccessSecret());
         Region region = new Region(key.getEndpoint());
         ClientConfig clientConfig = new ClientConfig(region);
@@ -178,7 +178,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     //删除FTP存储的图片文件
-    public void delectFTP(Keys key, String fileName) {
+    public void delectFTP(Key key, String fileName) {
         FTPClient ftp = new FTPClient();
         String[] host = key.getEndpoint().split("\\:");
         String h = host[0];
@@ -192,7 +192,6 @@ public class ImageServiceImpl implements ImageService {
             ftp.deleteFile(fileName);
         } catch (IOException e) {
             e.printStackTrace();
-            Print.warning("删除FTP存储的图片失败");
         }
     }
 

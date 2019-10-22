@@ -1,9 +1,9 @@
 package com.su.quartz;
 
 import com.su.config.SystemConfig;
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.service.impl.ImageServiceImpl;
-import com.su.service.impl.KeysServiceImpl;
+import com.su.service.impl.KeyServiceImpl;
 import com.su.utils.DeleImg;
 import com.su.utils.LocUpdateImg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class TempImgTask {
     @Autowired
     private ImageServiceImpl imgService;
     @Autowired
-    private KeysServiceImpl keysService;
+    private KeyServiceImpl keysService;
 
     @Autowired
     private SystemConfig systemConfig;
@@ -42,7 +42,7 @@ public class TempImgTask {
     }
 
 
-    public void start() throws InterruptedException {
+    public void start() {
         List<String> list = new ArrayList<>();
         File file = new File(File.separator + "HellohaoData" + File.separator + "img.ini");
         // File file = new File(this.systemConfig.getSavePath() + "img.ini");
@@ -63,7 +63,7 @@ public class TempImgTask {
                     Date sd2 = df.parse(strArr[1]);//小时间
                     if (sd1.after(sd2)) {//等于false时说明图片时间大于或者等于当前时间
                         Integer ret = tempImgTask.imgService.deleimgname(strArr[0]);//删除库里图片数据
-                        Keys key = null;
+                        Key key = null;
                         if (Integer.parseInt(strArr[2]) == 1) {
                             key = tempImgTask.keysService.selectByStorageType(Integer.parseInt(strArr[2]));
                             tempImgTask.imgService.delect(key, strArr[0]);
@@ -101,7 +101,6 @@ public class TempImgTask {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

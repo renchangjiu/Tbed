@@ -91,9 +91,9 @@ VALUES (1, '', '', '', '', '', 0);
 DROP TABLE IF EXISTS `group`;
 CREATE TABLE `group`
 (
-    `id`        int(255)                                                NOT NULL AUTO_INCREMENT,
-    `groupname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '组名称',
-    `keyid`     int(255)                                                NULL DEFAULT NULL,
+    `id`     int(255)                                                NOT NULL AUTO_INCREMENT,
+    `name`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '组名称',
+    `key_id` int(255)                                                NULL DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 2
@@ -154,10 +154,10 @@ INSERT INTO `imgreview`
 VALUES (1, NULL, NULL, NULL, 0, 0);
 
 -- ----------------------------
--- Table structure for keys
+-- Table structure for key
 -- ----------------------------
-DROP TABLE IF EXISTS `keys`;
-CREATE TABLE `keys`
+DROP TABLE IF EXISTS `key`;
+CREATE TABLE `key`
 (
     `id`             int(11)                                                 NOT NULL AUTO_INCREMENT,
     `AccessKey`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -174,27 +174,27 @@ CREATE TABLE `keys`
   ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of keys
+-- Records of key
 -- ----------------------------
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (1, '', '', '', '', '', 1);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (2, '', '', '', '', '', 2);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (3, '', '', '0', '', '', 3);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (4, '', '', '', '', '', 4);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (5, '0', '0', '0', '0', '0', 5);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (6, '', '', '', '', '', 6);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (7, '', '', '', '', '', 7);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (8, '', '', '', '', '', 8);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (9, '', '', '', '', '', 9);
-INSERT INTO `keys`
+INSERT INTO `key`
 VALUES (10, '0', '', '0', '0', '0', 10);
 
 -- ----------------------------

@@ -59,7 +59,7 @@ public class SendEmail {
                 "    </header>\n" +
                 "    <div class=\"main-content\">\n" +
                 "     <h5><span>您正在注册"+webname+"<i></i></span></h5>\n" +
-                "     <p>点击 <a href='"+domain+"/user/activation.do?activation=" + Url + "&username=" + username + "'  ><u>&nbsp;激活链接&nbsp;</u></a> 进行账号激活</p>\n" +
+                "     <p>点击 <a href='"+domain+"/activation?activation=" + Url + "&username=" + username + "'  ><u>&nbsp;激活链接&nbsp;</u></a> 进行账号激活</p>\n" +
                 "    </div>\n" +
                 "   </div>\n" +
                 "  </div>\n" +

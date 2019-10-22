@@ -146,7 +146,7 @@
                     label: '点击选择文件'
                 },
                 formData: {
-                    setday: isday
+                    expireDay: isday
                 },
                 dnd: '#wrapper',
                 paste: '#wrapper',

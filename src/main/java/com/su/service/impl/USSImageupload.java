@@ -1,11 +1,11 @@
 package com.su.service.impl;
 
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.ReturnImage;
 import com.su.pojo.UploadConfig;
 import com.su.utils.DateUtils;
 import com.su.utils.DeleImg;
-import com.su.utils.ImgUrlUtil;
+import com.su.utils.BinUtils;
 import com.UpYun;
 import com.aliyun.oss.model.ObjectMetadata;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 public class USSImageupload {
     static UpYun upyun;
-    static Keys key;
+    static Key key;
 
     public Map<ReturnImage, Integer> ImageuploadUSS(Map<String, MultipartFile> fileMap, String username,
                                                     Map<String, String> fileMap2, Integer setday) throws Exception {
@@ -73,7 +73,7 @@ public class USSImageupload {
                 if(result){
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid+times + "." + entry.getKey());
-                    ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
+                    ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(imgurl)));
                     if(setday>0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "3");
@@ -103,7 +103,7 @@ public class USSImageupload {
     }
 
     //初始化
-    public static Integer Initialize(Keys k) {
+    public static Integer Initialize(Key k) {
         int ret = -1;
         if(k.getEndpoint()!=null && k.getAccessSecret()!=null
                 && k.getBucketname()!=null && k.getRequestAddress()!=null ) {

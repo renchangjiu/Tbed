@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author su
@@ -31,7 +33,7 @@ public interface StorageService {
      * @param request   request
      * @return Result<ReturnImage>
      */
-    Result<Image> save(String imageUrl, Integer expireDay, HttpServletRequest request);
+    Result<Image> save(String imageUrl, Integer expireDay, HttpServletRequest request) throws Exception;
 
     Result<Boolean> delete(Integer imageId);
 

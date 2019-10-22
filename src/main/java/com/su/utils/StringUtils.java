@@ -1,10 +1,10 @@
 package com.su.utils;
 
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 
 public class StringUtils {
     //接受当前使用的存储源id，在根据id进行非空判断
-    public static Boolean doNull(Integer sourcekey, Keys k) {
+    public static Boolean doNull(Integer sourcekey, Key k) {
         if(sourcekey==1){
             //网易
             if(k.getEndpoint()!=null && k.getAccessSecret()!=null && k.getEndpoint()!=null

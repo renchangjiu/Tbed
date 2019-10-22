@@ -1,10 +1,10 @@
 package com.su.controller;
 
 import com.su.pojo.Group;
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.User;
 import com.su.service.GroupService;
-import com.su.service.KeysService;
+import com.su.service.KeyService;
 import com.su.service.UserService;
 import com.su.utils.StringUtils;
 import com.alibaba.fastjson.JSONArray;
@@ -33,7 +33,7 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private KeysService keysService;
+    private KeyService keyService;
     @Autowired
     private UserService userService;
 
@@ -77,11 +77,11 @@ public class GroupController {
     @ResponseBody
     public Integer addisgroup(Group group) {
         boolean b = false;
-        if (group.getKeyid() == 5) {
+        if (group.getKeyId() == 5) {
             b = true;
         } else {
-            Keys key = keysService.selectByStorageType(group.getKeyid());
-            b = StringUtils.doNull(group.getKeyid(), key);
+            Key key = keyService.selectByStorageType(group.getKeyId().intValue());
+            b = StringUtils.doNull(group.getKeyId().intValue(), key);
         }
         Integer ret = 0;
         if (b) {

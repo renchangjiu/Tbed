@@ -52,22 +52,22 @@
             ,cols: [ [
                // {type: 'checkbox', fixed: 'left' ,width:50}
                 {field:'id', width:70, title: '编号', sort: true}, //sort：true页面可进行排序操作
-                {field:'groupname',width:270,  title: '分组名称'}
-                ,{field:'keyid',  title: '所属存储源',templet: function(d){
+                {field:'name',width:270,  title: '分组名称'}
+                ,{field:'keyId',  title: '所属存储源',templet: function(d){
                         var source = '';
-                        if (d.keyid == 1) {
+                        if (d.keyId == 1) {
                             source = '网易NOS';
-                        } else if (d.keyid  == 2) {
+                        } else if (d.keyId  == 2) {
                             source = '阿里OSS';
-                        } else if (d.keyid  == 3) {
+                        } else if (d.keyId  == 3) {
                             source = '又拍USS';
-                        } else if (d.keyid  == 4) {
+                        } else if (d.keyId  == 4) {
                             source = '七牛KODO';
-                        } else if (d.keyid  == 5) {
+                        } else if (d.keyId  == 5) {
                             source = '本地存储';
-                        }else if (d.keyid  == 6) {
+                        }else if (d.keyId  == 6) {
                             source = '腾讯COS';
-                        }else if (d.keyid  == 7) {
+                        }else if (d.keyId  == 7) {
                             source = 'FTP存储';
                         }else {
                             source = '未知';

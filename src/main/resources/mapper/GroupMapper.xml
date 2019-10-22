@@ -15,8 +15,8 @@
     </select>
 
     <insert id="addgroup" parameterType="com.su.pojo.Group">
-        insert into `group` (id, groupname, keyid)
-        values (null, #{groupname}, #{keyid})
+        insert into `group` (id, name, key_id)
+        values (null, #{name}, #{keyId})
     </insert>
 
     <delete id="delegroup" parameterType="long">
@@ -27,8 +27,8 @@
 
     <update id="setgroup" parameterType="com.su.pojo.Group">
         UPDATE `group`
-        SET groupname=#{groupname},
-            keyid=#{keyid}
+        SET name=#{name},
+            key_id=#{keyId}
         where id = #{id};
     </update>
 

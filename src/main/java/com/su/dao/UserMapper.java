@@ -12,8 +12,7 @@ public interface UserMapper {
     //注册
     Integer register(User user);
 
-    //登录
-    Integer login(@Param("email") String email, @Param("password") String password);
+    User login(@Param("email") String email, @Param("password") String password);
 
     //获取用户信息
     User getUsers(@Param("email") String email);

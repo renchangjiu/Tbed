@@ -4,41 +4,35 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/*
-操作网络url图片工具类
-* */
-public class ImgUrlUtil {
+/**
+ * 进制转换工具类
+ *
+ * @author su
+ * @date 2019/10/22 10:03
+ */
+public class BinUtils {
 
-    //获取文件类型
-//    public static void main(String[] args) throws Exception {
-//        FileInputStream is = new FileInputStream("D:\\22222\\");
-//        byte[] b = new byte[3];
-//        is.read(b, 0, b.length);
-//        String xxx = bytesToHexString(b);
-//        xxx = xxx.toUpperCase();
-//        System.out.println("头文件是：" + xxx);
-//        String ooo = TypeDict.checkType(xxx);
-//        System.out.println("后缀名是：" + ooo);
-//
-//
-//        //Long ll = FileType.getFileLength("http://img.ph.126.");
-//        // Print.Normal("文件大小="+ll);
-//    }
 
-    public static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder();
+    /**
+     * 二进制转16进制字符串
+     *
+     * @param src 字节数组
+     * @return 16进制字符串
+     */
+    public static String binToHex(byte[] src) {
         if (src == null || src.length <= 0) {
-            return null;
+            return "";
         }
-        for (int i = 0; i < src.length; i++) {
-            int v = src[i] & 0xFF;
+        StringBuilder sb = new StringBuilder();
+        for (byte b : src) {
+            int v = b & 0xFF;
             String hv = Integer.toHexString(v);
             if (hv.length() < 2) {
-                stringBuilder.append(0);
+                sb.append(0);
             }
-            stringBuilder.append(hv);
+            sb.append(hv);
         }
-        return stringBuilder.toString();
+        return sb.toString().toUpperCase();
     }
 
 
@@ -63,48 +57,6 @@ public class ImgUrlUtil {
         }
     }
 
-
-    /**
-     * 从网络Url中下载文件
-     *
-     * @param urlStr
-     * @param fileName
-     * @param savePath
-     * @throws IOException
-     */
-
-    public static boolean downLoadFromUrl(String urlStr, String fileName, String savePath) throws IOException {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        //设置超时间为3秒
-        conn.setConnectTimeout(5 * 1000);
-        //防止屏蔽程序抓取而返回403错误
-        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-
-        //得到输入流
-        InputStream inputStream = conn.getInputStream();
-        //获取自己数组
-        byte[] getData = readInputStream(inputStream);
-
-        //文件保存位置
-        //File saveDir = new File(savePath);
-        //this.getServletContext().getRealPath("/WEB-INF/jrxml/hgc.png"
-        File saveDir = new File(savePath);
-        if (!saveDir.exists()) {
-            saveDir.mkdir();
-        }
-        File file = new File(saveDir + File.separator + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(getData);
-        if (fos != null) {
-            fos.close();
-        }
-        if (inputStream != null) {
-            inputStream.close();
-        }
-        System.out.println("info:" + url + " download success");
-        return true;
-    }
 
     /**
      * 从输入流中获取字节数组

@@ -18,7 +18,7 @@
     <div class="layui-inline">
         <label class="layui-form-label">用户容量(M)</label>
         <div class="layui-input-inline">
-            <input id="memory"  style="width: 250px;" th:value="${memory}" type="tel" name="groupname" lay-verify="required|phone" autocomplete="off" class="layui-input">
+            <input id="memory"  style="width: 250px;" th:value="${memory}" type="tel" name="name" lay-verify="required|phone" autocomplete="off" class="layui-input">
             <input th:value="${uid}" type="hidden"  id="uid"/>
         </div>
     </div>
@@ -52,7 +52,7 @@
             success: function (data) {
                 var body = '';
                 for(var i=0;i<data.length;i++){
-                    body+='<option value="'+data[i].id+'">&nbsp;'+data[i].groupname+'</option>';
+                    body+='<option value="'+data[i].id+'">&nbsp;'+data[i].name+'</option>';
                 }
                 $('#group').append(body);
                 $('#group').val(groupid);

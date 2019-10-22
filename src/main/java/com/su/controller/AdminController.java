@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class AdminController {
     @Autowired
     private ImageService imageService;
     @Autowired
-    private KeysService keysService;
+    private KeyService keyService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -146,13 +145,14 @@ public class AdminController {
         JSONObject jsonObject = new JSONObject();
         Config config = configService.getSourceype();
         User u = (User) session.getAttribute("user");
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        // Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         Imgreview imgreview = imgreviewService.selectByPrimaryKey(1);
         jsonObject.put("usercount", imageService.countimg(u.getId()));
         jsonObject.put("counts", imageService.counts(null));
         jsonObject.put("getusertotal", userService.getUserTotal());
         jsonObject.put("imgreviewcount", imgreview.getCount());
-        Keys key = keysService.selectByStorageType(Sourcekey);
+        Key key = keyService.selectByStorageType(Sourcekey);
         Boolean b = false;
         if (Sourcekey == 5) {
             b = true;
@@ -240,10 +240,10 @@ public class AdminController {
         Integer v = 0;
         ImageServiceImpl de = new ImageServiceImpl();
         User u = (User) session.getAttribute("user");
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         for (int i = 0; i < ids.length; i++) {
             Images images = imageService.selectByPrimaryKey(Integer.parseInt(ids[i] + ""));
-            Keys key = keysService.selectByStorageType(images.getSource());
+            Key key = keyService.selectByStorageType(images.getSource());
             Boolean b = false;
             if (Sourcekey == 5) {
                 b = true;
@@ -347,7 +347,6 @@ public class AdminController {
         if (u != null) {
             //List<Code> code = codeService.selectCode(codestring);
             Code c = codeService.selectCodekey(codestring);
-            Print.warning(c);
             if (c != null) {
                 User user = new User();
                 sizes = c.getValue() + u1.getMemory();

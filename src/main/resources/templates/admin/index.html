@@ -248,7 +248,7 @@
     function exit() {
         $.ajax({
             type: "POST",
-            url: "/user/exit.do",
+            url: "/logout",
             dataType: "json",
             success: function (data) {
                 layer.msg('账号已退出');

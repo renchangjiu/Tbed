@@ -4,19 +4,19 @@ package com.su.utils;
 import java.io.*;
 
 public class DeleImg {
-    public static void main(String[] args) throws  Exception {
-        readFile(File.separator + "HellohaoData"+File.separator+"img.ini");
+    public static void main(String[] args) throws Exception {
+        readFile(File.separator + "HellohaoData" + File.separator + "img.ini");
         //charu();
     }
 
     public static void charu(String imgUrlText) {
-        String filePath =File.separator + "HellohaoData" ;
+        String filePath = File.separator + "HellohaoData";
         File file = new File(filePath);
-        File file1 = new File(filePath+File.separator+"img.ini");
-        if(!file.exists()){
+        File file1 = new File(filePath + File.separator + "img.ini");
+        if (!file.exists()) {
             file.mkdirs();
         }
-        if(!file1.exists()){
+        if (!file1.exists()) {
             try {
                 file1.createNewFile();
             } catch (IOException e) {
@@ -52,7 +52,7 @@ public class DeleImg {
             String s = null;
             while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
                 result.append(System.lineSeparator() + s);
-                Print.Normal( s);
+                // Print.Normal( s);
             }
             br.close();
         } catch (Exception e) {

@@ -343,7 +343,7 @@
                 success: function (data) {
                     var body = '';//<option value="0">&nbsp;默认群组</option>
                     for(var i=0;i<data.length;i++){
-                        body+='<option value="'+data[i].id+'">'+data[i].groupname+'</option>';
+                        body+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
                     }
                     $('#group').append(body);
                     form.render('select');

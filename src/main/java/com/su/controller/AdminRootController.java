@@ -3,11 +3,6 @@ package com.su.controller;
 import com.su.pojo.*;
 import com.su.service.*;
 import com.su.service.impl.*;
-import com.su.pojo.*;
-import com.su.service.*;
-import com.su.service.impl.*;
-import com.su.utils.GetCurrentSource;
-import com.su.utils.Print;
 import com.su.utils.StringUtils;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
@@ -31,7 +26,7 @@ public class AdminRootController {
     @Autowired
     private ConfigService configService;
     @Autowired
-    private KeysService keysService;
+    private KeyService keyService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -60,8 +55,8 @@ public class AdminRootController {
     @RequestMapping(value = "tostorage")
     public String tostorage(HttpSession session, Model model, HttpServletRequest request) {
         User u = (User) session.getAttribute("user");
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
-        Keys key = keysService.selectByStorageType(Sourcekey);//然后根据类型再查询key
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
+        Key key = keyService.selectByStorageType(Sourcekey);//然后根据类型再查询key
         Boolean b = StringUtils.doNull(Sourcekey, key);//判断对象是否有空值
         Integer StorageType = 0;
         if (Sourcekey != 5) {
@@ -94,7 +89,7 @@ public class AdminRootController {
     @ResponseBody
     public String getkey(Integer storageType) {
         JSONArray jsonArray = new JSONArray();
-        Keys key = keysService.selectByStorageType(storageType);
+        Key key = keyService.selectByStorageType(storageType);
         jsonArray.add(key);
         return jsonArray.toString();
     }
@@ -103,7 +98,7 @@ public class AdminRootController {
     @ResponseBody
     public Integer getkeyourceype(HttpSession session) {
         User u = (User) session.getAttribute("user");
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         Integer ret = 0;
         if (Sourcekey != null) {
             ret = Sourcekey;
@@ -113,7 +108,7 @@ public class AdminRootController {
 
     @PostMapping("/updatekey")
     @ResponseBody
-    public String updatekey(Keys key) {
+    public String updatekey(Key key) {
         JSONArray jsonArray = new JSONArray();
         Config config = new Config();
         config.setSourcekey(key.getStorageType());
@@ -134,10 +129,10 @@ public class AdminRootController {
         } else if (key.getStorageType() == 7) {
             ret = FTPImageupload.Initialize(key);
         } else {
-            Print.Normal("为获取到存储参数，或者使用存储源是本地的。");
+            // Print.Normal("为获取到存储参数，或者使用存储源是本地的。");
         }
         if (ret > 0) {
-            ret = keysService.updateKey(key);
+            ret = keyService.updateKey(key);
         }
 
         //-1 对象存储有参数为空,初始化失败
@@ -193,7 +188,7 @@ public class AdminRootController {
     public String towebconfig(HttpSession session, Model model) {
         Config config = configService.getSourceype();
         User u = (User) session.getAttribute("user");
-        Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
         SysConfig sysConfig = sysConfigService.getstate();
         model.addAttribute("config", config);

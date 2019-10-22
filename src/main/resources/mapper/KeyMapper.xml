@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.su.dao.KeysMapper">
+<mapper namespace="com.su.dao.KeyMapper">
 
 
     <!-- 查询对象存储key-->
-    <select id="selectByStorageType" parameterType="integer" resultType="com.su.pojo.Keys">
+    <select id="selectByStorageType" parameterType="integer" resultType="com.su.pojo.Key">
         SELECT *
-        FROM `keys`
+        FROM `key`
         WHERE storageType = #{storageType}
     </select>
-
-    <!-- 查询对象存储key-->
-    <select id="getKeys" parameterType="integer" resultType="com.su.pojo.Keys">
+    <select id="selectByKey" parameterType="long" resultType="com.su.pojo.Key">
         SELECT *
-        FROM `keys`
+        FROM `key`
+        WHERE id = #{id}
     </select>
 
-    <update id="updateKey" parameterType="com.su.pojo.Keys">
-        UPDATE `keys`
+    <!-- 查询对象存储key-->
+    <select id="getKeys" parameterType="integer" resultType="com.su.pojo.Key">
+        SELECT *
+        FROM `key`
+    </select>
+
+    <update id="updateKey" parameterType="com.su.pojo.Key">
+        UPDATE `key`
         SET AccessKey      = #{AccessKey},
             AccessSecret   = #{AccessSecret},
             Endpoint       = #{Endpoint},

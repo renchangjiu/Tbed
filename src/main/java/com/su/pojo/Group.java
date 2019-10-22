@@ -14,12 +14,12 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 public class Group {
+    /**
+     * 默认分组ID, 游客即属于该分组
+     */
+    public static final Long DEFAULT_ID = 1L;
+
     private Long id;
     private String name;
-    // private Long keyId;
-
-    private String groupname;
-    private Integer keyid;
-
-
+    private Long keyId;
 }

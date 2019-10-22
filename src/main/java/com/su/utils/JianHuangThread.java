@@ -1,7 +1,7 @@
 package com.su.utils;
 
 import com.su.pojo.Imgreview;
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.User;
 import com.su.service.ImgreviewService;
 
@@ -9,13 +9,13 @@ import java.util.Map;
 
 public class JianHuangThread extends Thread {
 
-    private Keys key;
+    private Key key;
     private Map hashMap;
     private ImgreviewService imgreviewService;
     private User user;
 
-    public JianHuangThread(ImgreviewService imgreviewService, Keys keys, User user, Map<String, Integer> hashMap) {
-        this.key = keys;
+    public JianHuangThread(ImgreviewService imgreviewService, Key key, User user, Map<String, Integer> hashMap) {
+        this.key = key;
         this.user = user;
         this.imgreviewService = imgreviewService;
         this.hashMap = hashMap;

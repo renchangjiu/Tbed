@@ -1,11 +1,11 @@
 package com.su.service.impl;
 
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.pojo.ReturnImage;
 import com.su.pojo.UploadConfig;
 import com.su.utils.DateUtils;
 import com.su.utils.DeleImg;
-import com.su.utils.ImgUrlUtil;
+import com.su.utils.BinUtils;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -33,7 +33,7 @@ import java.util.UUID;
 public class KODOImageupload {
     static String upToken;
     static UploadManager uploadManager;
-    static Keys key;
+    static Key key;
 
     public Map<ReturnImage, Integer> ImageuploadKODO(Map<String, MultipartFile> fileMap, String username,
                                                      Map<String, String> fileMap2, Integer setday) throws Exception {
@@ -90,7 +90,7 @@ public class KODOImageupload {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     ReturnImage returnImage = new ReturnImage();
                     returnImage.setImgurl(key.getRequestAddress() + "/" + username + "/" + uuid + times + "." + entry.getKey());
-                    ImgUrl.put(returnImage, ImgUrlUtil.getFileSize2(new File(imgurl)));
+                    ImgUrl.put(returnImage, BinUtils.getFileSize2(new File(imgurl)));
                     if (setday > 0) {
                         String deleimg = DateUtils.plusDay(setday);
                         DeleImg.charu(username + "/" + uuid + times + "." + entry.getKey() + "|" + deleimg + "|" + "4");
@@ -125,7 +125,7 @@ public class KODOImageupload {
     }
 
     //初始化
-    public static Integer Initialize(Keys k) {
+    public static Integer Initialize(Key k) {
         int ret = -1;
         if (k.getEndpoint() != null && k.getAccessSecret() != null && k.getEndpoint() != null
                 && k.getBucketname() != null && k.getRequestAddress() != null) {

@@ -1,7 +1,7 @@
 package com.su.utils;
 
 import com.su.pojo.Imgreview;
-import com.su.pojo.Keys;
+import com.su.pojo.Key;
 import com.su.service.impl.ImageServiceImpl;
 import com.su.service.impl.ImgreviewServiceImpl;
 import com.alibaba.fastjson.JSON;
@@ -29,7 +29,7 @@ public class ImageReview {
 
     }
     //开始调用鉴黄。
-    public static void imgJB(Map<String, Integer> imgmap, String requestAddress, Keys key, Imgreview imgreview) {
+    public static void imgJB(Map<String, Integer> imgmap, String requestAddress, Key key, Imgreview imgreview) {
         ImageServiceImpl imgService = SpringContextHolder.getBean(ImageServiceImpl.class);
         ImgreviewServiceImpl imgreviewService = SpringContextHolder.getBean(ImgreviewServiceImpl.class);
         ImageReview.Initializes(imgreview);

@@ -21,13 +21,12 @@
     </select>
     <!--  uid查询用户并修改  -->
     <update id="uiduser" parameterType="com.su.pojo.User">
-        <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
         UPDATE `user` set `isok`=1 where uid=#{uid}
     </update>
 
     <!-- 登录 -->
-    <select id="login" parameterType="string" resultType="integer">
-        select COUNT(*)
+    <select id="login" parameterType="string" resultType="com.su.pojo.User">
+        select *
         from user
         where email = #{email}
         and password = #{password}
