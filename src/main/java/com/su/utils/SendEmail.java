@@ -12,6 +12,10 @@ import java.util.Properties;
 
 public class SendEmail {
 
+
+
+
+
     public static MimeMessage Emails(EmailConfig emailConfig) {
         Properties p = new Properties();
         p.setProperty("mail.smtp.auth", "true");

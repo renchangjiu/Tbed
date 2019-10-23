@@ -8,7 +8,7 @@
     </insert>
 
     <!-- 查询-->
-    <select id="selectimg" parameterType="com.su.pojo.Images" resultType="com.su.pojo.Images">
+    <select id="listData" parameterType="com.su.pojo.Images" resultType="com.su.pojo.Image">
         SELECT
         a.id,
         a.imgname,

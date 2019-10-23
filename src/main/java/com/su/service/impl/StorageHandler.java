@@ -115,16 +115,14 @@ public class StorageHandler {
             return Result.error("已禁止游客上传,请登陆后使用。");
         }
         // 已使用的总内存, KB
-        Integer usedMemory = fileSize;
+        Integer usedMemory = fileSize + this.imageService.getUsedMemory(user);
         // 可用内存, KB
         Integer totalMemory = 0;
         Integer storageType = this.keyService.getCurrentKey(user).getStorageType();
         if (user == null) {
             totalMemory = this.systemConfig.touristTotalMemory;
-            usedMemory += imageService.getUsedMemory(0L);
         } else {
             totalMemory = userService.getUsers(user.getEmail()).getMemory();
-            usedMemory += imageService.getUsedMemory(user.getId());
         }
         if (totalMemory != -1 && usedMemory >= totalMemory) {
             return Result.error("上传失败，可用空间不足。");

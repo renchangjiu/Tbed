@@ -33,12 +33,16 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private EmailConfigService emailConfigService;
+
     @Autowired
     private ConfigService configService;
+
     @Autowired
     private UploadConfigService uploadConfigService;
+
     @Autowired
     private SysConfigService sysConfigService;
 
@@ -128,14 +132,10 @@ public class UserController extends BaseController {
 
     @RequestMapping("/logout")
     @ResponseBody
-    public String exit() {
-        JSONObject jsonObject = new JSONObject();
+    public Result<?> exit() {
         session.removeAttribute("user");
-        //刷新view
         session.invalidate();
-        jsonObject.put("exit", 1);
-
-        return jsonObject.toString();
+        return Result.success();
     }
 
 

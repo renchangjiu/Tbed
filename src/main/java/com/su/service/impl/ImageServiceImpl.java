@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.su.config.SystemConfig;
-import com.su.pojo.Image;
-import com.su.pojo.Key;
-import com.su.pojo.Result;
+import com.su.pojo.*;
 import com.su.utils.IdWorker;
 import com.UpYun;
 import com.aliyun.oss.OSSClient;
@@ -24,7 +22,6 @@ import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.util.Auth;
 import com.su.dao.ImageMapper;
-import com.su.pojo.Images;
 import com.su.service.ImageService;
 import com.upyun.UpException;
 import org.apache.commons.net.ftp.FTPClient;
@@ -58,9 +55,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<Images> selectimg(Images images) {
-        // TODO Auto-generated method stub
-        return imageMapper.selectimg(images);
+    public List<Image> listData(Image image) {
+        return this.imageMapper.listData(image);
     }
 
     @Override
@@ -228,14 +224,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Integer getUsedMemory(Long userId) {
-        Integer usedMemory = imageMapper.getusermemory(userId);
+    public Integer getUsedMemory(User user) {
+        Integer usedMemory = imageMapper.getusermemory(this.getUserId(user));
         return usedMemory != null ? usedMemory : 0;
     }
 
     @Override
     public String getImagePath(long imageId) {
         return this.systemConfig.getSavePath() + imageId;
+    }
+
+    private Long getUserId(User user) {
+        return user != null ? user.getId() : 0L;
     }
 
 }

@@ -512,8 +512,9 @@
                 {
                     title: '链接',
                     formatter: function (value, rows, index) {
+
                         var view = {
-                            imgurl: rows.imgurl
+                            imgurl: rows.url
                         };
                         if(kooltype==1){
                             var output = Mustache.render('<a style="cursor:pointer;" onclick="lookimgs('+rows.id+',\'{{&imgurl}}\')">{{imgurl}}<img class="slt" style="display: none;" id="imgs'+rows.id+'" src="{{imgurl}}" alt="" /></a>', view);
@@ -584,9 +585,9 @@
                     title: '操作',
                     formatter: function (value, rows, index) {
                         var view = {
-                            imgurl: rows.imgurl,
-                            path:rows.imgname,
-                            size:rows.sizes
+                            imgurl: rows.url,
+                            path:rows.name,
+                            size:rows.size
                         };
                         var htm = '<a onclick="copy(\'' + rows.imgurl +
                             '\')" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list-alt" title="复制"></span></a>'+ "&nbsp;&nbsp;";//复制

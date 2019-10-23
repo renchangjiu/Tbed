@@ -7,13 +7,14 @@ import com.su.pojo.Image;
 
 import com.su.pojo.Images;
 import com.su.pojo.Result;
+import com.su.pojo.User;
 
 /**
  * @author su
  * @date 2019/10/19 13:26
  */
 public interface ImageService {
-    List<Images> selectimg(Images images);
+    List<Image> listData(Image image);
 
     Integer delete(Long id);
 
@@ -34,12 +35,11 @@ public interface ImageService {
     List<Images> gettimeimg(String time);
 
     /**
-     * 获取某用户已使用的总存储空间
+     * 获取该用户已使用的总存储空间
      *
-     * @param userId user id
      * @return integer
      */
-    Integer getUsedMemory(Long userId);
+    Integer getUsedMemory(User user);
 
     /**
      * 根据 imageId 返回其在本地存储中的文件路径

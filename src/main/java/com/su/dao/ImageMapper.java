@@ -17,7 +17,7 @@ public interface ImageMapper {
 
     Integer insert(Image image);
 
-    List<Images> selectimg(Images images);
+    List<Image> listData(Image image);
 
     Integer countimg(@Param("userid") Long userid);
 

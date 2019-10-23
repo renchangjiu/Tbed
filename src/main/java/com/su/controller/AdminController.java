@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController{
 
     @Autowired
     private ImageService imageService;
@@ -168,19 +168,19 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/selecttable")
+    @RequestMapping("/selecttable")
     @ResponseBody
-    public PageResultBean<Images> selectByFy(HttpSession session, Integer pageNum, Integer pageSize, Integer selecttype,
+    public PageResultBean<Image> selectByFy(HttpSession session, Integer pageNum, Integer pageSize, Integer selecttype,
                                              Integer storageType, String starttime, String stoptime) {
-        User u = (User) session.getAttribute("user");
-        Images img = new Images();
+        User user = super.getCurrentLoginUser();
+        Image img = new Image();
         if (storageType != null) {
             if (storageType != 0) {
                 img.setSource(storageType);
             }
         }
         if (starttime != null && stoptime != null) {
-            if (!starttime.equals("") && !stoptime.equals("")) {
+            if (!"".equals(starttime) && !"".equals(stoptime)) {
                 img.setStarttime(starttime);
                 img.setStoptime(stoptime);
             }
@@ -188,20 +188,20 @@ public class AdminController {
         // 使用Pagehelper传入当前页数和页面显示条数会自动为我们的select语句加上limit查询
         // 从他的下一条sql开始分页
         PageHelper.startPage(pageNum, pageSize);
-        List<Images> images = null;
-        if (u.getLevel() > 1) { //根据用户等级查询管理员查询所有的信息
+        List<Image> images = null;
+        if (user.getLevel() > 1) { //根据用户等级查询管理员查询所有的信息
             if (selecttype == 1) {
-                images = imageService.selectimg(img);// 这是我们的sql
+                images = imageService.listData(img);
             } else {
-                img.setUserid(u.getId());
-                images = imageService.selectimg(img);// 这是我们的sql
+                img.setUserId(user.getId());
+                images = imageService.listData(img);
             }
         } else {
-            img.setUserid(u.getId());
-            images = imageService.selectimg(img);// 这是我们的sql
+            img.setUserId(user.getId());
+            images = imageService.listData(img);
         }
         // 使用pageInfo包装查询
-        PageInfo<Images> rolePageInfo = new PageInfo<>(images);//
+        PageInfo<Image> rolePageInfo = new PageInfo<>(images);//
         return new PageResultBean<>(rolePageInfo.getTotal(), rolePageInfo.getList());
     }
 
