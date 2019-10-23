@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.su.dao.ImageMapper">
-
+    <resultMap id="ResultMap" type="com.su.pojo.Image" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="imgname" property="name" jdbcType="VARCHAR" />
+        <id column="imgurl" property="url" jdbcType="VARCHAR" />
+        <id column="username" property="userName" jdbcType="VARCHAR" />
+        <id column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+        <id column="sizes" property="size" jdbcType="INTEGER" />
+        <id column="abnormal" property="abnormal" jdbcType="INTEGER" />
+        <id column="source" property="source" jdbcType="INTEGER" />
+    </resultMap>
     <insert id="insert" parameterType="com.su.pojo.Image">
         INSERT INTO imgdata (id, imgname, imgurl, userid, updatetime, sizes, abnormal, source)
         VALUES (#{id}, #{name}, #{url}, #{userId}, #{updatetime}, #{size}, null, #{source})
     </insert>
 
     <!-- 查询-->
-    <select id="listData" parameterType="com.su.pojo.Images" resultType="com.su.pojo.Image">
+    <select id="listData" parameterType="com.su.pojo.Images" resultMap="ResultMap">
         SELECT
         a.id,
         a.imgname,
@@ -23,9 +32,9 @@
         LEFT JOIN user b ON a.userid = b.id
         where
         1=1
-        <if test="userid != null">
+        <if test="userId != null">
             and
-            userid = #{userid}
+            userid = #{userId}
         </if>
         <if test="source != null">
             and

@@ -53,7 +53,7 @@ public class AdminController extends BaseController{
     public String goadmin1(HttpSession session, Model model, HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        Integer usermemory = imageService.getUsedMemory(user.getId());
+        Integer usermemory = imageService.getUsedMemory(user);
         if (usermemory == null) {
             usermemory = 0;
         }
@@ -110,7 +110,7 @@ public class AdminController extends BaseController{
 
         //空间大小
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        Integer usermemory = imageService.getUsedMemory(u.getId());
+        Integer usermemory = imageService.getUsedMemory(u);
         if (usermemory == null) {
             usermemory = 0;
         }

@@ -13,6 +13,7 @@ import com.su.utils.requests.Response;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class LocalStorageServiceImpl implements StorageService {
         try {
             long id = IdWorker.singleNextId();
             String imageExt = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+            imageExt = StringUtils.isNotEmpty(imageExt) ? imageExt.toLowerCase() : "jpg";
             String destPath = this.genLocalSavePath(id, imageExt);
             String url = this.genLocalUrl(id, imageExt, request);
             File dest = new File(destPath);

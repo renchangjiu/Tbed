@@ -1,11 +1,4 @@
 create database picturebed character set = 'utf8';
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for code
--- ----------------------------
-DROP TABLE IF EXISTS `code`;
 CREATE TABLE `code`
 (
     `id`    int(255)                                                NOT NULL AUTO_INCREMENT,
@@ -18,10 +11,6 @@ CREATE TABLE `code`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Table structure for config
--- ----------------------------
-DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config`
 (
     `id`          int(4)                                                  NOT NULL AUTO_INCREMENT,
@@ -45,9 +34,6 @@ CREATE TABLE `config`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of config
--- ----------------------------
 INSERT INTO `config`
 VALUES (1, 7, 1, 'Hellohao', '网站由JAVA语言编写应用SpringBoot框架开发，前端全部组件由BootStrap/Layui框架编写。
 由作者个人更新维护，后期会加入更全面的功能供大家使用，如有BUG请与我反馈。',
@@ -59,10 +45,6 @@ VALUES (1, 7, 1, 'Hellohao', '网站由JAVA语言编写应用SpringBoot框架开
         'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1565769264&di=74d809d6cfae81bbab83bf9d573d8f9a&src=http://pic17.nipic.com/20110917/7420038_160826355111_2.jpg',
         1);
 
--- ----------------------------
--- Table structure for emailconfig
--- ----------------------------
-DROP TABLE IF EXISTS `emailconfig`;
 CREATE TABLE `emailconfig`
 (
     `id`        int(2)                                                  NOT NULL AUTO_INCREMENT,
@@ -79,16 +61,9 @@ CREATE TABLE `emailconfig`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of emailconfig
--- ----------------------------
 INSERT INTO `emailconfig`
 VALUES (1, '', '', '', '', '', 0);
 
--- ----------------------------
--- Table structure for group
--- ----------------------------
-DROP TABLE IF EXISTS `group`;
 CREATE TABLE `group`
 (
     `id`     int(255)                                                NOT NULL AUTO_INCREMENT,
@@ -101,16 +76,9 @@ CREATE TABLE `group`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of group
--- ----------------------------
 INSERT INTO `group`
 VALUES (1, '默认群组', 5);
 
--- ----------------------------
--- Table structure for imgdata
--- ----------------------------
-DROP TABLE IF EXISTS `imgdata`;
 CREATE TABLE `imgdata`
 (
     `id`         bigint(255)                                             NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -128,10 +96,6 @@ CREATE TABLE `imgdata`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Table structure for imgreview
--- ----------------------------
-DROP TABLE IF EXISTS `imgreview`;
 CREATE TABLE `imgreview`
 (
     `id`         int(4)                                                  NOT NULL AUTO_INCREMENT,
@@ -153,10 +117,6 @@ CREATE TABLE `imgreview`
 INSERT INTO `imgreview`
 VALUES (1, NULL, NULL, NULL, 0, 0);
 
--- ----------------------------
--- Table structure for key
--- ----------------------------
-DROP TABLE IF EXISTS `key`;
 CREATE TABLE `key`
 (
     `id`             int(11)                                                 NOT NULL AUTO_INCREMENT,
@@ -173,9 +133,6 @@ CREATE TABLE `key`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of key
--- ----------------------------
 INSERT INTO `key`
 VALUES (1, '', '', '', '', '', 1);
 INSERT INTO `key`
@@ -197,10 +154,6 @@ VALUES (9, '', '', '', '', '', 9);
 INSERT INTO `key`
 VALUES (10, '0', '', '0', '0', '0', 10);
 
--- ----------------------------
--- Table structure for notice
--- ----------------------------
-DROP TABLE IF EXISTS `notice`;
 CREATE TABLE `notice`
 (
     `id`   int(4)                                                    NOT NULL,
@@ -210,10 +163,6 @@ CREATE TABLE `notice`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Table structure for sysconfig
--- ----------------------------
-DROP TABLE IF EXISTS `sysconfig`;
 CREATE TABLE `sysconfig`
 (
     `id`       int(2) NOT NULL AUTO_INCREMENT,
@@ -225,16 +174,9 @@ CREATE TABLE `sysconfig`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of sysconfig
--- ----------------------------
 INSERT INTO `sysconfig`
 VALUES (1, 1);
 
--- ----------------------------
--- Table structure for uploadconfig
--- ----------------------------
-DROP TABLE IF EXISTS `uploadconfig`;
 CREATE TABLE `uploadconfig`
 (
     `id`               int(2)                                                  NOT NULL AUTO_INCREMENT,
@@ -254,16 +196,9 @@ CREATE TABLE `uploadconfig`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of uploadconfig
--- ----------------------------
 INSERT INTO `uploadconfig`
 VALUES (1, 3, 5, 1, 5, 'gif,jpg,jpeg,bmp,png', 1, 1, 500, 1024);
 
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`
 (
     `id`       int(10)                                                NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -283,16 +218,9 @@ CREATE TABLE `user`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of user
--- ----------------------------
 INSERT INTO `user`
 VALUES (1, 'admin', 'YWRtaW4=', 'admin', '2019-06-12', 2, 'admin', 1, 1024, 1);
 
--- ----------------------------
--- Table structure for usergroup
--- ----------------------------
-DROP TABLE IF EXISTS `usergroup`;
 CREATE TABLE `usergroup`
 (
     `id`      int(255) NOT NULL AUTO_INCREMENT,
@@ -305,9 +233,6 @@ CREATE TABLE `usergroup`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of usergroup
--- ----------------------------
 INSERT INTO `usergroup`
 VALUES (1, 1, 1);
 

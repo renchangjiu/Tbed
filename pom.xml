@@ -8,11 +8,11 @@
         <version>2.1.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>cn.hellohao</groupId>
-    <artifactId>Tbed</artifactId>
+    <groupId>com.su</groupId>
+    <artifactId>bed</artifactId>
     <version>1.0</version>
-    <name>Tbed</name>
-    <description>Hellohao Picture Bed for Spring Boot</description>
+    <name>bed</name>
+    <description>A image bed for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
