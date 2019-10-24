@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<!-- meta -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<!--	<meta name="description" content="Hellohao图床是一个基于JAVA-SpringBoot开发的,免费纯粹的图片存放驿站">-->
-<!--	<meta name="author" content="tc.hellohao.cn">-->
-<!--	<meta name="keywords" content="图床,图片上传,hellohao图床,开源图床,hellohao">-->
-	<!-- title -->
-	<title th:text="${config.getWebname()}"></title>
+	<title>TBed</title>
 
-<!--	<title th:text="Hellohao图床"></title>-->
 	<link rel="shortcut icon" href="https://hellohao.nos-eastchina1.126.net/BlogImg/favicon.ico" type="image/x-icon"/>
 	<link rel="icon" type="image/ico" href="https://hellohao.nos-eastchina1.126.net/BlogImg/favicon.ico">
 	<!-- CSS IMPORT -->
@@ -23,7 +17,6 @@
 	<link th:href="@{/static/css/login-register.css}" media="all" rel="stylesheet" type="text/css"/>
 	<link th:href="@{/static/css/sweetalert.min.css}" media="all" rel="stylesheet" type="text/css"/>
 	<link th:href="@{/webuploade/css/component.css}" media="all" rel="stylesheet" type="text/css"/>
-	<!--	<link th:href="@{/static/css/popover.css}" media="all" rel="stylesheet" type="text/css"/>-->
 	<link rel="stylesheet" th:href="@{/layui/layui/css/layui.css}">
 	<link rel="stylesheet" th:href="@{/css/intro.css}">
 	<link rel="stylesheet" th:href="@{/css/verify.css}">
@@ -32,10 +25,7 @@
 	<script th:src="@{/static/js/login-register.js}"></script>
 	<script th:src="@{/static/js/clipboard.min.js}"></script>
 	<script th:src="@{/static/js/bootbox.min.js}"></script>
-	<!--	<script th:src="@{/static/js/sweetalert.min.js}"></script>-->
-	<!--	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
 	<script th:src="@{/static/js/sweetalert2.min.js}"></script>
-	<!--	<script th:src="@{/static/js/popover.min.js}"></script>-->
 	<script th:src="@{/layui/layui/layui.js}"></script>
 	<style type="text/css">
 		a {
@@ -113,15 +103,6 @@
 			</a></li>
 			<li><a href="javascript:;" class="md-trigger" data-modal="modal-3">登录&nbsp;<span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
 			<li><a href="javascript:;" class="md-trigger" data-modal="modal-4">注册&nbsp;<span class="glyphicon glyphicon-education" aria-hidden="true"></span></a></li>
-<!--			<li><a class="menu-link" href="https://github.com/Hello-hao/Tbed" target="_blank"-->
-<!--			>GitHub<i class="fa fa-github"></i></a></li>-->
-<!--			<li><a class="menu-link" href="http://www.hellohao.cn" target="_blank"-->
-<!--			>作者<i class="fa fa-github"></i></a></li>-->
-
-<!--							<li><a href="javascript:;" class="md-trigger" data-modal="modal-2">赞助商&nbsp;<i class="fa fa-share-alt"></i></a></li>-->
-
-<!--											<li><a class="menu-link" onclick="tanchuang('亲爱的开发者','全新的响应式图床站，如果你也喜欢，希望给我一个Star。\n Hellohao开发者交流群：864800972','success');"-->
-<!--							>关于<i class="fa fa-share-alt"></i></a></li>-->
 		</ul>
 	</div>
 	<div class="cls">
@@ -149,12 +130,9 @@
 					</div>
 
 					<!-- end headline -->
-					<!-- short description -->
-					<p class="desc" th:text="${config.getExplain()}">
-						Hellohao Figure bed：support several mainstream object storage, CDN acceleration is more stable.
-						Technology constantly updated, we will always move forward on the road ahead.
+					<p class="desc">
+						自用图床，支持几种主流对象存储，CDN加速更加稳定，技术不断更新。
 					</p>
-					<!-- end short description -->
 					<!-- countdown container -->
 					<div id="countdown" class="countdown-container">
 						<!-- days left -->
@@ -194,8 +172,9 @@
 
 				<div id="beian" style="text-align: center;">
 					<br />
-					<span th:utext="${config.getLinks()}">
-					<a href="http://www.hellohao.cn">Hellohao©技术支持</a>
+					<span>
+<!--						todo: 备案显示-->
+					<a href="#">Hellohao©技术支持</a>
 					</span>
 					<br />
 					<br />

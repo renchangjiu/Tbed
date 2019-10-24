@@ -61,8 +61,8 @@ public class UserController extends BaseController {
             if (sysConfig.getRegister() == 1) {
                 if (countusername == 0 && countmail == 0) {
                     String uid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-                    String birthder = df.format(new Date());// new Date()为获取当前系统时间
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    String birthder = df.format(new Date());
                     user.setLevel(1);
                     user.setUid(uid);
                     user.setBirthder(birthder);
@@ -74,14 +74,14 @@ public class UserController extends BaseController {
                     //查询是否启用了邮箱验证。
                     Config config = configService.getSourceype();
                     System.err.println("是否启用了邮箱激活：" + emailConfig.getUsing());
-                    Integer type = 0;
+                    int type = 0;
                     if (emailConfig.getUsing() == 1) {
                         user.setIsok(0);
                         //初始化邮箱
                         MimeMessage message = SendEmail.Emails(emailConfig);
                         //注册完发激活链接
                         Thread thread = new Thread(() -> {
-                            Integer a = SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
+                            SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
                         });
                         thread.start();
                         type = 1;
@@ -104,10 +104,12 @@ public class UserController extends BaseController {
                     jsonObject.put("ret", -2);
                 }
             } else {
-                jsonObject.put("ret", -3); //管理员关闭的注册
+                //管理员关闭的注册
+                jsonObject.put("ret", -3);
             }
         } else {
-            jsonObject.put("ret", -4);//非法注册
+            //非法注册
+            jsonObject.put("ret", -4);
         }
         return jsonObject.toString();
     }
@@ -149,10 +151,8 @@ public class UserController extends BaseController {
         User user = userService.getUsersMail(activation);
         model.addAttribute("config", config);
         if (user != null && user.getIsok() == 0) {
-            Integer setisok = userService.uiduser(activation);
             model.addAttribute("setisok", ret);
             model.addAttribute("username", username);
-
             return "isok";
         } else {
             return "redirect:/index";
@@ -160,7 +160,7 @@ public class UserController extends BaseController {
 
     }
 
-    @PostMapping(value = "/verification")
+    @PostMapping("/verification")
     @ResponseBody
     public Integer verification(Integer tmp, Integer type) {
         Random random = new Random();

@@ -32,56 +32,11 @@ public class ImageController extends BaseController {
     @Autowired
     private KeyService keyService;
     @Autowired
-    private ConfigService configService;
-    @Autowired
-    private UploadConfigService uploadConfigService;
-    @Autowired
     private ImageService imageService;
 
     @Autowired
     private StorageHandler storageHandler;
-    @Autowired
-    private SystemConfig systemConfig;
 
-    @RequestMapping({"/", "/index"})
-    public String indexImg(ModelMap map) {
-        Config config = configService.getSourceype();
-        UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
-        Integer filesizetourists = 0;
-        Integer filesizeuser = 0;
-        Integer imgcounttourists = 0;
-        Integer imgcountuser = 0;
-        if (uploadConfig.getFilesizetourists() != null) {
-            filesizetourists = uploadConfig.getFilesizetourists();
-        }
-        if (uploadConfig.getFilesizeuser() != null) {
-            filesizeuser = uploadConfig.getFilesizeuser();
-        }
-        if (uploadConfig.getImgcounttourists() != null) {
-            imgcounttourists = uploadConfig.getImgcounttourists();
-        }
-        if (uploadConfig.getImgcountuser() != null) {
-            imgcountuser = uploadConfig.getImgcountuser();
-        }
-        User user = super.getCurrentLoginUser();
-        if (user != null) {
-            map.addAttribute("username", user.getUsername());
-            map.addAttribute("level", user.getLevel());
-            map.addAttribute("imgcount", imgcountuser);
-            map.addAttribute("filesize", filesizeuser * 1024 * 1024);
-        } else {
-            map.addAttribute("imgcount", imgcounttourists);
-            map.addAttribute("filesize", filesizetourists * 1024 * 1024);
-        }
-        map.addAttribute("suffix", uploadConfig.getSuffix());
-        map.addAttribute("config", config);
-
-        int uploadable = (this.systemConfig.touristUploadable || user != null) ? 1 : 0;
-        map.put("uploadable", uploadable);
-        map.put("systemConfig", this.systemConfig);
-        return "index";
-
-    }
 
     @RequestMapping("/up")
     @ResponseBody
@@ -181,10 +136,5 @@ public class ImageController extends BaseController {
         return jsonObject.toString();
     }
 
-
-    @RequestMapping("/err")
-    public String err() {
-        return "err";
-    }
 
 }
