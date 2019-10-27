@@ -1,7 +1,6 @@
 package com.su.service.impl;
 
 import com.su.dao.CodeMapper;
-import com.su.exception.CodeException;
 import com.su.dao.UserMapper;
 import com.su.pojo.Group;
 import com.su.pojo.User;
@@ -109,9 +108,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Integer usersetmemory(User user, String codestring) {
         Integer ret = userMapper.setmemory(user);
-        if (ret <= 0) {
-            throw new CodeException("用户之没有设置成功。");
-        } else {
+        if (ret > 0) {
             ret = codeMapper.deleteCode(codestring);
         }
         return ret;
