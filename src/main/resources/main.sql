@@ -163,19 +163,6 @@ CREATE TABLE `notice`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
-CREATE TABLE `sysconfig`
-(
-    `id`       int(2) NOT NULL AUTO_INCREMENT,
-    `register` int(2) NOT NULL COMMENT '是否可以注册',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci
-  ROW_FORMAT = Compact;
-
-INSERT INTO `sysconfig`
-VALUES (1, 1);
 
 CREATE TABLE `uploadconfig`
 (
@@ -208,7 +195,7 @@ CREATE TABLE `user`
     `birthder` date                                                   NULL DEFAULT NULL COMMENT '注册时间',
     `level`    int(10)                                                NULL DEFAULT NULL COMMENT '等级',
     `uid`      varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户唯一标识',
-    `isok`     int(2)                                                 NOT NULL,
+    `status`   tinyint                                                NOT NULL comment '用户状态: 1正常/2未通过邮箱激活/3冻结',
     `memory`   int(10)                                                NULL DEFAULT NULL COMMENT '用户内存大小',
     `groupid`  int(255)                                               NULL DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE

@@ -4,8 +4,8 @@
 
     <!-- 用户注册 -->
     <insert id="register" parameterType="com.su.pojo.User">
-        INSERT INTO user (id, username, PASSWORD, email, birthder, LEVEL,uid,isok,memory,groupid)
-        VALUES (NULL, #{username}, #{password}, #{email}, #{birthder}, #{level},#{uid},#{isok},#{memory},#{groupid}   )
+        INSERT INTO user (id, username, PASSWORD, email, birthder, LEVEL, uid, status, memory, groupid)
+        VALUES (NULL, #{username}, #{password}, #{email}, #{birthder}, #{level}, #{uid}, #{status}, #{memory}, #{groupid})
     </insert>
     <!--  查询是否有username  -->
     <select id="countusername" parameterType="string" resultType="integer">
@@ -21,7 +21,9 @@
     </select>
     <!--  uid查询用户并修改  -->
     <update id="uiduser" parameterType="com.su.pojo.User">
-        UPDATE `user` set `isok`=1 where uid=#{uid}
+        UPDATE `user`
+        set status=1
+        where uid = #{uid}
     </update>
 
     <!-- 登录 -->
@@ -29,21 +31,21 @@
         select *
         from user
         where email = #{email}
-        and password = #{password}
+          and password = #{password}
     </select>
 
     <!-- 查询当前用户:根据邮箱 -->
     <select id="getUsers" parameterType="string" resultType="com.su.pojo.User">
         SELECT id,
-        username,
-        email,
-        password,
-        birthder,
-        LEVEL,
-        uid,
-        isok,
-        memory,
-        groupid
+               username,
+               email,
+               password,
+               birthder,
+               LEVEL,
+               uid,
+               status,
+               memory,
+               groupid
         FROM user
         WHERE email = #{email}
     </select>
@@ -56,7 +58,7 @@
                birthder,
                LEVEL,
                uid,
-               isok,
+               status,
                memory,
                groupid
         FROM user
@@ -65,15 +67,15 @@
     <!-- 查询当前用户:根据uid -->
     <select id="getUsersMail" parameterType="string" resultType="com.su.pojo.User">
         SELECT id,
-        username,
-        email,
-        password,
-        birthder,
-        LEVEL,
-        uid,
-        isok,
-        memory,
-        groupid
+               username,
+               email,
+               password,
+               birthder,
+               LEVEL,
+               uid,
+               status,
+               memory,
+               groupid
         FROM user
         WHERE uid = #{uid}
     </select>
@@ -90,7 +92,7 @@
                 `username` = #{username},
             </if>
             <if test="password != null">
-            `password` = #{password},
+                `password` = #{password},
             </if>
             <if test="memory != null">
                 `memory` = #{memory},
@@ -103,12 +105,15 @@
     </update>
 
     <select id="checkUsername" parameterType="string" resultType="integer">
-        SELECT count(username) FROM `user` where username=#{username}
+        SELECT count(username)
+        FROM `user`
+        where username = #{username}
     </select>
 
     <!-- 查询用户总数 -->
     <select id="getUserTotal" resultType="integer">
-        SELECT count(*) FROM `user`
+        SELECT count(*)
+        FROM `user`
     </select>
     <!-- 获取用户的详细信息 -->
     <select id="getuserlist" resultType="com.su.pojo.User">
@@ -128,12 +133,14 @@
 
     <!--刪除用戶-->
     <delete id="deleuser" parameterType="long">
-        DELETE FROM user WHERE id=#{id}
+        DELETE
+        FROM user
+        WHERE id = #{id}
     </delete>
 
     <update id="setisok" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
-        UPDATE `user` set `isok`=#{isok} where id=#{id}
+        UPDATE `user` set status=#{status} where id=#{id}
     </update>
     <update id="setmemory" parameterType="com.su.pojo.User">
         <!-- UPDATE `user` set username=#{username},`password`=#{password} where email=#{email} -->
@@ -141,7 +148,9 @@
     </update>
 
     <select id="getuserlistforgroupid" parameterType="long" resultType="com.su.pojo.User">
-        select * from user where groupid=#{groupid}
+        select *
+        from user
+        where groupid = #{groupid}
     </select>
 
 </mapper>

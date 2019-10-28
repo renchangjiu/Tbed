@@ -36,8 +36,6 @@ public class AdminRootController {
     @Autowired
     private NoticeService noticeService;
     @Autowired
-    private SysConfigService sysConfigService;
-    @Autowired
     private GroupService groupService;
     //@Autowired
     //private UserGroupService userGroupService;
@@ -185,18 +183,18 @@ public class AdminRootController {
     }
 
     @RequestMapping(value = "/towebconfig")
-    public String towebconfig(HttpSession session, Model model) {
-        Config config = configService.getSourceype();
-        User u = (User) session.getAttribute("user");
-        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
-        UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
-        SysConfig sysConfig = sysConfigService.getstate();
-        model.addAttribute("config", config);
-        model.addAttribute("updateConfig", updateConfig);
-        model.addAttribute("sysconfig", sysConfig);
-        model.addAttribute("group", Sourcekey);
-        return "admin/webconfig";
-    }
+    // public String towebconfig(HttpSession session, Model model) {
+    //     Config config = configService.getSourceype();
+    //     User u = (User) session.getAttribute("user");
+    //     Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
+    //     UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
+    //     SysConfig sysConfig = sysConfigService.getstate();
+    //     model.addAttribute("config", config);
+    //     model.addAttribute("updateConfig", updateConfig);
+    //     model.addAttribute("sysconfig", sysConfig);
+    //     model.addAttribute("group", Sourcekey);
+    //     return "admin/webconfig";
+    // }
 
     //修改站点配置
     @PostMapping("/updateconfig")
@@ -239,13 +237,13 @@ public class AdminRootController {
     }
 
     //修改注册开关
-    @PostMapping("/setstate")
-    @ResponseBody
-    public Integer setstate(HttpSession session, SysConfig sysConfig) {
-        Integer ret = -1;
-        ret = sysConfigService.setstate(sysConfig);
-        return ret;
-    }
+    // @PostMapping("/setstate")
+    // @ResponseBody
+    // public Integer setstate(HttpSession session, SysConfig sysConfig) {
+    //     Integer ret = -1;
+    //     ret = sysConfigService.setstate(sysConfig);
+    //     return ret;
+    // }
 
     @RequestMapping(value = "/modifyuser")
     public String modifyuser(Model model, String uid, Integer id) {

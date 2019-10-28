@@ -1,17 +1,22 @@
 package com.su.service.impl;
 
+import com.su.config.SystemConfig;
 import com.su.dao.CodeMapper;
 import com.su.exception.CodeException;
 import com.su.dao.UserMapper;
-import com.su.pojo.Group;
-import com.su.pojo.User;
+import com.su.pojo.*;
 import com.su.service.UserService;
+import com.su.utils.SendEmail;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author su
@@ -22,12 +27,58 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private CodeMapper codeMapper;
 
+    @Autowired
+    private SystemConfig systemConfig;
+
     @Override
-    public Integer register(User user) {
-        return userMapper.register(user);
+    public Result<User> register(UserAddBean userAddBean) {
+        Integer countusername = this.countusername(userAddBean.getUsername());
+        Integer countmail = this.countmail(userAddBean.getEmail());
+
+        if (countusername != 0 || countmail != 0) {
+            return Result.error("注册失败，用户名或邮箱重复，请重试。");
+        }
+        if (!this.systemConfig.enableRegister) {
+            return Result.error("本站已关闭注册功能。");
+        }
+        User user = new User();
+        EmailConfig emailConfig = emailConfigService.getemail();
+        String uid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String birthder = df.format(new Date());
+        user.setLevel(1);
+        user.setUid(uid);
+        user.setBirthder(birthder);
+        user.setMemory(this.systemConfig.userDefaultMemory);
+        user.setGroupid(1L);
+        user.setEmail(userAddBean.getEmail());
+        user.setUsername(userAddBean.getUsername());
+        user.setPassword(new String(Base64.encodeBase64(userAddBean.getPassword().getBytes())));
+        Config config = configService.getSourceype();
+        // 是否开启邮箱验证
+        if (this.systemConfig.enableEmailVerification == 1) {
+            user.setStatus(2);
+            //初始化邮箱
+            MimeMessage message = SendEmail.Emails(emailConfig);
+            //注册完发激活链接
+            Thread thread = new Thread(() -> {
+                SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
+            });
+            thread.start();
+        } else {
+            //直接注册
+            user.setStatus(1);
+        }
+        Integer ret = userMapper.register(user);
+        if (ret == 1) {
+            return Result.success(user);
+        } else {
+            return Result.error();
+        }
     }
 
     @Override

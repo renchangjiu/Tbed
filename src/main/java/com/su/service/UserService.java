@@ -1,12 +1,14 @@
 package com.su.service;
 
+import com.su.pojo.Result;
 import com.su.pojo.User;
+import com.su.pojo.UserAddBean;
 
 import java.util.List;
 
 public interface UserService {
-    //注册
-    Integer register(User user);
+
+    Result<User> register(UserAddBean userAddBean);
 
     //登录
     User login(String email, String password);

@@ -54,7 +54,7 @@ public class ImageController extends BaseController {
         Image image = result.getData();
         image.setUpdatetime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         image.setSource(key.getStorageType());
-        image.setUserId(user != null ? user.getId() : User.TOURIST_ID);
+        image.setUserId(user != null ? user.getId() : UserConstant.TOURIST_ID);
         image.setAbnormal(0);
         this.imageService.insert(image);
         return Result.success(image);

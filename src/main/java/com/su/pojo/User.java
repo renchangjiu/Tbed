@@ -15,10 +15,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class User {
 
-    /**
-     * 游客id
-     */
-    public static final Long TOURIST_ID = 0L;
 
     private Long id;
     //@NotBlank(message = "用户名不能为空")
@@ -32,7 +28,10 @@ public class User {
     private String birthder;
     private Integer level;
     private String uid;
-    private Integer isok;
+    /**
+     * 用户状态: 1正常/2未通过邮箱激活/3冻结
+     */
+    private Integer status;
     private Integer memory;
     private Long groupid;
 

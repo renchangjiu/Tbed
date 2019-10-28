@@ -467,99 +467,49 @@
 
 
 	function zhuce(mail, registerusername, registerpassword) {
-		if(zcverification){
-			//验证成功
-			$.ajax({
-				type: "POST",
-				url: "/register",
-				data: {email: mail, username: registerusername, password: registerpassword,zctmp:zctmp},
-				dataType: "json",
-				success: function (data) {
-					if (data.ret > 0) {
-						if (data.zctype == 1) {
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('注册成功，请前往邮箱激活你的账号，注意！激活邮件如果迟迟未收到，有可能在您的【垃圾箱】中。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 1  // icon
-									,yes:function(){
-										window.location.reload();
-									}
-								});
-							});
-						} else {
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('注册成功，快去登录体验吧。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 1  // icon
-									,yes:function(){
-										window.location.reload();
-									}
-								});
-							});
-						}
-					} else {
-						if (data.ret == -2) {
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('注册失败，用户名或邮箱重复且用户名只能为字母数字，请重试。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 2  // icon
-								});
-							});
-						} else if(data.ret == -3){
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('本站关闭了注册功能。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 2  // icon
-								});
-							});
-						}else if(data.ret == -4){
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('非法注册，请刷新页面后重新尝试。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 2  // icon
-								});
-							});
-						}else {
-							layui.use('layer', function(){
-								var layer = layui.layer;
-								layer.alert('注册失败，请重试。', {
-									skin: 'layui-layer-molv' //样式类名 自定义样式
-									,closeBtn: 0  // 是否显示关闭按钮
-									,anim: 1 //动画类型
-									,btn: ['确定'] //按钮
-									,icon: 2  // icon
-								});
-							});
-						}
-						setTimeout(function () {
-						}, 2000);
-					}
-					again(2);
-				}
-			});
-		}else{
-
-		}
+        if (!zcverification) {
+            return;
+        }
+        //验证成功
+        $.ajax({
+            type: "POST",
+            url: "/register",
+            data: {email: mail, username: registerusername, password: registerpassword,zctmp:zctmp},
+            dataType: "json",
+            success: function (ret) {
+                if (ret.success) {
+					let data = ret.data;
+					let msg = data.status === 1? "注册成功，快去登录体验吧。": "注册成功，请前往邮箱激活你的账号，注意！激活邮件如果迟迟未收到，有可能在您的【垃圾箱】中。";
+					layui.use('layer', function(){
+						var layer = layui.layer;
+						layer.alert(msg, {
+							skin: 'layui-layer-molv' //样式类名 自定义样式
+							,closeBtn: 0  // 是否显示关闭按钮
+							,anim: 1 //动画类型
+							,btn: ['确定'] //按钮
+							,icon: 1  // icon
+							,yes:function(){
+								window.location.reload();
+							}
+						});
+					});
+                } else {
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        layer.alert(ret.message, {
+                            skin: 'layui-layer-molv' //样式类名 自定义样式
+                            ,closeBtn: 0  // 是否显示关闭按钮
+                            ,anim: 1 //动画类型
+                            ,btn: ['确定'] //按钮
+                            ,icon: 2  // icon
+                        });
+                    });
+                    setTimeout(function () {
+                    }, 2000);
+                }
+                again(2);
+            }
+        });
 
 	}
 
