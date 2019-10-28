@@ -2,7 +2,6 @@ package com.su.service.impl;
 
 import com.su.dao.GroupMapper;
 import com.su.dao.UserMapper;
-import com.su.exception.CodeException;
 import com.su.pojo.Group;
 import com.su.pojo.Result;
 import com.su.pojo.User;
@@ -67,8 +66,6 @@ public class GroupServiceImpl implements GroupService {
                 u.setUid(user.getUid());
                 userMapper.change(u);
             }
-        } else {
-            throw new CodeException("用户之没有设置成功。");
         }
         return ret;
     }

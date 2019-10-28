@@ -1,4 +1,6 @@
 create database picturebed character set = 'utf8';
+use picturebed;
+
 CREATE TABLE `code`
 (
     `id`    int(255)                                                NOT NULL AUTO_INCREMENT,
