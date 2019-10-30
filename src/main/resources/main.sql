@@ -192,7 +192,7 @@ CREATE TABLE `user`
 (
     `id`       int(10)                                                NOT NULL AUTO_INCREMENT COMMENT '主键',
     `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
-    `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+    `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码, md5摘要',
     `email`    varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮箱',
     `birthder` date                                                   NULL DEFAULT NULL COMMENT '注册时间',
     `level`    int(10)                                                NULL DEFAULT NULL COMMENT '等级',
@@ -207,8 +207,9 @@ CREATE TABLE `user`
   COLLATE = utf8_general_ci
   ROW_FORMAT = Compact;
 
+-- password: admin
 INSERT INTO `user`
-VALUES (1, 'admin', 'YWRtaW4=', 'admin', '2019-06-12', 2, 'admin', 1, 1024, 1);
+VALUES (1, 'admin', '21232F297A57A5A743894A0E4A801FC3', 'admin', '2019-06-12', 2, 'admin', 1, 1024, 1);
 
 CREATE TABLE `usergroup`
 (

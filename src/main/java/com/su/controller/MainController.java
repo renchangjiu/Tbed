@@ -6,6 +6,7 @@ import com.su.pojo.UploadConfig;
 import com.su.pojo.User;
 import com.su.service.ConfigService;
 import com.su.service.UploadConfigService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,7 +61,7 @@ public class MainController extends BaseController {
         map.addAttribute("suffix", uploadConfig.getSuffix());
         map.addAttribute("config", config);
 
-        int uploadable = (this.systemConfig.touristUploadable || user != null) ? 1 : 0;
+        int uploadable = (this.systemConfig.getTouristUploadable() || user != null) ? 1 : 0;
         map.put("uploadable", uploadable);
         map.put("systemConfig", this.systemConfig);
         return "index";

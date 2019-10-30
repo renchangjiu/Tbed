@@ -5,8 +5,10 @@ import com.su.dao.CodeMapper;
 import com.su.dao.UserMapper;
 import com.su.pojo.*;
 import com.su.service.UserService;
+import com.su.utils.HashUtils;
 import com.su.utils.SendEmail;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,11 +43,11 @@ public class UserServiceImpl implements UserService {
         if (countusername != 0 || countmail != 0) {
             return Result.error("注册失败，用户名或邮箱重复，请重试。");
         }
-        if (!this.systemConfig.enableRegister) {
+        if (!this.systemConfig.getEnableRegister()) {
             return Result.error("本站已关闭注册功能。");
         }
         User user = new User();
-        EmailConfig emailConfig = emailConfigService.getemail();
+        // EmailConfig emailConfig = emailConfigService.getemail();
         String uid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String birthder = df.format(new Date());
@@ -56,18 +58,18 @@ public class UserServiceImpl implements UserService {
         user.setGroupid(1L);
         user.setEmail(userAddBean.getEmail());
         user.setUsername(userAddBean.getUsername());
-        user.setPassword(new String(Base64.encodeBase64(userAddBean.getPassword().getBytes())));
-        Config config = configService.getSourceype();
+        user.setPassword(HashUtils.MD5(userAddBean.getPassword()));
+        // Config config = configService.getSourceype();
         // 是否开启邮箱验证
         if (this.systemConfig.enableEmailVerification == 1) {
             user.setStatus(2);
             //初始化邮箱
-            MimeMessage message = SendEmail.Emails(emailConfig);
+            // MimeMessage message = SendEmail.Emails(emailConfig);
             //注册完发激活链接
-            Thread thread = new Thread(() -> {
-                SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
-            });
-            thread.start();
+            // Thread thread = new Thread(() -> {
+            //     SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
+            // });
+            // thread.start();
         } else {
             //直接注册
             user.setStatus(1);
@@ -81,8 +83,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String email, String password) {
-        return userMapper.login(email, new String(Base64.encodeBase64(password.getBytes())));
+    public Result<User> login(String email, String password) {
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(password)) {
+            return Result.error("邮箱或密码为空");
+        }
+
+        User user = userMapper.login(email, HashUtils.MD5(password));
+        if (user == null) {
+            return Result.error("登录失败，你的邮箱或密码不正确，请重试。");
+        }
+        if (user.getStatus() != 1) {
+            return Result.error("您的账号是未激活状态，无法登陆。");
+        }
+        return Result.success(user);
     }
 
     @Override

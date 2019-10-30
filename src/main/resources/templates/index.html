@@ -410,8 +410,10 @@
 		$.wordrotator_words =arr2;
 
 		setInterval(clock,1000);//首页动态时间
+		console.log(backtype);
 		if(backtype==1){
-			$(".bg-container-static").css('background', 'url('+[[${config.getBackground2()}]]+') no-repeat');
+			// $(".bg-container-static").css('background', 'url('+[[${config.getBackground2()}]]+') no-repeat');
+			$(".bg-container-static").css('background', 'url(img/w23-1920x1024.jpg) no-repeat');
 			$(".bg-container-static").css({'background-position':'50% 50%','height':'100%','width':'100%','overflow':'hidden','background-size':'cover'});
 
 		}
@@ -699,8 +701,6 @@
 		if (day < 10) {
 			day = "0" + day;
 		}
-		//$("#nian").html(year);
-		//$("#yue").html(month);
 		$("#ri").html(day);
 		$("#shi").html(hour);
 		$("#fen").html(min);
@@ -722,7 +722,8 @@
 		$.launch_date = [7, 9, 2016]; 										//-- launch date [d,m,yyyy], for example 7 September 2016 : [7,9,2016]
 		if(backtype==1){
 			$.bg_urls = [
-				[[${config.getBackground1()}]]
+					"img/w23-1920x1024.jpg"
+				// [[${config.getBackground1()}]]
 			];
 		}else{
 			$('#videohtml').html('\t<video muted autoplay="autoplay" loop="loop"  class="bgvid" id="bgvid" style="width: 100%;height: 100%;display: block;object-fit: fill;"><source src="'+videourl+'" type="video/mp4"></video>');

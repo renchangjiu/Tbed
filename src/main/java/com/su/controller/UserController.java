@@ -36,20 +36,10 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SystemConfig systemConfig;
-
-    @Autowired
-    private EmailConfigService emailConfigService;
 
     @Autowired
     private ConfigService configService;
 
-    @Autowired
-    private UploadConfigService uploadConfigService;
-
-    @Autowired
-    private SysConfigService sysConfigService;
 
     @RequestMapping("/register")
     @ResponseBody
@@ -70,15 +60,11 @@ public class UserController extends BaseController {
         if ((logotmp - number1) != (istmp1 - number1)) {
             return Result.error("非法登录，请刷新页面重新尝试。");
         }
-        User user = userService.login(email, password);
-        if (user == null) {
-            return Result.error("登录失败，你的邮箱或密码不正确，请重试。");
+        Result<User> result = userService.login(email, password);
+        if (result.isSuccess()) {
+            session.setAttribute("user", result.getData());
         }
-        if (user.getStatus() != 1) {
-            return Result.error("您的账号是未激活状态，无法登陆。");
-        }
-        session.setAttribute("user", user);
-        return Result.success();
+        return result;
     }
 
     @RequestMapping("/logout")

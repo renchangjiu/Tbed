@@ -183,29 +183,22 @@ public class AdminRootController {
     }
 
     @RequestMapping(value = "/towebconfig")
-    // public String towebconfig(HttpSession session, Model model) {
-    //     Config config = configService.getSourceype();
-    //     User u = (User) session.getAttribute("user");
-    //     Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
-    //     UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
-    //     SysConfig sysConfig = sysConfigService.getstate();
-    //     model.addAttribute("config", config);
-    //     model.addAttribute("updateConfig", updateConfig);
-    //     model.addAttribute("sysconfig", sysConfig);
-    //     model.addAttribute("group", Sourcekey);
-    //     return "admin/webconfig";
-    // }
+    public String towebconfig(HttpSession session, Model model) {
+        Config config = configService.getSourceype();
+        User u = (User) session.getAttribute("user");
+        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
+        UploadConfig updateConfig = uploadConfigService.getUpdateConfig();
+        model.addAttribute("config", config);
+        model.addAttribute("updateConfig", updateConfig);
+        model.addAttribute("group", Sourcekey);
+        return "admin/webconfig";
+    }
 
     //修改站点配置
     @PostMapping("/updateconfig")
     @ResponseBody
-//    public Integer updateconfig(String webname,String explain, String video,
-//                                Integer backtype, String links, String notice,String baidu,
-//                                String domain,String background1,String background2 ) {
     public Integer updateconfig(Config config) {
-
-        Integer ret = configService.setSourceype(config);
-        return ret;
+        return configService.setSourceype(config);
     }
 
     //修改上传配置

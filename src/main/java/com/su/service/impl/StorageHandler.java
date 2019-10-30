@@ -111,7 +111,7 @@ public class StorageHandler {
      * @param fileSize 文件大小, KB
      */
     private Result<Boolean> checkPreservable(Integer fileSize, User user) {
-        if (!this.systemConfig.touristUploadable && user == null) {
+        if (!this.systemConfig.getTouristUploadable() && user == null) {
             return Result.error("已禁止游客上传,请登陆后使用。");
         }
         // 已使用的总内存, KB

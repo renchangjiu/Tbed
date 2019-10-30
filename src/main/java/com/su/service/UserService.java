@@ -10,8 +10,7 @@ public interface UserService {
 
     Result<User> register(UserAddBean userAddBean);
 
-    //登录
-    User login(String email, String password);
+    Result<User> login(String email, String password);
 
     //获取用户信息
     User getUsers(String email);
