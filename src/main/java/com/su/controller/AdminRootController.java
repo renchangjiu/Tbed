@@ -35,19 +35,9 @@ public class AdminRootController {
     private UploadConfigService uploadConfigService;
     @Autowired
     private NoticeService noticeService;
-    @Autowired
-    private GroupService groupService;
-    //@Autowired
-    //private UserGroupService userGroupService;
 
     @Value("${systemupdate}")
     private String systemupdate;
-
-    //返回对象存储界面
-    @RequestMapping(value = "/touser")
-    public String touser() {
-        return "admin/user";
-    }
 
     //返回对象存储界面
     @RequestMapping(value = "tostorage")
@@ -143,44 +133,7 @@ public class AdminRootController {
         return jsonArray.toString();
     }
 
-    //刪除用戶
-    @PostMapping("/deleuser")
-    @ResponseBody
-    public String deleuser(HttpSession session, Long id) {
-        JSONArray jsonArray = new JSONArray();
-        User u = (User) session.getAttribute("user");
-        if (u.getId().equals(id)) {
-            jsonArray.add("-1");
-        } else {
-            Integer ret = userService.deleuser(id);
-            //userGroupService.deleusergroup(id);
-            jsonArray.add(ret);
-        }
-        return jsonArray.toString();
-    }
 
-    //跳转邮箱配置页面
-    @RequestMapping(value = "/emailconfig")
-    public String emailconfig(Model model) {
-        EmailConfig emailConfig = emailConfigService.getemail();
-        model.addAttribute("emailConfig", emailConfig);
-        return "admin/emailconfig";
-    }
-
-
-    @PostMapping("/updateemail")
-    @ResponseBody
-    public Integer updateemail(HttpSession session, String emails, String emailkey, String emailurl, String port, String emailname, Integer using) {
-        EmailConfig emailConfig = new EmailConfig();
-        emailConfig.setEmailname(emailname);
-        emailConfig.setEmails(emails);
-        emailConfig.setEmailkey(emailkey);
-        emailConfig.setEmailurl(emailurl);
-        emailConfig.setPort(port);
-        emailConfig.setUsing(using);
-        Integer ret = emailConfigService.updateemail(emailConfig);
-        return ret;
-    }
 
     @RequestMapping(value = "/towebconfig")
     public String towebconfig(HttpSession session, Model model) {
@@ -209,44 +162,8 @@ public class AdminRootController {
         return ret;
     }
 
-    //修改用户激活状态
-    @PostMapping("/setisok")
-    @ResponseBody
-    public String setisok(HttpSession session, User user) {
-        Integer ret = userService.setisok(user);
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.add(ret);
-        return jsonArray.toString();
-    }
 
-    //修改资料
-    @PostMapping("/setmemory")
-    @ResponseBody
-    public String setmemory(HttpSession session, User user) {
-        Integer ret = userService.setmemory(user);
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.add(ret);
-        return jsonArray.toString();
-    }
 
-    //修改注册开关
-    // @PostMapping("/setstate")
-    // @ResponseBody
-    // public Integer setstate(HttpSession session, SysConfig sysConfig) {
-    //     Integer ret = -1;
-    //     ret = sysConfigService.setstate(sysConfig);
-    //     return ret;
-    // }
-
-    @RequestMapping(value = "/modifyuser")
-    public String modifyuser(Model model, String uid, Integer id) {
-        User user = userService.getUsersMail(uid);
-        model.addAttribute("memory", user.getMemory());
-        model.addAttribute("groupid", user.getGroupid());
-        model.addAttribute("uid", uid);
-        model.addAttribute("id", id);
-        return "admin/modifyuser";
-    }
 
     @PostMapping("/settstoragetype")
     @ResponseBody

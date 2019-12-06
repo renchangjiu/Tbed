@@ -1,7 +1,6 @@
 package com.su.service.impl;
 
 import com.su.config.SystemConfig;
-import com.su.dao.CodeMapper;
 import com.su.dao.UserMapper;
 import com.su.pojo.*;
 import com.su.service.UserService;
@@ -28,8 +27,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private CodeMapper codeMapper;
 
 
     @Override
@@ -119,14 +116,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.getuserlistforgroupid(groupid);
     }
 
-    @Transactional
-    public Integer usersetmemory(User user, String codestring) {
-        Integer ret = userMapper.setmemory(user);
-        if (ret > 0) {
-            ret = codeMapper.deleteCode(codestring);
-        }
-        return ret;
-    }
 
 
 }

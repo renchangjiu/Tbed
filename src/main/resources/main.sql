@@ -1,17 +1,6 @@
 create database picturebed character set = 'utf8';
 use picturebed;
 
-CREATE TABLE `code`
-(
-    `id`    int(255)                                                NOT NULL AUTO_INCREMENT,
-    `value` int(20)                                                 NOT NULL,
-    `code`  varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci
-  ROW_FORMAT = Compact;
 
 CREATE TABLE `config`
 (
@@ -66,20 +55,6 @@ CREATE TABLE `emailconfig`
 INSERT INTO `emailconfig`
 VALUES (1, '', '', '', '', '', 0);
 
-CREATE TABLE `group`
-(
-    `id`     int(255)                                                NOT NULL AUTO_INCREMENT,
-    `name`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '组名称',
-    `key_id` int(255)                                                NULL DEFAULT NULL,
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci
-  ROW_FORMAT = Compact;
-
-INSERT INTO `group`
-VALUES (1, '默认群组', 5);
 
 CREATE TABLE `imgdata`
 (

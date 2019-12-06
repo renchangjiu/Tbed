@@ -1,6 +1,5 @@
 package com.su.service.impl;
 
-import com.su.dao.GroupMapper;
 import com.su.dao.KeyMapper;
 import com.su.pojo.Group;
 import com.su.pojo.Key;
@@ -21,9 +20,6 @@ public class KeyServiceImpl implements KeyService {
     @Autowired
     private KeyMapper keyMapper;
 
-    @Autowired
-    private GroupMapper groupMapper;
-
     @Override
     public Key selectByStorageType(Integer storageType) {
         return keyMapper.selectByStorageType(storageType);
@@ -31,9 +27,7 @@ public class KeyServiceImpl implements KeyService {
 
     @Override
     public Key getCurrentKey(User user) {
-        long groupId = user != null ? user.getGroupid() : Group.DEFAULT_ID;
-        Group group = this.groupMapper.selectByKey(groupId);
-        return this.getById(group.getKeyId());
+        return null;
     }
 
 

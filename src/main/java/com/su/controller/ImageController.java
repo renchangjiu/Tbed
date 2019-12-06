@@ -41,7 +41,7 @@ public class ImageController extends BaseController {
     @RequestMapping("/up")
     @ResponseBody
     public Result<?> upload(MultipartFile file, Integer expireDay) {
-        if (super.isLogin()) {
+        if (!super.isLogin()) {
             return Result.error("请先登录");
         }
         User user = super.getCurrentLoginUser();
@@ -70,7 +70,7 @@ public class ImageController extends BaseController {
     @PostMapping("/up-url")
     @ResponseBody
     public Result<?> uploadByUrl(String imageUrl, Integer expireDay) throws Exception {
-        if (super.isLogin()) {
+        if (!super.isLogin()) {
             return Result.error("请先登录");
         }
         User user = super.getCurrentLoginUser();

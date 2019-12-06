@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin")
-public class AdminController extends BaseController{
+public class AdminController extends BaseController {
 
     @Autowired
     private ImageService imageService;
@@ -45,12 +45,13 @@ public class AdminController extends BaseController{
     private ConfigService configService;
     @Autowired
     private UploadConfigService uploadConfigService;
-    @Autowired
-    private CodeService codeService;
 
 
-    @RequestMapping(value = "/goadmin")
-    public String goadmin1(HttpSession session, Model model, HttpServletRequest request) {
+    @RequestMapping("/goadmin")
+    public String goadmin1(HttpSession session, Model model) {
+        if (!super.isLogin()) {
+            return "redirect:/";
+        }
         User user = (User) session.getAttribute("user");
         UploadConfig uploadConfig = uploadConfigService.getUpdateConfig();
         Integer usermemory = imageService.getUsedMemory(user);
@@ -58,30 +59,21 @@ public class AdminController extends BaseController{
             usermemory = 0;
         }
         User u = userService.getUsers(user.getEmail());
-        if (user != null) {
-            if (user.getLevel() == 1) {
-                model.addAttribute("level", "普通用户");
-            } else if (user.getLevel() == 2) {
-                model.addAttribute("level", "管理员");
-            } else {
-                model.addAttribute("level", "未 知");
-            }
-            model.addAttribute("levels", user.getLevel());
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("api", uploadConfig.getApi());
-
-            model.addAttribute("memory", u.getMemory());//单位M
-            if (usermemory == null) {
-                model.addAttribute("usermemory", 0);//单位M
-            } else {
-                float d = (float) (Math.round((usermemory / 1024.0F) * 100.0) / 100.0);
-                //Print.Normal();
-                model.addAttribute("usermemory", d);//单位M
-            }
-            return "admin/index";
+        if (user.getLevel() == 1) {
+            model.addAttribute("level", "普通用户");
+        } else if (user.getLevel() == 2) {
+            model.addAttribute("level", "管理员");
         } else {
-            return "redirect:/";
+            model.addAttribute("level", "未 知");
         }
+        model.addAttribute("levels", user.getLevel());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("api", uploadConfig.getApi());
+
+        model.addAttribute("memory", u.getMemory());//单位M
+        float d = (float) (Math.round((usermemory / 1024.0F) * 100.0) / 100.0);
+        model.addAttribute("usermemory", d);//单位M
+        return "admin/index";
     }
 
     @RequestMapping(value = "/admin")
@@ -143,9 +135,7 @@ public class AdminController extends BaseController{
     @ResponseBody
     public String getwebconfig(HttpSession session) {
         JSONObject jsonObject = new JSONObject();
-        Config config = configService.getSourceype();
         User u = (User) session.getAttribute("user");
-        // Integer Sourcekey = GetCurrentSource.GetSource(u.getId());
         Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         Imgreview imgreview = imgreviewService.selectByPrimaryKey(1);
         jsonObject.put("usercount", imageService.countimg(u.getId()));
@@ -171,7 +161,7 @@ public class AdminController extends BaseController{
     @RequestMapping("/selecttable")
     @ResponseBody
     public PageResultBean<Image> selectByFy(HttpSession session, Integer pageNum, Integer pageSize, Integer selecttype,
-                                             Integer storageType, String starttime, String stoptime) {
+                                            Integer storageType, String starttime, String stoptime) {
         User user = super.getCurrentLoginUser();
         Image img = new Image();
         if (storageType != null) {
@@ -206,30 +196,6 @@ public class AdminController extends BaseController{
     }
 
 
-    //获取用户信息列表
-    @RequestMapping(value = "/selectusertable")
-    @ResponseBody
-    public Map<String, Object> selectByFy12(HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false) int limit, String username) {
-        User u = (User) session.getAttribute("user");
-        PageHelper.startPage(page, limit);
-        List<User> users = null;
-        if (u.getLevel() > 1) { //根据用户等级查询管理员查询所有的信息
-            User user = new User();
-            user.setUsername(username);
-            users = userService.getuserlist(user);// 这是我们的sql
-            // 使用pageInfo包装查询
-            PageInfo<User> rolePageInfo = new PageInfo<>(users);//
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("code", 0);
-            map.put("msg", "");
-            map.put("count", rolePageInfo.getTotal());
-            map.put("data", rolePageInfo.getList());
-            return map;
-        } else {
-            return null;
-        }
-    }
 
     //批量删除图片
     @PostMapping("/deleallimg")
@@ -284,90 +250,6 @@ public class AdminController extends BaseController{
         return jsonObject.toString();
     }
 
-    //进入修改密码页面
-    @RequestMapping(value = "/tosetuser")
-    public String tosetuser(HttpSession session, Model model, HttpServletRequest request) {
-        User u = (User) session.getAttribute("user");
-        //key信息
-        model.addAttribute("user", u);
-        return "admin/setuser";
-    }
-
-    //修改资料
-    @PostMapping("/change")
-    @ResponseBody
-    public String change(HttpSession session, User user) {
-        User u = (User) session.getAttribute("user");
-        User us = new User();
-        us.setEmail(user.getEmail());
-        us.setUsername(user.getUsername());
-        us.setPassword(new String(Base64.encodeBase64(user.getPassword().getBytes())));
-        us.setUid(u.getUid());
-        //user.setUid(u.getUid());
-        JSONArray jsonArray = new JSONArray();
-        Integer ret = 0;
-        if (u.getLevel() == 1) {
-            us.setUsername(null);
-            us.setEmail(null);
-            ret = userService.change(us);
-        } else {
-            ret = userService.change(us);
-        }
-        jsonArray.add(ret);
-        if (u.getEmail() != null && u.getPassword() != null) {
-            session.removeAttribute("user");
-            //刷新view
-            session.invalidate();
-        }
-        // -1 用户名重复
-        return jsonArray.toString();
-    }
-
-    //进入api
-    @RequestMapping(value = "/toapi")
-    public String toapi(HttpSession session, Model model, HttpServletRequest request) {
-        User u = (User) session.getAttribute("user");
-        Config config = configService.getSourceype();
-        //key信息
-        model.addAttribute("username", u.getUsername());
-        model.addAttribute("level", u.getLevel());
-        model.addAttribute("domain", config.getDomain());
-        return "admin/api";
-    }
-
-
-    @PostMapping(value = "/kuorong")
-    @ResponseBody
-    public String kuorong(HttpSession session, String codestring) {
-        User u = (User) session.getAttribute("user");
-        JSONObject jsonObject = new JSONObject();
-        User u1 = userService.getUsers(u.getEmail());
-        Integer ret = 0;
-        Integer sizes = 0;
-        if (u != null) {
-            //List<Code> code = codeService.selectCode(codestring);
-            Code c = codeService.selectCodekey(codestring);
-            if (c != null) {
-                User user = new User();
-                sizes = c.getValue() + u1.getMemory();
-                user.setMemory(c.getValue() + u1.getMemory());
-                user.setId(u.getId());
-                ret = userServiceImpl.usersetmemory(user, codestring);
-                if (ret > 0) {
-                    ret = 1;
-                }
-            } else {
-                //扩容码不存在
-                ret = -1;
-            }
-        } else {
-            //登录过期
-            session.invalidate();
-        }
-        jsonObject.put("sizes", sizes);
-        jsonObject.put("ret", ret);
-        return jsonObject.toString();
-    }
 
 
     @GetMapping(value = "/images/{id}")
