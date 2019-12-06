@@ -6,7 +6,6 @@ import com.su.dao.UserMapper;
 import com.su.pojo.*;
 import com.su.service.UserService;
 import com.su.utils.HashUtils;
-import com.su.utils.SendEmail;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,55 +31,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CodeMapper codeMapper;
 
-    @Autowired
-    private SystemConfig systemConfig;
-
-    @Override
-    public Result<User> register(UserAddBean userAddBean) {
-        Integer countusername = this.countusername(userAddBean.getUsername());
-        Integer countmail = this.countmail(userAddBean.getEmail());
-
-        if (countusername != 0 || countmail != 0) {
-            return Result.error("注册失败，用户名或邮箱重复，请重试。");
-        }
-        if (!this.systemConfig.getEnableRegister()) {
-            return Result.error("本站已关闭注册功能。");
-        }
-        User user = new User();
-        // EmailConfig emailConfig = emailConfigService.getemail();
-        String uid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String birthder = df.format(new Date());
-        user.setLevel(1);
-        user.setUid(uid);
-        user.setBirthder(birthder);
-        user.setMemory(this.systemConfig.userDefaultMemory);
-        user.setGroupid(1L);
-        user.setEmail(userAddBean.getEmail());
-        user.setUsername(userAddBean.getUsername());
-        user.setPassword(HashUtils.MD5(userAddBean.getPassword()));
-        // Config config = configService.getSourceype();
-        // 是否开启邮箱验证
-        if (this.systemConfig.enableEmailVerification == 1) {
-            user.setStatus(2);
-            //初始化邮箱
-            // MimeMessage message = SendEmail.Emails(emailConfig);
-            //注册完发激活链接
-            // Thread thread = new Thread(() -> {
-            //     SendEmail.sendEmail(message, user.getUsername(), uid, user.getEmail(), emailConfig, config);
-            // });
-            // thread.start();
-        } else {
-            //直接注册
-            user.setStatus(1);
-        }
-        Integer ret = userMapper.register(user);
-        if (ret == 1) {
-            return Result.success(user);
-        } else {
-            return Result.error();
-        }
-    }
 
     @Override
     public Result<User> login(String email, String password) {

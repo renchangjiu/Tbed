@@ -41,11 +41,14 @@ public class ImageController extends BaseController {
     @RequestMapping("/up")
     @ResponseBody
     public Result<?> upload(MultipartFile file, Integer expireDay) {
-        User user = super.getCurrentLoginUser();
-        Result<Boolean> booleanResult = this.storageHandler.checkPreservable(file, user);
-        if (booleanResult.isNotSuccess()) {
-            return booleanResult;
+        if (super.isLogin()) {
+            return Result.error("请先登录");
         }
+        User user = super.getCurrentLoginUser();
+        // Result<Boolean> booleanResult = this.storageHandler.checkPreservable(file, user);
+        // if (booleanResult.isNotSuccess()) {
+        //     return booleanResult;
+        // }
         Key key = this.keyService.getCurrentKey(user);
         Result<Image> result = this.storageHandler.saveHand(file, expireDay, key.getStorageType(), this.request);
         if (result.isNotSuccess()) {
@@ -67,11 +70,14 @@ public class ImageController extends BaseController {
     @PostMapping("/up-url")
     @ResponseBody
     public Result<?> uploadByUrl(String imageUrl, Integer expireDay) throws Exception {
-        User user = super.getCurrentLoginUser();
-        Result<Boolean> booleanResult = this.storageHandler.checkPreservable(imageUrl, user);
-        if (booleanResult.isNotSuccess()) {
-            return booleanResult;
+        if (super.isLogin()) {
+            return Result.error("请先登录");
         }
+        User user = super.getCurrentLoginUser();
+        // Result<Boolean> booleanResult = this.storageHandler.checkPreservable(imageUrl, user);
+        // if (booleanResult.isNotSuccess()) {
+        //     return booleanResult;
+        // }
         Key key = this.keyService.getCurrentKey(user);
         Result<Image> result = this.storageHandler.saveHand(imageUrl, expireDay, key.getStorageType(), this.request);
         if (result.isNotSuccess()) {
@@ -94,7 +100,7 @@ public class ImageController extends BaseController {
         User u = (User) session.getAttribute("user");
         Images images = imageService.selectByPrimaryKey((int) id);
         Key key = keyService.selectByStorageType(sourcekey);
-        Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
+        int Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         boolean b = false;
         if (Sourcekey == 5) {
             b = true;

@@ -38,7 +38,7 @@ public class CodeController {
     @RequestMapping(value = "/selectcodelist")
     @ResponseBody
     public Map<String, Object> selectcodel(HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false) int limit) {
+                                           @RequestParam(required = false) int limit) {
         User u = (User) session.getAttribute("user");
         // 使用Pagehelper传入当前页数和页面显示条数会自动为我们的select语句加上limit查询
         // 从他的下一条sql开始分页
@@ -61,33 +61,35 @@ public class CodeController {
 
     @RequestMapping("/deletecodes")
     @ResponseBody
-    public Integer deletecodes(HttpSession session, @RequestParam("arr[]") String[] arr){
+    public Integer deletecodes(HttpSession session, @RequestParam("arr[]") String[] arr) {
         //JSONObject jsonObject = new JSONObject();
         Integer v = 0;
         User u = (User) session.getAttribute("user");
         for (int i = 0; i < arr.length; i++) {
-           v =  codeService.deleteCode(arr[i]);
+            v = codeService.deleteCode(arr[i]);
         }
         return v;
     }
+
     @RequestMapping("/deletecode")
     @ResponseBody
-    public Integer deletecode(String code){
-            Integer v =  codeService.deleteCode(code);
+    public Integer deletecode(String code) {
+        Integer v = codeService.deleteCode(code);
         return v;
     }
+
     @RequestMapping("/addcode")
     @ResponseBody
-    public Integer addcode(Integer value,Integer counts){
-        Integer val = 0;
+    public Integer addcode(Integer value, Integer counts) {
+        int val = 0;
         Code code = new Code();
-        for (int i= 0;i<counts;i++) {
+        for (int i = 0; i < counts; i++) {
             java.text.DateFormat format1 = new java.text.SimpleDateFormat("hhmmss");
-            Integer number = (int)(Math.random()*100000)+1;
-            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0,5);
+            Integer number = (int) (Math.random() * 100000) + 1;
+            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0, 5);
 
             code.setValue(value);
-            code.setCode(SecureUtil.sha256(number+format1.format(new Date())+uuid));
+            code.setCode(SecureUtil.sha256(number + format1.format(new Date()) + uuid));
             //code.setCode(SecureUtil.md5(format1.format(new Date())+number+value));
             codeService.addCode(code);
             val = 1;

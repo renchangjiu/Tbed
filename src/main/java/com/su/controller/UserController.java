@@ -7,18 +7,11 @@ import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
-import com.su.config.SystemConfig;
 import com.su.pojo.*;
 import com.su.service.*;
-import com.su.utils.SendEmail;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,19 +32,6 @@ public class UserController extends BaseController {
 
     @Autowired
     private ConfigService configService;
-
-
-    @RequestMapping("/register")
-    @ResponseBody
-    public Result<?> register(@Valid UserAddBean userAddBean, Integer zctmp, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return Result.error(bindingResult.getFieldError().getDefaultMessage());
-        }
-        if ((zctmp - number2) != (istmp2 - number2)) {
-            return Result.error("非法注册，请刷新页面后重新尝试。");
-        }
-        return this.userService.register(userAddBean);
-    }
 
 
     @RequestMapping("/login")
@@ -75,25 +55,6 @@ public class UserController extends BaseController {
         return Result.success();
     }
 
-
-    /**
-     * 邮箱激活
-     */
-    @RequestMapping("/activation")
-    public String activation(Model model, String activation, String username) {
-        Config config = configService.getSourceype();
-        Integer ret = 0;
-        User user = userService.getUsersMail(activation);
-        model.addAttribute("config", config);
-        if (user != null && user.getStatus() == 0) {
-            model.addAttribute("setisok", ret);
-            model.addAttribute("username", username);
-            return "isok";
-        } else {
-            return "redirect:/index";
-        }
-
-    }
 
     @PostMapping("/verification")
     @ResponseBody

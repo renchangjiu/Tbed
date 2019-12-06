@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface UserService {
 
-    Result<User> register(UserAddBean userAddBean);
-
     Result<User> login(String email, String password);
 
     //获取用户信息

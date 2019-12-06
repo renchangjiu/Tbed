@@ -20,33 +20,7 @@ public class SystemConfig {
     @Value("${system.image.save-domain}")
     public String imageSaveDomain;
 
-    @Value("${system.image.tourist-total-memory}")
-    public Integer touristTotalMemory;
 
-    @Value("${system.image.user-default-memory}")
-    public Integer userDefaultMemory;
-
-    @Value("${system.image.tourist-uploadable}")
-    private String q;
-    private boolean touristUploadable;
-    public boolean getTouristUploadable() {
-        return StringUtils.isEmpty(this.q) || "1".equals(this.q);
-    }
-
-    @Value("${system.image.tourist-once-upload-max-size}")
-    public Integer touristOnceUploadMaxSize;
-
-    @Value("${system.image.user-once-upload-max-size}")
-    public Integer userOnceUploadMaxSize;
-
-    @Value("${system.enable-email-verification}")
-    public Integer enableEmailVerification;
-
-    @Value("${system.enable-register}")
-    private String q1;
-    public boolean getEnableRegister() {
-        return StringUtils.isEmpty(q1) || "1".equals(q1);
-    }
     /**
      * 返回本地存储中的保存图片的路径
      *

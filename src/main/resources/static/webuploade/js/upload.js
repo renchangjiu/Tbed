@@ -137,118 +137,114 @@
             alert('Web Uploader 不支持您的浏览器！');
             return;
         }
-        if (uploadable !== 1) {
-            $('#urlsc').html('<a style="color: #4ebd87;font-size: 0.9em;cursor:pointer;font-weight: bold;">已禁止游客上传,请登陆后使用</a>')
-        } else {
-            uploader = WebUploader.create({
-                pick: {
-                    id: '#filePicker',
-                    label: '点击选择文件'
-                },
-                formData: {
-                    expireDay: isday
-                },
-                dnd: '#wrapper',
-                paste: '#wrapper',
-                //swf: 'https://hellohao-cloud.oss-cn-beijing.aliyuncs.com/Uploader.swf',
-                swf: '/webuploade/Uploader.sw',
-                chunked: false,//分片上传
-                chunkSize: 512 * 1024,
-                server: '/up',
-                method: 'POST',
-                // runtimeOrder: 'flash',
-                compress: false,//不启用压缩
-                resize: false,//尺寸不改变
-                accept: {
-                    title: 'Images',
-                    //extensions: 'gif,jpg,jpeg,bmp,png',
-                    extensions: suffix,
-                    mimeTypes: 'image/*'
-                },
+        uploader = WebUploader.create({
+            pick: {
+                id: '#filePicker',
+                label: '点击选择文件'
+            },
+            formData: {
+                expireDay: isday
+            },
+            dnd: '#wrapper',
+            paste: '#wrapper',
+            //swf: 'https://hellohao-cloud.oss-cn-beijing.aliyuncs.com/Uploader.swf',
+            swf: '/webuploade/Uploader.sw',
+            chunked: false,//分片上传
+            chunkSize: 512 * 1024,
+            server: '/up',
+            method: 'POST',
+            // runtimeOrder: 'flash',
+            compress: false,//不启用压缩
+            resize: false,//尺寸不改变
+            accept: {
+                title: 'Images',
+                //extensions: 'gif,jpg,jpeg,bmp,png',
+                extensions: suffix,
+                mimeTypes: 'image/*'
+            },
 
-                // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
-                disableGlobalDnd: true,
-                fileNumLimit: imgcount, //做多允许上传几个
-                //fileSizeLimit: 2000 * 1024 * 1024,    // 200 M  文件总大小
-                fileSingleSizeLimit: filesize    // 50 M  单文件大小
-            });
+            // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
+            disableGlobalDnd: true,
+            fileNumLimit: imgcount, //做多允许上传几个
+            //fileSizeLimit: 2000 * 1024 * 1024,    // 200 M  文件总大小
+            fileSingleSizeLimit: filesize    // 50 M  单文件大小
+        });
 
-            // 拖拽时不接受 js, txt 文件。
-            uploader.on('dndAccept', function (items) {
-                var denied = false,
-                    len = items.length,
-                    i = 0,
-                    // 修改js类型
-                    unAllowed = 'text/plain;application/javascript ';
+        // 拖拽时不接受 js, txt 文件。
+        uploader.on('dndAccept', function (items) {
+            var denied = false,
+                len = items.length,
+                i = 0,
+                // 修改js类型
+                unAllowed = 'text/plain;application/javascript ';
 
-                for (; i < len; i++) {
-                    // 如果在列表里面
-                    if (~unAllowed.indexOf(items[i].type)) {
-                        denied = true;
-                        break;
-                    }
+            for (; i < len; i++) {
+                // 如果在列表里面
+                if (~unAllowed.indexOf(items[i].type)) {
+                    denied = true;
+                    break;
                 }
+            }
 
-                return !denied;
-            });
+            return !denied;
+        });
 
-            // 文件上传成功
-            uploader.on('uploadSuccess', function (file, response) {
-                $("#address").css('display', 'block');
+        // 文件上传成功
+        uploader.on('uploadSuccess', function (file, response) {
+            $("#address").css('display', 'block');
 
-                if (!response.success) {
-                    layui.use('layer', function () {
-                        layer = layui.layer;
-                        layer.msg(response.message, {icon: 2});
-                    });
-                } else {
-                    arr_url += response.data.url + '\r\n';
-                    arr_markdown += '![' + response.data.name + '](' + response.data.url + ')\r\n';
-                    arr_html += '<img src="' + response.data.url + '" alt="' + response.data.name + '" title="' + response.data.name + '" /> \r\n';
-                }
-
-                if (urltypes == 1) {
-                    $("#urls").text(arr_url);
-                } else if (urltypes == 2) {
-                    $("#urls").text(arr_markdown);
-                } else {
-                    $("#urls").text(arr_html);
-                }
-            });
-
-            // 文件上传失败，显示上传出错
-            uploader.on('uploadError', function (file) {
-                //alert("文件上传失败")
+            if (!response.success) {
                 layui.use('layer', function () {
                     layer = layui.layer;
-                    layer.msg("文件上传失败，或许你的存储源配置不正确。", {icon: 2});
+                    layer.msg(response.message, {icon: 2});
                 });
-            });
+            } else {
+                arr_url += response.data.url + '\r\n';
+                arr_markdown += '![' + response.data.name + '](' + response.data.url + ')\r\n';
+                arr_html += '<img src="' + response.data.url + '" alt="' + response.data.name + '" title="' + response.data.name + '" /> \r\n';
+            }
 
-            // uploader.on('filesQueued', function() {
-            //     uploader.sort(function( a, b ) {
-            //         if ( a.name < b.name )
-            //           return -1;
-            //         if ( a.name > b.name )
-            //           return 1;
-            //         return 0;
-            //     });
-            // });
+            if (urltypes == 1) {
+                $("#urls").text(arr_url);
+            } else if (urltypes == 2) {
+                $("#urls").text(arr_markdown);
+            } else {
+                $("#urls").text(arr_html);
+            }
+        });
 
-            // 添加“添加文件”的按钮，
-            uploader.addButton({
-                id: '#filePicker2',
-                label: '继续添加'
+        // 文件上传失败，显示上传出错
+        uploader.on('uploadError', function (file) {
+            //alert("文件上传失败")
+            layui.use('layer', function () {
+                layer = layui.layer;
+                layer.msg("文件上传失败，或许你的存储源配置不正确。", {icon: 2});
             });
-            // 添加“添加下一个”模型的按钮，
-            // uploader.addButton({
-            //     id: '#addModel',
-            //     label: '添加下一个'
-            // });
-            uploader.on('ready', function () {
-                window.uploader = uploader;
-            });
-        }
+        });
+
+        // uploader.on('filesQueued', function() {
+        //     uploader.sort(function( a, b ) {
+        //         if ( a.name < b.name )
+        //           return -1;
+        //         if ( a.name > b.name )
+        //           return 1;
+        //         return 0;
+        //     });
+        // });
+
+        // 添加“添加文件”的按钮，
+        uploader.addButton({
+            id: '#filePicker2',
+            label: '继续添加'
+        });
+        // 添加“添加下一个”模型的按钮，
+        // uploader.addButton({
+        //     id: '#addModel',
+        //     label: '添加下一个'
+        // });
+        uploader.on('ready', function () {
+            window.uploader = uploader;
+        });
 
         // 当有文件添加进来时执行，负责view的创建
         function addFile(file) {

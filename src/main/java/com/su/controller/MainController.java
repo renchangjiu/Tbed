@@ -25,9 +25,6 @@ public class MainController extends BaseController {
     @Autowired
     private UploadConfigService uploadConfigService;
 
-    @Autowired
-    private SystemConfig systemConfig;
-
     @RequestMapping({"/", "/index"})
     public String indexImg(ModelMap map) {
         Config config = configService.getSourceype();
@@ -61,9 +58,6 @@ public class MainController extends BaseController {
         map.addAttribute("suffix", uploadConfig.getSuffix());
         map.addAttribute("config", config);
 
-        int uploadable = (this.systemConfig.getTouristUploadable() || user != null) ? 1 : 0;
-        map.put("uploadable", uploadable);
-        map.put("systemConfig", this.systemConfig);
         return "index";
 
     }
