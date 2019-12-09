@@ -59,14 +59,6 @@ public class AdminController extends BaseController {
             usermemory = 0;
         }
         User u = userService.getUsers(user.getEmail());
-        if (user.getLevel() == 1) {
-            model.addAttribute("level", "普通用户");
-        } else if (user.getLevel() == 2) {
-            model.addAttribute("level", "管理员");
-        } else {
-            model.addAttribute("level", "未 知");
-        }
-        model.addAttribute("levels", user.getLevel());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("api", uploadConfig.getApi());
 
@@ -196,7 +188,6 @@ public class AdminController extends BaseController {
     }
 
 
-
     //批量删除图片
     @PostMapping("/deleallimg")
     @ResponseBody
@@ -249,7 +240,6 @@ public class AdminController extends BaseController {
         jsonObject.put("count", imageService.counts(null));
         return jsonObject.toString();
     }
-
 
 
     @GetMapping(value = "/images/{id}")

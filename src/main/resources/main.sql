@@ -131,14 +131,6 @@ VALUES (9, '', '', '', '', '', 9);
 INSERT INTO `key`
 VALUES (10, '0', '', '0', '0', '0', 10);
 
-CREATE TABLE `notice`
-(
-    `id`   int(4)                                                    NOT NULL,
-    `text` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci
-  ROW_FORMAT = Compact;
 
 
 CREATE TABLE `uploadconfig`

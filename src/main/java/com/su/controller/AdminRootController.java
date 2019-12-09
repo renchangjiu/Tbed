@@ -28,13 +28,7 @@ public class AdminRootController {
     @Autowired
     private KeyService keyService;
     @Autowired
-    private UserService userService;
-    @Autowired
-    private EmailConfigService emailConfigService;
-    @Autowired
     private UploadConfigService uploadConfigService;
-    @Autowired
-    private NoticeService noticeService;
 
     @Value("${systemupdate}")
     private String systemupdate;
@@ -46,7 +40,6 @@ public class AdminRootController {
         Integer Sourcekey = this.keyService.getCurrentKey(u).getStorageType();
         Key key = keyService.selectByStorageType(Sourcekey);//然后根据类型再查询key
         Boolean b = StringUtils.doNull(Sourcekey, key);//判断对象是否有空值
-        Integer StorageType = 0;
         if (Sourcekey != 5) {
             if (b) {
                 //key信息
