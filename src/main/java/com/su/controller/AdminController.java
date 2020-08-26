@@ -152,7 +152,7 @@ public class AdminController extends BaseController {
 
     @RequestMapping("/selecttable")
     @ResponseBody
-    public PageResultBean<Image> selectByFy(HttpSession session, Integer pageNum, Integer pageSize, Integer selecttype,
+    public PageResultBean<Image> selectByFy(Integer pageNum, Integer pageSize, Integer selecttype,
                                             Integer storageType, String starttime, String stoptime) {
         User user = super.getCurrentLoginUser();
         Image img = new Image();

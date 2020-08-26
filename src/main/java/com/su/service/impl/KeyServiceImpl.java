@@ -26,7 +26,8 @@ public class KeyServiceImpl implements KeyService {
 
     @Override
     public Key getCurrentKey(User user) {
-        return null;
+
+        return this.selectByStorageType(5);
     }
 
 
